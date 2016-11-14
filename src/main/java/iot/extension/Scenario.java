@@ -4,38 +4,38 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import at.ac.uibk.dps.cloud.simulator.test.simple.cloud.vmscheduler.BasicSchedulingTest.AssertFulScheduler;
-
 import org.w3c.dom.Node;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
 
+/**
+ * Az osztaly fo feladata az egyes Szcenariok lefuttasa, illetve logolasa
+ *
+ */
 public class Scenario {
 
 	/**
-	 * 
-	 * @param va
-	 * @param filesize
-	 * @param datafile
-	 * @throws Exception
+	 * Feldolgozza a Station-oket leiro XML fajlt es elinditja a szimulaciot.
+	 * @param va a virtualis kepfajl, default ertek hasznalathoz null-kent keruljon atadasra
+	 * @param arc a VM eroforrasigenye, default ertek hasznalathoz null-kent keruljon atadasra
+	 * @param datafile a Station-okat definialo XML fajl 
+	 * @param cloudfile az IaaS felhot definialo XML fajl
+	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(VirtualAppliance va, String datafile,String cloudfile,int print) throws Exception {
-		long tasksize=-1;
-		if (va == null) {
-			new Cloud(Cloud.v,cloudfile); // IaaS letrehozasa defaulta VA-val
-		} else {
-			new Cloud(va,cloudfile);
-		}
+	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,int print) throws Exception {
+		long tasksize=-1; // TODO: ez miert kell?!
+		new Cloud(null,null,cloudfile);
+		
 		if (datafile.isEmpty()) {
 			System.out.println("Datafile nem lehet null");
 			System.exit(0);
@@ -128,7 +128,7 @@ public class Scenario {
 						Stationdata sd = new Stationdata(time, starttime, stoptime, filesize, snumber, freq,
 								eElement.getElementsByTagName("name").item(0).getTextContent()+" "+i,
 								eElement.getElementsByTagName("torepo").item(0).getTextContent(), ratio);
-						Station.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd));
+						Station.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
 					}
 
 					}
@@ -139,8 +139,6 @@ public class Scenario {
 				Application.getInstance(60000,tasksize,true,1);
 				Timed.simulateUntilLastEvent();
 			}
-						
-			
 			// hasznos infok:
 			if(print==1){
 				
@@ -163,9 +161,9 @@ public class Scenario {
 				System.out.println("~~~~~~~~~~~~");
 				System.out.println("All filesize: "+Station.allstationsize);
 				System.out.println("~~~~~~~~~~~~");
-				System.out.println(Cloud.iaas.repositories.toString());
+				System.out.println(Cloud.getIaas().repositories.toString());
 				System.out.println("~~~~~~~~~~~~");
-				for (PhysicalMachine p : Cloud.iaas.machines) {
+				for (PhysicalMachine p : Cloud.getIaas().machines) {
 					if (/* !p.isHostingVMs() */ p.localDisk.getFreeStorageCapacity() != p.localDisk
 							.getMaxStorageCapacity()) {
 						System.out.println(p);
@@ -187,18 +185,16 @@ public class Scenario {
 		}
 
 		/**
-		 * 
 		 * @param args Az elso argumentumkent adhato meg a Station-okat leiro XML eleresi utvonala
 		 * 			masodik argumentumkent az IaaS-t leiro XML eleresi utvonala
-		 * 			harmadik argumentumkent egy szam, ami ha 1-es, akkor van kiiratas
-		 * @throws Exception
+		 * 			harmadik argumentumkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
 	
 			String datafile=args[0];
 			String cloudfile=args[1];
 			int print=Integer.parseInt(args[2]);
-			new Scenario(null,datafile,cloudfile,print);	
+			new Scenario(null,null,datafile,cloudfile,print);	
 			
 		}
 }

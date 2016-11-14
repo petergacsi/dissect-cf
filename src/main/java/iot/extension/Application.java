@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
-
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -21,8 +20,16 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import iot.extension.Application.VmCollector;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 
+/**
+ * Ez az osztaly dolgozza fel a Station-ok altal generalt adatokat ComputeTask-okban.
+ * Elinditja a Station-öket, illetve kezeli a virtualis gepek inditasat es leallitasat is.
+ */
 public class Application extends Timed {
 
+	/**
+	 * Osztalyba foglalja az adott virtualis gepet, a VM altal elvegzett osszes feladat 
+	 * es az adott VM allapotat (dolgozik-e eppen feladaton,vagy sem).
+	 */
 	public static class VmCollector {
 		@Override
 		public String toString() {
@@ -30,18 +37,18 @@ public class Application extends Timed {
 					+ worked + ", pm=" + pm + "]";
 		}
 
-		public VirtualMachine vm;
-		public boolean isworking;
-		public int tasknumber;
-		public boolean worked;
-		public PhysicalMachine pm;
+		 VirtualMachine vm;
+		 boolean isworking;
+		 int tasknumber;
+		 boolean worked;
+		 PhysicalMachine pm;
 
-		public VmCollector(VirtualMachine vm, boolean isworking) {
+		VmCollector(VirtualMachine vm, boolean isworking) {
 			this.vm = vm;
 			this.isworking = isworking;
 			this.tasknumber = 0;
 			this.worked = false;
-			//this.pm=this.vm.getResourceAllocation().getHost();
+			//this.pm=this.vm.getResourceAllocation().getHost(); TODO: ezt miert kommenteztem ki?
 		}
 	}
 
@@ -53,19 +60,30 @@ public class Application extends Timed {
 	private static long allgenerateddatasize = 0;
 	private static long localfilesize = 0;
 	private static long temp;
-	public static TreeMap<Long, Integer> hmap = new TreeMap();
+	public static TreeMap<Long, Integer> hmap = new TreeMap<Long, Integer>();
 	private static int feladatszam = 0;
 	private long tasksize;
 
-	public static Application getInstance(final long freq,long tasksize, boolean delay, int print) {
+	/**
+	 * Ez az osztaly egy Singleton osztaly, csak 1 peldany letezhet belole, az osztaly peldanyositasa
+	 * ezzel a metodushivassal tortenhet.
+	 * @param freq az applikacio ismetlesi frekvenciaja
+	 * @param tasksize a maximalisan feldolgozando byte-ok szama feladatonkent
+	 * @param delay a Station-ok inditasanak kesleltese adhato meg
+	 * @param print logolasi funkciohoz: 1 - igen, 2 - nem
+	 */
+	static Application getInstance(final long freq,long tasksize, boolean delay, int print) {
 		if (app == null) {
 			app = new Application(freq,tasksize, delay, print);
 		} else {
-			System.out.println("you can't create a second app!");
+			System.out.println("Nem hozhato letre meg egy Application peldany!");
 		}
 		return Application.app;
 	}
 
+	/**
+	 * Privat konstruktor, hogy csak osztalyon belulrol lehessen hivni
+	 */
 	private Application(final long freq,long tasksize, boolean delay, int print) {
 		subscribe(freq);
 		this.print = print;
@@ -75,9 +93,7 @@ public class Application extends Timed {
 	}
 
 	/**
-	 * it searches the first vm which doesnt have work
-	 * 
-	 * @return
+	 * megkeresi az elso szabad virtualis gepet, amelyik epp nem dolgozik
 	 */
 	private VmCollector VmSearch() {
 		VmCollector vmc = null;
@@ -91,6 +107,9 @@ public class Application extends Timed {
 		return vmc;
 	}
 
+	/**
+	 * A metodus elinditja az osszes Station mukodeset
+	 */
 	private void startStation() {
 		if (Application.i == 0) {
 			Application.i++;
@@ -113,45 +132,43 @@ public class Application extends Timed {
 		}
 	}
 
-	
+	/**
+	 * A metodus megkeresi es ujrainditja az elso SHUTDOWN allapotban levo virtualis gepet.
+	 */
 	private boolean turnonVM(){
 		for (int i = 0; i < Application.vmlist.size(); i++) {
-			//System.out.println(Application.vmlist.get(i).pm);
-			if ((Application.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) /*||
-					Application.vmlist.get(i).vm.getState().equals(VirtualMachine.State.DESTROYED)*/)
+			if ((Application.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) /*|| TODO: Destroyed allapot jelentese?!
+					Application.vmlist.get(i).vm.getState().equals(VirtualMachine.State.DESTROYED)*/) 
 					&& Application.vmlist.get(i).pm!=null) {
 				try {
 					Application.vmlist.get(i).vm.switchOn(
 							Application.vmlist.get(i).pm.allocateResources(Cloud.getArc(), false, PhysicalMachine.defaultAllocLen),
-							Cloud.iaas.repositories.get(0));
-				} catch (VMManagementException e) {
-					// TODO Auto-generated catch block
+							Cloud.getIaas().repositories.get(0));
+				} catch (Exception e) {
 					e.printStackTrace();
-				} catch (NetworkException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} 
 				return true;
 			}
 		}
 		return false;
 	}
 	/**
-	 * it makes a new VM with default false working variable
-	 * 
-	 * @return
+	 * A metodus - ha nincs olyan  VM amit ujra lehet inditani - letrehoz egyet.
 	 */
 	private void generateAndAddVM() {
 		try {
-			if(turnonVM()==false){
+			if(this.turnonVM()==false){
 				Application.vmlist.add(new VmCollector(
-					Cloud.iaas.requestVM(Cloud.getVa(), Cloud.getArc(), Cloud.iaas.repositories.get(0), 1)[0], false));	
+					Cloud.getIaas().requestVM(Cloud.getVa(), Cloud.getArc(), Cloud.getIaas().repositories.get(0), 1)[0], false));	
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
+	/**
+	 * A metodus megvizsgalja, hogy van-e olyan Station, amelyik meg uzemel.
+	 */
 	private boolean checkStationState() {
 		boolean i = true;
 		for (Station s : Station.stations) {
@@ -162,7 +179,9 @@ public class Application extends Timed {
 		return i;
 	}
 
-	
+	/**
+	 *  Megkeresi az osszes futo, de eppen nem dolgozo VM-et es 1 kivetelevel leallitja mind.
+	 */
 	private void turnoffVM(){
 		int reqshutdown = 0;
 		for (VmCollector vmcl : Application.vmlist) {
@@ -178,35 +197,30 @@ public class Application extends Timed {
 					try {
 						vmcl.vm.switchoff(true);
 					} catch (StateChangeException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
 			}
 		}
 	}
+	
 	@Override
+	/**
+	 * Ez a metodus hivodik meg az applikacio frekvenciaja szerint. Feladata a virtualis gepeknek valo feladatosztas,
+	 * es a virtualis gepek kezelese
+	 */
 	public void tick(long fires) {
-
 		if (Application.vmlist.isEmpty()) {
 			this.generateAndAddVM(); //
 		}
 		if (this.VmSearch() != null) {
 			this.startStation();
 		}
-		/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-		Application.localfilesize = (Station.allstationsize - Application.allgenerateddatasize); // tickben
-																									// mennyi
-																									// adatom
-																									// erkezett
-																									// feldolgozasra
-
-		if (Application.localfilesize > 0) { // ha van adat
+		 // ha erkezett be a kozponti repoba feldolgozatlan adat
+		Application.localfilesize = (Station.allstationsize - Application.allgenerateddatasize); 
+		if (Application.localfilesize > 0) { 
 			long processed = 0;
-			while (Application.localfilesize != processed) { // akkor addig
-																// inditsunk
-																// vm-eken
-																// feladatot
+			while (Application.localfilesize != processed) { // akkor addig inditsunk feladatokat a VM-en, amig fel nem lett dolgozva az osszes
 				if (Application.localfilesize - processed > this.tasksize) {
 					Application.temp = this.tasksize; // maximalis feldolgozott meret
 				} else {
@@ -280,8 +294,6 @@ public class Application extends Timed {
 						vmcl.vm.switchoff(true);
 					}
 				} catch (StateChangeException e) {
-					// TODO Auto-generated catch
-					// block
 					e.printStackTrace();
 				}
 			}
