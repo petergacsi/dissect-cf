@@ -189,19 +189,21 @@ public class Application extends Timed {
 				reqshutdown++;
 			}
 		}
-
+		int stopped_vm=0;
 		for (VmCollector vmcl : Application.vmlist) {
 			if (reqshutdown > 1) {
 				if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && vmcl.isworking == false) {
 					reqshutdown--;
 					try {
 						vmcl.vm.switchoff(true);
+						stopped_vm++;
 					} catch (StateChangeException e) {
 						e.printStackTrace();
 					}
 				}
 			}
 		}
+		//System.out.println("leallitott VM: "+stopped_vm + " ido: "+Timed.getFireCount());
 	}
 	
 	@Override
@@ -220,13 +222,14 @@ public class Application extends Timed {
 		Application.localfilesize = (Station.allstationsize - Application.allgenerateddatasize); 
 		if (Application.localfilesize > 0) { 
 			long processed = 0;
-			while (Application.localfilesize != processed) { // akkor addig inditsunk feladatokat a VM-en, amig fel nem lett dolgozva az osszes
+			boolean havevm = true;
+			while (Application.localfilesize != processed && havevm) { // akkor addig inditsunk feladatokat a VM-en, amig fel nem lett dolgozva az osszes
 				if (Application.localfilesize - processed > this.tasksize) {
 					Application.temp = this.tasksize; // maximalis feldolgozott meret
 				} else {
 					Application.temp = (Application.localfilesize - processed);
 				}
-				processed += Application.temp;
+				
 				final double noi = Application.temp == 250000 ? 2400 : (double) (2400 * Application.temp / 250000);
 				/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 				// System.out.println(Application.temp+" : "+processed+ " :
@@ -234,8 +237,10 @@ public class Application extends Timed {
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					this.generateAndAddVM();
+					havevm=false;
 				} else {
 					try {
+						processed += Application.temp;
 						final String printtart = vml.vm + " started at " + Timed.getFireCount();
 						vml.isworking = true;
 						Application.feladatszam++;
@@ -268,6 +273,7 @@ public class Application extends Timed {
 					}
 				}
 			}
+			//System.out.println("osszes: "+Station.allstationsize +" feldolgozott: " +Application.allgenerateddatasize+ " ido: "+Timed.getFireCount());
 		}
 		this.turnoffVM();
 
