@@ -230,7 +230,7 @@ public class Application extends Timed {
 					Application.temp = (Application.localfilesize - processed);
 				}
 				
-				final double noi = Application.temp == 250000 ? 2400 : (double) (2400 * Application.temp / 250000);
+				final double noi = Application.temp == this.tasksize ? 2400 : (double) (2400 * Application.temp / this.tasksize);
 				/* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 				// System.out.println(Application.temp+" : "+processed+ " :
 				// "+Application.localfilesize+" : "+fires);
