@@ -13,12 +13,14 @@ public class Metering extends DeferredEvent {
 	private int i;
 	private String sName;
 	private int filesize;
-
-	public Metering(String sName, int i, int filesize,long delay) {
+	private Repository r;
+	private Station s;
+	public Metering(Station s, int i, int filesize,long delay,Repository r) {
 		super(delay);
+		this.r = r;
 		this.i = i;
 		this.filesize = filesize;
-		this.sName = sName;
+		this.s = s;
 	}
 
 	@Override
@@ -28,15 +30,20 @@ public class Metering extends DeferredEvent {
 	protected void eventAction() {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd:HH:mm:ss:SS");
-		StorageObject so = new StorageObject(this.sName + " " + this.filesize + " " + this.i + " "
+		StorageObject so = new StorageObject(this.s.getName() + " " + this.filesize + " " + this.i + " "
 				+ Timed.getFireCount() + " " + sdf.format(cal.getTime()), this.filesize, false);
-		for (Station s : Station.stations) {
+		if(this.r.registerObject(so)){
+			this.s.generatedfilesize+=this.filesize;
+			Station.allstationsize+=this.filesize;
+		};
+		
+		/*for (Station s : Station.stations) {
 			if (s.getName().equals(this.sName)) {
 				if(s.getRepo().registerObject(so)){
 					s.generatedfilesize+=this.filesize;
 					Station.allstationsize+=this.filesize;
 				};
 			}
-		}
+		}*/
 	}
 }

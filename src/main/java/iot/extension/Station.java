@@ -142,6 +142,7 @@ public class Station extends Timed {
 		@Override
 		public void conComplete() {
 			repo.deregisterObject(this.so);
+			Cloud.getIaas().repositories.get(0).deregisterObject(this.so);
 		}
 
 		@Override
@@ -180,6 +181,7 @@ public class Station extends Timed {
 	private void stopMeter() {
 		isWorking = false;
 		unsubscribe();
+		this.torepo.registerObject(new StorageObject(this.sd.name,generatedfilesize, false));
 	}
 
 	/**
@@ -234,10 +236,10 @@ public class Station extends Timed {
 					
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(60)+1;		
-					new Metering(sd.name, i, sd.filesize,1000*randomInt);
+					new Metering(this, i, sd.filesize,1000*randomInt,this.repo);
 				}else{
 					
-					new Metering(sd.name, i, sd.filesize,1);
+					new Metering(this, i, sd.filesize,1,this.repo);
 				}
 				
 
