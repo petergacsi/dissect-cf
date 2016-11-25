@@ -15,12 +15,15 @@ public class Metering extends DeferredEvent {
 	private int filesize;
 	private Repository r;
 	private Station s;
-	public Metering(Station s, int i, int filesize,long delay) {
+	private int cloudnumber;
+	
+	public Metering(Station s, int i, int filesize,long delay,int cloudnumber) {
 		super(delay);
 		this.r = s.getRepo();
 		this.i = i;
 		this.filesize = filesize;
 		this.s = s;
+		this.cloudnumber = cloudnumber;
 	}
 
 	@Override
@@ -35,6 +38,7 @@ public class Metering extends DeferredEvent {
 		if(this.r.registerObject(so)){
 			this.s.generatedfilesize+=this.filesize;
 			Station.allstationsize+=this.filesize;
+			Scenario.stationvalue[cloudnumber]+=this.filesize;
 		};
 		
 		/*for (Station s : Station.stations) {

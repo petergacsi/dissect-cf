@@ -2,6 +2,8 @@ package iot.extension;
 
 import hu.mta.sztaki.lpds.cloud.simulator.util.*;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.*;
@@ -13,15 +15,15 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
  * illetve tarolja a virtualis kepfajlt es a virtualis gep eroforrasigenyet is.
  * */
 public class Cloud {
-	private static IaaSService iaas;
-	private static VirtualAppliance va ;//= new VirtualAppliance("BaseVA", 100, 0, false, 1000000); // default static VA to reach from everywhere
-	private static AlterableResourceConstraints arc;// = new AlterableResourceConstraints(8, 0.001, 4294967296l); // 8 magos,4gb memoria
+	private  IaaSService iaas;
+	private  VirtualAppliance va ;//= new VirtualAppliance("BaseVA", 100, 0, false, 1000000); // default static VA to reach from everywhere
+	private  AlterableResourceConstraints arc;// = new AlterableResourceConstraints(8, 0.001, 4294967296l); // 8 magos,4gb memoria
 	
 	/**
 	 * Getter metodus az IaaS felhohoz
 	 * @return IaaSService 
 	 */
-	 static IaaSService getIaas() {
+	 IaaSService getIaas() {
 		return iaas;
 	}
 	
@@ -29,7 +31,7 @@ public class Cloud {
 	 * Getter metodus a virtualis kepfajlhoz
 	 * @return VirtualAppliance
 	 */
-	static VirtualAppliance getVa() {
+	VirtualAppliance getVa() {
 		return va;
 	}
 	
@@ -37,7 +39,7 @@ public class Cloud {
 	 * Getter metodus a VM eroforrasigenyhez
 	 * @return AlterableResourceConstraints
 	 */
-	static AlterableResourceConstraints getArc() {
+	AlterableResourceConstraints getArc() {
 		return arc;
 	}
 
@@ -52,16 +54,16 @@ public class Cloud {
 	 */
 	public Cloud(VirtualAppliance p_va,AlterableResourceConstraints p_arc,String cloudfile) throws IOException, SAXException, ParserConfigurationException {
 		if (p_va==null){
-			Cloud.va= new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
+			this.va= new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
 		}else{
-			Cloud.va= p_va;
+			this.va= p_va;
 		}
 		if(p_arc==null){
-			Cloud.arc= new AlterableResourceConstraints(8, 0.001, 4294967296l);
+			this.arc= new AlterableResourceConstraints(8, 0.001, 4294967296l);
 		}else{
-			Cloud.arc=p_arc;
+			this.arc=p_arc;
 		}
 		iaas = CloudLoader.loadNodes(cloudfile);
-		iaas.repositories.get(0).registerObject(Cloud.getVa());
+		iaas.repositories.get(0).registerObject(this.getVa());
 	}
 }

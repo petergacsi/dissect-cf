@@ -3,6 +3,9 @@ package iot.extension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import org.omg.Messaging.SyncScopeHelper;
+
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.*;
@@ -79,9 +82,13 @@ public class Station extends Timed {
 	private PhysicalMachine pm;
 	private boolean isWorking;
 	private boolean randommetering;
-	public static ArrayList<Station> stations = new ArrayList<Station>();
+	public Cloud cloud;
+	private int cloudnumber;
+	
+
 	public long generatedfilesize;
 	public static long allstationsize=0;
+	
 
 	/**
 	 * A konstruktor vegzi el a kozos halozatba szervezest az IaaS felhovel
@@ -96,7 +103,7 @@ public class Station extends Timed {
 		this.vm = null;
 		this.i = 0;
 		this.sd = sd;
-		this.pm = this.findPm(sd.torepo);
+		
 		isWorking = sd.lifetime == -1 ? false : true;
 		lmap = new HashMap<String, Integer>();
 		lat = 11;
@@ -104,7 +111,7 @@ public class Station extends Timed {
 		lmap.put(sd.torepo, lat);
 		this.reposize = reposize;
 		repo = new Repository(this.reposize, sd.name, maxinbw, maxoutbw, diskbw, lmap);
-		this.torepo = this.findRepo(sd.torepo);
+		
 		this.randommetering=randommetering;
 	}
 
@@ -112,10 +119,20 @@ public class Station extends Timed {
 	 * TODO kommentezes!!!!!!!!
 	 * @return
 	 */
+	public int getCloudnumber() {
+		return cloudnumber;
+	}
+
+	public void setCloudnumber(int cloudnumber) {
+		this.cloudnumber = cloudnumber;
+	}
 	public String getName() {
 		return this.sd.name;
 	}
 	
+	void setCloud(Cloud cloud) {
+		this.cloud = cloud;
+	}
 	public Repository getRepo() {
 		return repo;
 	}
@@ -142,7 +159,8 @@ public class Station extends Timed {
 		@Override
 		public void conComplete() {
 			repo.deregisterObject(this.so);
-			Cloud.getIaas().repositories.get(0).deregisterObject(this.so);
+			cloud.getIaas().repositories.get(0).deregisterObject(this.so);
+			
 		}
 
 		@Override
@@ -171,6 +189,8 @@ public class Station extends Timed {
 		if (isWorking) {
 			subscribe(interval);
 			this.time=Timed.getFireCount();
+			this.pm = this.findPm(sd.torepo);
+			this.torepo = this.findRepo(sd.torepo);
 		}
 	}
 
@@ -190,11 +210,12 @@ public class Station extends Timed {
 	 */
 	private Repository findRepo(String torepo) {
 		Repository r = null;
-		for (Repository tmp : Cloud.getIaas().repositories) {
+		
+		for (Repository tmp : this.cloud.getIaas().repositories) {
 			if (tmp.getName().equals(torepo)) {
 				r = tmp;
 			} else { // TODO: kell ez az else ag?!
-				for (PhysicalMachine pm : Cloud.getIaas().machines) {
+				for (PhysicalMachine pm :  this.cloud.getIaas().machines) {
 					if (pm.localDisk.getName().equals(torepo)) {
 						r = pm.localDisk;
 					}
@@ -212,7 +233,7 @@ public class Station extends Timed {
 	 */
 	private PhysicalMachine findPm(String torepo) {
 		PhysicalMachine p = null;
-		for (PhysicalMachine pm : Cloud.getIaas().machines) {
+		for (PhysicalMachine pm :  this.cloud.getIaas().machines) {
 			if (pm.localDisk.getName().equals(torepo)) {
 				p = pm;
 			}
@@ -236,10 +257,10 @@ public class Station extends Timed {
 					
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(60)+1;		
-					new Metering(this, i, sd.filesize,1000*randomInt);
+					new Metering(this, i, sd.filesize,1000*randomInt,this.cloudnumber);
 				}else{
 					
-					new Metering(this, i, sd.filesize,1);
+					new Metering(this, i, sd.filesize,1,this.cloudnumber);
 				}
 				
 
@@ -251,7 +272,7 @@ public class Station extends Timed {
 		}
 
 		// kozponti tarolo a cel repo
-		if (Cloud.getIaas().repositories.contains(this.torepo)) {
+		if ( this.cloud.getIaas().repositories.contains(this.torepo)) {
 			// megkeresi a celrepo-t es elkuldeni annak
 			try {
 				if (this.torepo != null) {
@@ -272,8 +293,8 @@ public class Station extends Timed {
 				i++;
 				try {
 					if (!this.pm.isHostingVMs()) {
-						this.vm = this.pm.requestVM(Cloud.getVa(), Cloud.getArc(),
-								Cloud.getIaas().repositories.get(0), 1)[0];
+						this.vm = this.pm.requestVM( this.cloud.getVa(),  this.cloud.getArc(),
+								 this.cloud.getIaas().repositories.get(0), 1)[0];
 					} else {
 						this.vm = this.pm.listVMs().iterator().next();
 					}

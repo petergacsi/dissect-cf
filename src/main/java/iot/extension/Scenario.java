@@ -3,6 +3,7 @@ package iot.extension;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,7 +24,12 @@ import iot.extension.Station.Stationdata;
  *
  */
 public class Scenario {
-
+	private static ArrayList<Station> stations = new ArrayList<Station>();
+	private static ArrayList<Cloud> clouds = new ArrayList<Cloud>();
+	private static ArrayList<Application> app = new ArrayList<Application>();
+	public static long scenscan = 0;
+	public static long[] stationvalue; 
+	
 	/**
 	 * Feldolgozza a Station-oket leiro XML fajlt es elinditja a szimulaciot.
 	 * @param va a virtualis kepfajl, default ertek hasznalathoz null-kent keruljon atadasra
@@ -32,9 +38,13 @@ public class Scenario {
 	 * @param cloudfile az IaaS felhot definialo XML fajl
 	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,int print) throws Exception {
+	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,int print,int cloudcount,long appfreq) throws Exception {
 		long tasksize=-1; // TODO: ez miert kell?!
-		new Cloud(null,null,cloudfile);
+		stationvalue = new long[cloudcount];
+		if(cloudcount<1){
+			System.out.println("Cloudcount ertekenek legalabb 1-nek kell lennie!");
+			System.exit(0);
+		}
 		
 		if (datafile.isEmpty()) {
 			System.out.println("Datafile nem lehet null");
@@ -128,7 +138,7 @@ public class Scenario {
 						Stationdata sd = new Stationdata(time, starttime, stoptime, filesize, snumber, freq,
 								eElement.getElementsByTagName("name").item(0).getTextContent()+" "+i,
 								eElement.getElementsByTagName("torepo").item(0).getTextContent(), ratio);
-						Station.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
+						Scenario.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
 					}
 
 					}
@@ -136,50 +146,75 @@ public class Scenario {
 			}
 			
 			if(tasksize!=-1){
-				Application.getInstance(60000,tasksize,true,1);
+				int maxstation = Scenario.stations.size() / cloudcount;
+				for(int i=0;i<cloudcount;i++){
+					Scenario.stationvalue[i]=0;
+					Cloud cloud = new Cloud(null,null,cloudfile);
+					Scenario.clouds.add(cloud);
+					ArrayList<Station> stations = new ArrayList<Station>();
+					int stationcounter=Scenario.stations.size()-1;
+					while(stationcounter>=0){
+						Scenario.stations.get(stationcounter).setCloud(cloud);
+						Scenario.stations.get(stationcounter).setCloudnumber(i);
+						stations.add(Scenario.stations.get(stationcounter));
+						Scenario.stations.remove(stationcounter);
+						stationcounter--;
+						if(stations.size()>maxstation){
+							break;
+						}
+					}
+					app.add(new Application(appfreq,tasksize,true,1,cloud,stations,(i+1)+". app:"));
+				}
+				
+				
 				Timed.simulateUntilLastEvent();
 			}
 			// hasznos infok:
 			if(print==1){
 				
+				
 				int i=0;
 				int j=0;
-				for(VmCollector vmcl : Application.vmlist){
-					if(vmcl.worked){
-						j++;
-						i+=vmcl.tasknumber;
+				for(Application a : app){
+					System.out.println(a.getName()+ " stations: "+ a.stations.size());
+					for(VmCollector vmcl : a.vmlist){
+						if(vmcl.worked){
+							j++;
+							i+=vmcl.tasknumber;
+						}
 					}
-				}
-				System.out.println("~~~~~~~~~~~~");
-				for(VmCollector vmcl : Application.vmlist){
-					if(vmcl.worked && vmcl.tasknumber>0){
-						System.out.println(vmcl.vm+" : "+vmcl.tasknumber);
+					for(VmCollector vmcl : a.vmlist){
+						if(vmcl.worked && vmcl.tasknumber>0){
+							System.out.println(vmcl.vm+" : "+vmcl.tasknumber);
+						}
 					}
+					
+					PrintWriter writer = new PrintWriter("tasks-"+a.stations.get(0).getCloudnumber()+".csv", "UTF-8");	
+					for( Long s : a.tmap.keySet() )
+					{
+						writer.println(s + "," + a.tmap.get(s));
+
+					}
+					writer.close();
 				}
+				
 				System.out.println("~~~~~~~~~~~~");
 				System.out.println("VM: "+j + " tasks: "+i);
 				System.out.println("~~~~~~~~~~~~");
 				System.out.println("All filesize: "+Station.allstationsize);
 				System.out.println("~~~~~~~~~~~~");
-				System.out.println(Cloud.getIaas().repositories.toString());
+				System.out.println("Scneario finished at: "+Scenario.scenscan);
 				System.out.println("~~~~~~~~~~~~");
-				for (PhysicalMachine p : Cloud.getIaas().machines) {
-					if (/* !p.isHostingVMs() */ p.localDisk.getFreeStorageCapacity() != p.localDisk
-							.getMaxStorageCapacity()) {
-						System.out.println(p);
+				for(Cloud c : Scenario.clouds){
+					System.out.println(c.getIaas().repositories.toString());
+					for (PhysicalMachine p : c.getIaas().machines) {
+						if ( p.localDisk.getFreeStorageCapacity() != p.localDisk.getMaxStorageCapacity()) {
+							System.out.println(p);
+						}
 					}
+					System.out.println("~~~~~~~~~~~~");
 				}
-				/*System.out.println("~~~~~~~~~~~~");
-				for(Station s: Station.stations){
-					System.out.println(s);
-				}*/
-				System.out.println("~~~~~~~~~~~~");
-				PrintWriter writer = new PrintWriter("tasks.csv", "UTF-8");	
-				for( Long s : Application.hmap.keySet() )
-				{
-					writer.println(s + "," + Application.hmap.get(s));
-				}
-				writer.close();
+				
 			}
 			
 		}
@@ -190,14 +225,10 @@ public class Scenario {
 		 * 			harmadik argumentumkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-	
 			String datafile=args[0];
 			String cloudfile=args[1];
 			int print=Integer.parseInt(args[2]);
-			new Scenario(null,null,datafile,cloudfile,print);	
+			new Scenario(null,null,datafile,cloudfile,print,3,60000);	
 			
 		}
 }
-
-	
-
