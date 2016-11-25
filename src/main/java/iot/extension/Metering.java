@@ -15,9 +15,9 @@ public class Metering extends DeferredEvent {
 	private int filesize;
 	private Repository r;
 	private Station s;
-	public Metering(Station s, int i, int filesize,long delay,Repository r) {
+	public Metering(Station s, int i, int filesize,long delay) {
 		super(delay);
-		this.r = r;
+		this.r = s.getRepo();
 		this.i = i;
 		this.filesize = filesize;
 		this.s = s;

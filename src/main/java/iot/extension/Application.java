@@ -173,7 +173,7 @@ public class Application extends Timed {
 		boolean i = true;
 		for (Station s : Station.stations) {
 			if (s.isSubscribed()) {
-				i = false;
+				return false;
 			}
 		}
 		return i;

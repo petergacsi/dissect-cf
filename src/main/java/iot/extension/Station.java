@@ -236,10 +236,10 @@ public class Station extends Timed {
 					
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(60)+1;		
-					new Metering(this, i, sd.filesize,1000*randomInt,this.repo);
+					new Metering(this, i, sd.filesize,1000*randomInt);
 				}else{
 					
-					new Metering(this, i, sd.filesize,1,this.repo);
+					new Metering(this, i, sd.filesize,1);
 				}
 				
 
