@@ -18,6 +18,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
+import providers.Provider;
 
 /**
  * Az osztaly fo feladata az egyes Szcenariok lefuttasa, illetve logolasa
@@ -225,10 +226,11 @@ public class Scenario {
 		 * 			harmadik argumentumkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			String datafile=args[0];
+			/*String datafile=args[0];
 			String cloudfile=args[1];
 			int print=Integer.parseInt(args[2]);
-			new Scenario(null,null,datafile,cloudfile,print,3,60000);	
+			new Scenario(null,null,datafile,cloudfile,print,3,60000);	*/
+			Provider.readProviderXml(args[0]);
 			
 		}
 }
