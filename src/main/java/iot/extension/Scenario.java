@@ -229,8 +229,8 @@ public class Scenario {
 			/*String datafile=args[0];
 			String cloudfile=args[1];
 			int print=Integer.parseInt(args[2]);
-			new Scenario(null,null,datafile,cloudfile,print,3,60000);	*/
-			Provider.readProviderXml(args[0]);
+			new Scenario(null,null,datafile,cloudfile,print,3,60000);	
+			Provider.readProviderXml(args[0]);*/
 			
 		}
 }
