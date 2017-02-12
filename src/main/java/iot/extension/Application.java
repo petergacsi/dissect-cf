@@ -18,6 +18,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAda
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import iot.extension.Application.VmCollector;
+import providers.Provider;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 
 /**
@@ -288,6 +289,7 @@ public class Application extends Timed {
 				&& (Scenario.stationvalue[this.stations.get(0).getCloudnumber()]) == this.allgenerateddatasize
 				&& this.allgenerateddatasize != 0) {
 			unsubscribe();
+			Provider.stopProvider();
 			System.out.println("~~~~~~~~~~~~");
 			Scenario.scenscan=Timed.getFireCount();
 			

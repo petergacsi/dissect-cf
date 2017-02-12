@@ -1,32 +1,23 @@
 <?xml version="1.0"?>
 <providers>
-	<provider name="bluemix" frequency="1">
+	<provider name="bluemix" period="1">
 				<tier name="1" mbfrom="1" mbto="499999" constantfee="0">
-					<device-per-month>	0	</device-per-month>
-					<messages-per-month-per-device>	0	</messages-per-month-per-device>
-					<price-per-month>	0	</price-per-month>
-					<price-per-MB>	0.00097	</price-per-MB>
-					<messages-per-day>	0	</messages-per-day>
-					<messagesize-per-KB>	0	</messagesize-per-KB>
-					<block-of-data prize="0" messagenumber="0">	0	</block-of-data>
+					<price>0.00097</price>
+					<devicecount>0</devicecount>
+					<messagecount>0</messagecount>
+					<blockofdata>0</blockofdata>
 				</tier>
 				<tier name="2" mbfrom="450000" mbto="6999999" constantfee="0">
-					<device-per-month>	0	</device-per-month>
-					<messages-per-month-per-device>	0	</messages-per-month-per-device>
-					<price-per-month>	0	</price-per-month>
-					<price-per-MB>	0.00068	</price-per-MB>
-					<messages-per-day>	0	</messages-per-day>
-					<messagesize-per-KB>	0	</messagesize-per-KB>
-					<block-of-data prize="0" messagenumber="0">	0	</block-of-data>
+					<price>0.00068</price>
+					<devicecount>0</devicecount>
+					<messagecount>0</messagecount>
+					<blockofdata>0</blockofdata>
 				</tier>
 				<tier name="3" mbfrom="7000000" mbto="-1" constantfee="0">
-					<device-per-month>	0	</device-per-month>
-					<messages-per-month-per-device>	0	</messages-per-month-per-device>
-					<price-per-month>	0	</price-per-month>
-					<price-per-MB>	0.00014	</price-per-MB>
-					<messages-per-day>	0	</messages-per-day>
-					<messagesize-per-KB>	0	</messagesize-per-KB>
-					<block-of-data prize="0" messagenumber="0">	0	</block-of-data>
+					<price>0.00014</price>
+					<devicecount>0</devicecount>
+					<messagecount>0</messagecount>
+					<blockofdata>0</blockofdata>
 				</tier>
 	</provider>
 </providers>

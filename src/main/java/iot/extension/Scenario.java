@@ -18,6 +18,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
+import providers.BluemixProvider;
 import providers.Provider;
 
 /**
@@ -164,11 +165,12 @@ public class Scenario {
 							break;
 						}
 					}
-					app.add(new Application(appfreq,tasksize,true,1,cloud,stations,(i+1)+". app:"));
+					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
 				}
 				
-				
+				Provider.startProvider();
 				Timed.simulateUntilLastEvent();
+				
 			}
 			// hasznos infok:
 			if(print==1){
@@ -223,14 +225,14 @@ public class Scenario {
 		/**
 		 * @param args Az elso argumentumkent adhato meg a Station-okat leiro XML eleresi utvonala
 		 * 			masodik argumentumkent az IaaS-t leiro XML eleresi utvonala
-		 * 			harmadik argumentumkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
+		 * 			harmadik argumentumkent a provider-eket leiro XML fajl eleresi utvonala 
+		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			/*String datafile=args[0];
+			String datafile=args[0];
 			String cloudfile=args[1];
-			int print=Integer.parseInt(args[2]);
-			new Scenario(null,null,datafile,cloudfile,print,3,60000);	
-			Provider.readProviderXml(args[0]);*/
-			
+			new BluemixProvider(args[2]);
+			int print=Integer.parseInt(args[3]);
+			new Scenario(null,null,datafile,cloudfile,print,1,60000);	
 		}
 }

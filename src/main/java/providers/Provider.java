@@ -14,6 +14,90 @@ import org.xml.sax.SAXException;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 
 public abstract class Provider extends Timed{
+		
+	class Tier{
+
+		@Override
+		public String toString() {
+			return "Tier [tierName=" + tierName + ", mbFrom=" + mbFrom + ", mbTo=" + mbTo + ", constantFee="
+					+ constantFee + ", price=" + price + ", devicecount=" + devicecount + ", messagecount="
+					+ messagecount + ", blockofdata=" + blockofdata + "]";
+		}
+		
+		private void setTierName(String tierName) {
+			this.tierName = tierName;
+		}
+		private void setMbFrom(long mbFrom) {
+			this.mbFrom = mbFrom;
+		}
+		private void setMbTo(long mbTo) {
+			this.mbTo = mbTo;
+		}
+		private void setConstantFee(boolean constantFee) {
+			this.constantFee = constantFee;
+		}
+		private void setPrice(double price) {
+			this.price = price;
+		}
+		private void setDevicecount(long devicecount) {
+			this.devicecount = devicecount;
+		}
+		private void setMessagecount(long messagecount) {
+			this.messagecount = messagecount;
+		}
+		private void setBlockofdata(long blockofdata) {
+			this.blockofdata = blockofdata;
+		}
+		
+		
+
+		protected String getTierName() {
+			return tierName;
+		}
+
+		protected long getMbFrom() {
+			return mbFrom;
+		}
+
+		protected long getMbTo() {
+			return mbTo;
+		}
+
+		protected boolean isConstantFee() {
+			return constantFee;
+		}
+
+		protected double getPrice() {
+			return price;
+		}
+
+		protected long getDevicecount() {
+			return devicecount;
+		}
+
+		protected long getMessagecount() {
+			return messagecount;
+		}
+
+		protected long getBlockofdata() {
+			return blockofdata;
+		}
+
+
+
+		private String tierName;
+		private long mbFrom;
+		private long mbTo;
+		private boolean constantFee;
+		
+		private double price;
+		private long devicecount;
+		private long messagecount;
+		private long blockofdata;
+	}
+	
+	
+protected abstract Tier searchCategory();
 	
 	@Override
 	public String toString() {
@@ -41,7 +125,7 @@ public abstract class Provider extends Timed{
 		this.freq = freq;
 	}
 
-	private double getUserCost() {
+	public double getUserCost() {
 		return userCost;
 	}
 
@@ -61,75 +145,6 @@ public abstract class Provider extends Timed{
 	private long stopTime;
 	private ArrayList<Tier> tierList;
 	
-	class Tier{
-		@Override
-		public String toString() {
-			return "Tier [tierName=" + tierName + ", mbFrom=" + mbFrom + ", mbTo=" + mbTo + ", constantFee="
-					+ constantFee + ", devicePerMonth=" + devicePerMonth + ", messagesPerMonthPerDevice="
-					+ messagesPerMonthPerDevice + ", pricePerMonth=" + pricePerMonth + ", pricePerMb=" + pricePerMb
-					+ ", messagesPerDay=" + messagesPerDay + ", messagesizePerUnitInKb=" + messagesizePerUnitInKb
-					+ ", blockOfData=" + blockOfData + ", bodPrize=" + bodPrize + ", bodmessagenumber="
-					+ bodmessagenumber + "]";
-		}
-		private void setTierName(String tierName) {
-			this.tierName = tierName;
-		}
-		private void setMbFrom(int mbFrom) {
-			this.mbFrom = mbFrom;
-		}
-		private void setMbTo(int mbTo) {
-			this.mbTo = mbTo;
-		}
-		private void setConstantFee(boolean constantFee) {
-			this.constantFee = constantFee;
-		}
-		private void setDevicePerMonth(int devicePerMonth) {
-			this.devicePerMonth = devicePerMonth;
-		}
-		private void setMessagesPerMonthPerDevice(int messagesPerMonthPerDevice) {
-			this.messagesPerMonthPerDevice = messagesPerMonthPerDevice;
-		}
-		private void setPricePerMonth(double pricePerMonth) {
-			this.pricePerMonth = pricePerMonth;
-		}
-		private void setPricePerMb(double pricePerMb) {
-			this.pricePerMb = pricePerMb;
-		}
-		private void setMessagesPerDay(int messagesPerDay) {
-			this.messagesPerDay = messagesPerDay;
-		}
-		private void setMessagesizePerUnitInKb(int messagesPerUnitInKb) {
-			this.messagesizePerUnitInKb = messagesPerUnitInKb;
-		}
-		private void setBlockOfData(int blockOfData) {
-			this.blockOfData = blockOfData;
-		}
-		private void setBodPrize(double bodPrize) {
-			this.bodPrize = bodPrize;
-		}
-		private void setBodmessagenumber(int bodmessagenumber) {
-			this.bodmessagenumber = bodmessagenumber;
-		}
-		private String tierName;
-		private int mbFrom;
-		private int mbTo;
-		private boolean constantFee;
-		
-		private int devicePerMonth;
-		private int messagesPerMonthPerDevice;
-		private double pricePerMonth;
-		private double pricePerMb;
-		private int messagesPerDay;
-		private int messagesizePerUnitInKb;
-		private int blockOfData;
-		private double bodPrize;
-		private int bodmessagenumber;
-	}
-	/**
-	 * Should not be called directly
-	 * @param freq
-	 * @param name
-	 */
 	protected Provider(){
 		this.tierList = new ArrayList<Tier>();
 	}
@@ -145,6 +160,8 @@ public abstract class Provider extends Timed{
 		for(Provider p : providerList){
 			p.unsubscribe();
 			p.stopTime=Timed.getFireCount();
+			System.out.println("~~~~~~~~~~~~");
+			System.out.println(p);
 		}
 	}
 	
@@ -159,8 +176,8 @@ public abstract class Provider extends Timed{
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			
 			
-			p.setName(nList.item(temp).getAttributes().item(1).getNodeValue());
-			p.setFreq(Long.parseLong(nList.item(temp).getAttributes().item(0).getNodeValue())*86400000);
+			p.setName(nList.item(temp).getAttributes().item(0).getNodeValue());
+			p.setFreq(Long.parseLong(nList.item(temp).getAttributes().item(1).getNodeValue())*86400000);
 			
 			Node nNode = nList.item(temp);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
@@ -172,24 +189,21 @@ public abstract class Provider extends Timed{
 						Tier t  = p.new Tier();
 						Element eElement2 = (Element) nNode2;
 						t.setConstantFee(((Integer.parseInt(eElement2.getAttributes().item(0).getNodeValue()) == 1 ) ? true : false));
-						t.setMbFrom(Integer.parseInt(eElement2.getAttributes().item(1).getNodeValue()));
-						t.setMbTo(Integer.parseInt(eElement2.getAttributes().item(2).getNodeValue()));
+						t.setMbFrom(Long.parseLong(eElement2.getAttributes().item(1).getNodeValue()));
+						long tmp =Long.parseLong(eElement2.getAttributes().item(2).getNodeValue());
+						t.setMbTo(tmp==-1? Long.MAX_VALUE : tmp);
 						t.setTierName(eElement2.getAttributes().item(2).getNodeValue());
-						t.setDevicePerMonth(Integer.parseInt(eElement2.getElementsByTagName("device-per-month").item(0).getTextContent()));
-						t.setMessagesPerMonthPerDevice(Integer.parseInt(eElement2.getElementsByTagName("messages-per-month-per-device").item(0).getTextContent()));
-						t.setPricePerMonth(Double.parseDouble(eElement2.getElementsByTagName("price-per-month").item(0).getTextContent()));//f
-						t.setPricePerMb(Double.parseDouble(eElement2.getElementsByTagName("price-per-MB").item(0).getTextContent()));//f
-						t.setMessagesPerDay(Integer.parseInt(eElement2.getElementsByTagName("messages-per-day").item(0).getTextContent()));
-						t.setMessagesizePerUnitInKb(Integer.parseInt(eElement2.getElementsByTagName("messagesize-per-KB").item(0).getTextContent()));
-						t.setBlockOfData(Integer.parseInt(eElement2.getElementsByTagName("block-of-data").item(0).getTextContent()));
-						t.setBodmessagenumber(Integer.parseInt(eElement2.getElementsByTagName("block-of-data").item(0).getAttributes().item(0).getNodeValue()));
-						t.setBodPrize(Double.parseDouble(eElement2.getElementsByTagName("block-of-data").item(0).getAttributes().item(1).getNodeValue())); //f
+						t.setPrice(Double.parseDouble(eElement2.getElementsByTagName("price").item(0).getTextContent()));
+						t.setDevicecount(Long.parseLong(eElement2.getElementsByTagName("devicecount").item(0).getTextContent()));
+						t.setMessagecount(Long.parseLong(eElement2.getElementsByTagName("messagecount").item(0).getTextContent()));
+						t.setBlockofdata(Long.parseLong(eElement2.getElementsByTagName("blockofdata").item(0).getTextContent()));
+						
 						p.tierList.add(t);
+						
 					}
 				}
 			}
-		System.out.println(p);
 		}
+		Provider.providerList.add(p);
 	}
-
 }
