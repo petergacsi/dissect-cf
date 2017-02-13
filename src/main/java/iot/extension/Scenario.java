@@ -18,6 +18,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
+import providers.AmazonProvider;
 import providers.BluemixProvider;
 import providers.OracleProvider;
 import providers.Provider;
@@ -180,8 +181,9 @@ public class Scenario {
 				
 				new BluemixProvider(providerfile, this.simulatedTime,"bluemix");
 				new OracleProvider(providerfile, this.simulatedTime,"oracle");
-				/*new AzureProvider();
-				new AmazonProvider();*/
+				new AmazonProvider(providerfile, this.simulatedTime,"amazon");
+				/*new AzureProvider();*/
+
 				Provider.startProvider();
 				Timed.simulateUntilLastEvent();
 				
