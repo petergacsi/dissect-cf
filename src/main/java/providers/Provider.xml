@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <providers>
-	<provider name="bluemix" period="1">
+	<provider name="bluemix" period="0">
 				<tier name="1" mbfrom="1" mbto="499999" constantfee="0">
 					<price>0.00097</price>
 					<devicecount>0</devicecount>
@@ -17,6 +17,38 @@
 					<price>0.00014</price>
 					<devicecount>0</devicecount>
 					<messagecount>0</messagecount>
+					<blockofdata>0</blockofdata>
+				</tier>
+	</provider>
+	<provider name="oracle" period="31">
+				<tier name="Wearable" mbfrom="0" mbto="0" constantfee="0">
+					<price>0.46015</price>
+					<devicecount>0</devicecount>
+					<messagecount>1500</messagecount>
+					<blockofdata>0</blockofdata>
+				</tier>
+				<tier name="Consumer" mbfrom="0" mbto="0" constantfee="0">
+					<price>0.93</price>
+					<devicecount>0</devicecount>
+					<messagecount>15000</messagecount>
+					<blockofdata>0</blockofdata>
+				</tier>
+				<tier name="Telematic" mbfrom="0" mbto="0" constantfee="0">
+					<price>2.32</price>
+					<devicecount>0</devicecount>
+					<messagecount>100000</messagecount>
+					<blockofdata>0</blockofdata>
+				</tier>
+				<tier name="Commercial/Industrial" mbfrom="0" mbto="0" constantfee="0">
+					<price>3.47</price>
+					<devicecount>0</devicecount>
+					<messagecount>100000</messagecount>
+					<blockofdata>0</blockofdata>
+				</tier>
+				<tier name="Additional messages" mbfrom="0" mbto="0" constantfee="1">
+					<price>0.02344</price>
+					<devicecount>0</devicecount>
+					<messagecount>1000</messagecount>
 					<blockofdata>0</blockofdata>
 				</tier>
 	</provider>

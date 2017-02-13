@@ -34,6 +34,11 @@ public class Station extends Timed {
 		private String name;
 		private String torepo;
 		private int ratio;
+		
+		
+		public int getSensornumber() {
+			return sensornumber;
+		}
 
 		/**
 		 * @param lt lifetime, a szimulacio teljes idotartama
@@ -46,7 +51,7 @@ public class Station extends Timed {
 		 * @param torepo torepo, az a Repository, ahova a station a generalt adatokat fogja kuldeni 
 		 * @param ratio ratio, erteketol fuggoen az adatok bizonyos ideig vissza lesznek tartva a kuldestol
 		 */
-		public Stationdata(long lt, long st, long stt, int fs, int sn, long freq, String name, String torepo,
+		Stationdata(long lt, long st, long stt, int fs, int sn, long freq, String name, String torepo,
 				int ratio) {
 			this.lifetime = lt;
 			this.starttime = st;
@@ -84,10 +89,19 @@ public class Station extends Timed {
 	private boolean randommetering;
 	public Cloud cloud;
 	private int cloudnumber;
+	private int messagecount;
 	
+	void setMessagecount(int messagecount) {
+		this.messagecount = messagecount;
+	}
+
+	public int getMessagecount() {
+		return messagecount;
+	}
 
 	public long generatedfilesize;
 	public static long allstationsize=0;
+	
 	
 
 	/**
@@ -103,7 +117,7 @@ public class Station extends Timed {
 		this.vm = null;
 		this.i = 0;
 		this.sd = sd;
-		
+		this.messagecount=0;
 		isWorking = sd.lifetime == -1 ? false : true;
 		lmap = new HashMap<String, Integer>();
 		lat = 11;

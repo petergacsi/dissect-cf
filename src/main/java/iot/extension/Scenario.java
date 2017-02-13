@@ -19,6 +19,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
 import providers.BluemixProvider;
+import providers.OracleProvider;
 import providers.Provider;
 
 /**
@@ -31,7 +32,13 @@ public class Scenario {
 	private static ArrayList<Application> app = new ArrayList<Application>();
 	public static long scenscan = 0;
 	public static long[] stationvalue; 
+	private long simulatedTime;
 	
+	
+	public static ArrayList<Application> getApp() {
+		return app;
+	}
+
 	/**
 	 * Feldolgozza a Station-oket leiro XML fajlt es elinditja a szimulaciot.
 	 * @param va a virtualis kepfajl, default ertek hasznalathoz null-kent keruljon atadasra
@@ -40,7 +47,7 @@ public class Scenario {
 	 * @param cloudfile az IaaS felhot definialo XML fajl
 	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,int print,int cloudcount,long appfreq) throws Exception {
+	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,String providerfile,int print,int cloudcount,long appfreq) throws Exception {
 		long tasksize=-1; // TODO: ez miert kell?!
 		stationvalue = new long[cloudcount];
 		if(cloudcount<1){
@@ -75,6 +82,7 @@ public class Scenario {
 						System.exit(0);
 					}
 					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent());
+					this.simulatedTime = time;
 					if (time < -1) {
 						System.out.println("rossz time ertek! ");
 						System.exit(0);
@@ -141,6 +149,7 @@ public class Scenario {
 								eElement.getElementsByTagName("name").item(0).getTextContent()+" "+i,
 								eElement.getElementsByTagName("torepo").item(0).getTextContent(), ratio);
 						Scenario.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
+						
 					}
 
 					}
@@ -148,6 +157,7 @@ public class Scenario {
 			}
 			
 			if(tasksize!=-1){
+
 				int maxstation = Scenario.stations.size() / cloudcount;
 				for(int i=0;i<cloudcount;i++){
 					Scenario.stationvalue[i]=0;
@@ -168,6 +178,10 @@ public class Scenario {
 					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
 				}
 				
+				new BluemixProvider(providerfile, this.simulatedTime,"bluemix");
+				new OracleProvider(providerfile, this.simulatedTime,"oracle");
+				/*new AzureProvider();
+				new AmazonProvider();*/
 				Provider.startProvider();
 				Timed.simulateUntilLastEvent();
 				
@@ -231,8 +245,8 @@ public class Scenario {
 		public static void main(String[] args) throws Exception {
 			String datafile=args[0];
 			String cloudfile=args[1];
-			new BluemixProvider(args[2]);
+			String providerfile=args[2];
 			int print=Integer.parseInt(args[3]);
-			new Scenario(null,null,datafile,cloudfile,print,1,60000);	
+			new Scenario(null,null,datafile,cloudfile,providerfile,print,1,60000);	
 		}
 }

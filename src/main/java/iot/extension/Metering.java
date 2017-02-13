@@ -39,6 +39,7 @@ public class Metering extends DeferredEvent {
 			this.s.generatedfilesize+=this.filesize;
 			Station.allstationsize+=this.filesize;
 			Scenario.stationvalue[cloudnumber]+=this.filesize;
+			this.s.setMessagecount(this.s.getMessagecount()+1);
 		};
 		
 		/*for (Station s : Station.stations) {

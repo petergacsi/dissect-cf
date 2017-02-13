@@ -97,7 +97,7 @@ public abstract class Provider extends Timed{
 	}
 	
 	
-protected abstract Tier searchCategory();
+	protected abstract Tier searchCategory();
 	
 	@Override
 	public String toString() {
@@ -137,6 +137,16 @@ protected abstract Tier searchCategory();
 		return tierList;
 	}
 
+	
+	protected long getPeriod() {
+		return period;
+	}
+
+	protected void setPeriod(long period) {
+		this.period = period;
+	}
+
+
 	private static ArrayList<Provider> providerList = new ArrayList<Provider>();
 	private double userCost = 0.0;
 	private String name;
@@ -144,6 +154,9 @@ protected abstract Tier searchCategory();
 	private long startTime;
 	private long stopTime;
 	private ArrayList<Tier> tierList;
+	protected long lifetime;
+	protected long period;
+	protected String tierName;
 	
 	protected Provider(){
 		this.tierList = new ArrayList<Tier>();
@@ -165,7 +178,7 @@ protected abstract Tier searchCategory();
 		}
 	}
 	
-	protected <P extends Provider> void readProviderXml(String datafile,P p) throws ParserConfigurationException, SAXException, IOException {
+	protected <P extends Provider> void readProviderXml(String datafile,P p,String name) throws ParserConfigurationException, SAXException, IOException {
 		File fXmlFile = new File(datafile);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -175,35 +188,39 @@ protected abstract Tier searchCategory();
 		NodeList nList = doc.getElementsByTagName("provider");
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 			
-			
-			p.setName(nList.item(temp).getAttributes().item(0).getNodeValue());
-			p.setFreq(Long.parseLong(nList.item(temp).getAttributes().item(1).getNodeValue())*86400000);
-			
-			Node nNode = nList.item(temp);
-			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element eElement = (Element) nNode;
-				NodeList nList2 = eElement.getElementsByTagName("tier");
-				for (int temp2 = 0; temp2 < nList2.getLength(); temp2++) {
-					Node nNode2 = nList2.item(temp2);
-					if (nNode2.getNodeType() == Node.ELEMENT_NODE) {
-						Tier t  = p.new Tier();
-						Element eElement2 = (Element) nNode2;
-						t.setConstantFee(((Integer.parseInt(eElement2.getAttributes().item(0).getNodeValue()) == 1 ) ? true : false));
-						t.setMbFrom(Long.parseLong(eElement2.getAttributes().item(1).getNodeValue()));
-						long tmp =Long.parseLong(eElement2.getAttributes().item(2).getNodeValue());
-						t.setMbTo(tmp==-1? Long.MAX_VALUE : tmp);
-						t.setTierName(eElement2.getAttributes().item(2).getNodeValue());
-						t.setPrice(Double.parseDouble(eElement2.getElementsByTagName("price").item(0).getTextContent()));
-						t.setDevicecount(Long.parseLong(eElement2.getElementsByTagName("devicecount").item(0).getTextContent()));
-						t.setMessagecount(Long.parseLong(eElement2.getElementsByTagName("messagecount").item(0).getTextContent()));
-						t.setBlockofdata(Long.parseLong(eElement2.getElementsByTagName("blockofdata").item(0).getTextContent()));
-						
-						p.tierList.add(t);
-						
+			if(nList.item(temp).getAttributes().item(0).getNodeValue().equals(name)){
+				p.setName(nList.item(temp).getAttributes().item(0).getNodeValue());
+				p.setFreq(this.lifetime);
+				p.setPeriod(Long.parseLong(nList.item(temp).getAttributes().item(1).getNodeValue()));
+				
+				Node nNode = nList.item(temp);
+				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+					Element eElement = (Element) nNode;
+					NodeList nList2 = eElement.getElementsByTagName("tier");
+					for (int temp2 = 0; temp2 < nList2.getLength(); temp2++) {
+						Node nNode2 = nList2.item(temp2);
+						if (nNode2.getNodeType() == Node.ELEMENT_NODE) {
+							Tier t  = p.new Tier();
+							Element eElement2 = (Element) nNode2;
+							t.setConstantFee(((Integer.parseInt(eElement2.getAttributes().item(0).getNodeValue()) == 1 ) ? true : false));
+							t.setMbFrom(Long.parseLong(eElement2.getAttributes().item(1).getNodeValue()));
+							long tmp =Long.parseLong(eElement2.getAttributes().item(2).getNodeValue());
+							t.setMbTo(tmp==-1? Long.MAX_VALUE : tmp);
+							t.setTierName(eElement2.getAttributes().item(3).getNodeValue());
+							t.setPrice(Double.parseDouble(eElement2.getElementsByTagName("price").item(0).getTextContent()));
+							t.setDevicecount(Long.parseLong(eElement2.getElementsByTagName("devicecount").item(0).getTextContent()));
+							t.setMessagecount(Long.parseLong(eElement2.getElementsByTagName("messagecount").item(0).getTextContent()));
+							t.setBlockofdata(Long.parseLong(eElement2.getElementsByTagName("blockofdata").item(0).getTextContent()));
+							
+							p.tierList.add(t);
+						}
 					}
 				}
 			}
+			
+			
 		}
+		
 		Provider.providerList.add(p);
 	}
 }
