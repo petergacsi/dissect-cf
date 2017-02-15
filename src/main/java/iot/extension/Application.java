@@ -289,7 +289,6 @@ public class Application extends Timed {
 				&& (Scenario.stationvalue[this.stations.get(0).getCloudnumber()]) == this.allgenerateddatasize
 				&& this.allgenerateddatasize != 0) {
 			unsubscribe();
-			Provider.stopProvider();
 			System.out.println("~~~~~~~~~~~~");
 			Scenario.scenscan=Timed.getFireCount();
 			

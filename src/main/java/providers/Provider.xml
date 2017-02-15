@@ -1,63 +1,14 @@
 <?xml version="1.0"?>
 <providers>
-	<provider name="bluemix" period="0">
-				<tier name="B1" mbfrom="1" mbto="499999" constantfee="0">
-					<price>0.00097</price>
-					<devicecount>0</devicecount>
-					<messagecount>0</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-				<tier name="B2" mbfrom="450000" mbto="6999999" constantfee="0">
-					<price>0.00068</price>
-					<devicecount>0</devicecount>
-					<messagecount>0</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-				<tier name="B3" mbfrom="7000000" mbto="-1" constantfee="0">
-					<price>0.00014</price>
-					<devicecount>0</devicecount>
-					<messagecount>0</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-	</provider>
-	<provider name="oracle" period="31">
-				<tier name="Wearable" mbfrom="0" mbto="0" constantfee="0">
-					<price>0.46015</price>
-					<devicecount>0</devicecount>
-					<messagecount>1500</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-				<tier name="Consumer" mbfrom="0" mbto="0" constantfee="0">
-					<price>0.93</price>
-					<devicecount>0</devicecount>
-					<messagecount>15000</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-				<tier name="Telematic" mbfrom="0" mbto="0" constantfee="0">
-					<price>2.32</price>
-					<devicecount>0</devicecount>
-					<messagecount>100000</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-				<tier name="Commercial/Industrial" mbfrom="0" mbto="0" constantfee="0">
-					<price>3.47</price>
-					<devicecount>0</devicecount>
-					<messagecount>100000</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-				<tier name="Additional messages" mbfrom="0" mbto="0" constantfee="1">
-					<price>0.02344</price>
-					<devicecount>0</devicecount>
-					<messagecount>1000</messagecount>
-					<blockofdata>0</blockofdata>
-				</tier>
-	</provider>
-	<provider name="amazon" period="0">
-				<tier name="AT" mbfrom="0" mbto="0" constantfee="0">
-					<price>4.570195925</price>
-					<devicecount>0</devicecount>
-					<messagecount>1000000</messagecount>
-					<blockofdata>51</blockofdata>
+	<provider name="amazon" exchangerate="0.914039185">
+				<tier name="default" mbfrom="0" mbto="0">
+					<device-per-month>0</device-per-month>
+					<messages-per-month-per-device>0</messages-per-month-per-device>
+					<price-per-month>0</price-per-month>
+					<price-per-MB>0</price-per-MB>
+					<messages-per-day>0</messages-per-day>
+					<messagesize-per-KB>0</messagesize-per-KB>
+					<block-of-data price="5" messagecount="1000000">512</block-of-data>
 				</tier>
 	</provider>
 </providers>

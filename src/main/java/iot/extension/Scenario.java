@@ -18,9 +18,6 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
-import providers.AmazonProvider;
-import providers.BluemixProvider;
-import providers.OracleProvider;
 import providers.Provider;
 
 /**
@@ -33,7 +30,7 @@ public class Scenario {
 	private static ArrayList<Application> app = new ArrayList<Application>();
 	public static long scenscan = 0;
 	public static long[] stationvalue; 
-	private long simulatedTime;
+	private int filesize;
 	
 	
 	public static ArrayList<Application> getApp() {
@@ -82,8 +79,7 @@ public class Scenario {
 						System.out.println("rossz freq ertek! ");
 						System.exit(0);
 					}
-					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent());
-					this.simulatedTime = time;
+					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent()+10000L);
 					if (time < -1) {
 						System.out.println("rossz time ertek! ");
 						System.exit(0);
@@ -104,6 +100,7 @@ public class Scenario {
 					}
 					final int filesize=Integer.parseInt(eElement.getElementsByTagName("snumber").item(0)
 							.getAttributes().item(0).getNodeValue());
+					this.filesize=filesize;
 					if (filesize < 1) {
 						System.out.println("rossz filesize ertek! ");
 						System.exit(0);
@@ -178,15 +175,9 @@ public class Scenario {
 					}
 					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
 				}
-				
-				new BluemixProvider(providerfile, this.simulatedTime,"bluemix");
-				new OracleProvider(providerfile, this.simulatedTime,"oracle");
-				new AmazonProvider(providerfile, this.simulatedTime,"amazon");
-				/*new AzureProvider();*/
 
-				Provider.startProvider();
 				Timed.simulateUntilLastEvent();
-				
+				Provider.readProviderXml(providerfile, null, null,filesize);
 			}
 			// hasznos infok:
 			if(print==1){
@@ -249,6 +240,6 @@ public class Scenario {
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			int print=Integer.parseInt(args[3]);
-			new Scenario(null,null,datafile,cloudfile,providerfile,print,1,60000);	
+			new Scenario(null,null,datafile,cloudfile,providerfile,0/*print*/,1,60000);	
 		}
 }
