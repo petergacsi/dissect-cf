@@ -18,6 +18,7 @@ import iot.extension.Station;
 
 public class CloudsProvider extends Provider {
 
+	private long usedMessage = 0;
 	public CloudsProvider() {
 		super();
 	}
@@ -48,7 +49,6 @@ public class CloudsProvider extends Provider {
 						month=1;
 						this.setUserCost(this.getUserCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
 					}else if(s.sd.getLifetime()%(this.getFreq())!=0){
-						month=month+1;
 						this.setUserCost(this.getUserCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*(month+1));
 					}else{
 						this.setUserCost(this.getUserCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
@@ -72,10 +72,32 @@ public class CloudsProvider extends Provider {
 		}
 		//azure
 		
+		if(this.getPricePerMB()>=0 && this.getMessagesPerDay()>0 && filesize<=(this.getMessagesizePerKB()*1024)){
+			long totalMassages=Station.allstationsize  / filesize;
+			long msg = totalMassages - usedMessage;
+			usedMessage= msg;
+			if(msg<=this.getMessagesPerDay()){
+				long month = Timed.getFireCount()/((this.getFreq()*31));
+				if(month==0){
+					month=1;
+					this.setUserCost(this.getPricePerMonth()*month);
+				}else if(Timed.getFireCount()%(this.getFreq())!=0){
+					this.setUserCost(this.getPricePerMonth()*(month+1));
+				}else{
+					this.setUserCost(this.getPricePerMonth()*month);
+				}
+			}else{
+				System.err.println("You can't use this tier of Azure!");
+				System.exit(1);
+			}
+		}
+			
+		
 		
 		
 		/******************************************************************/
-		System.out.println("Usercost is: " + this.getUserCost());
+		//System.out.println("Usercost is: " + this.getUserCost());
+		// shutdown test
 		boolean tmp = false;
 		for(Application a : Scenario.getApp()){
 			if(a.isSubscribed()){

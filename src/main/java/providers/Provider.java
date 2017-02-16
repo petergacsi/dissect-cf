@@ -40,6 +40,7 @@ public abstract class Provider extends Timed{
 	}
 	
 	public void stopProvider(){
+		System.out.println(this.toString());
 		new DeferredEvent(Provider.lateStart){
 			@Override
 			protected void eventAction() {
@@ -51,12 +52,7 @@ public abstract class Provider extends Timed{
 	
 	@Override
 	public String toString() {
-		return "Provider [userCost=" + userCost + ", pricePerMB=" + pricePerMB + ", blockOfData=" + blockOfData
-				+ ", exchangeRate=" + exchangeRate + ", bofMessagecount=" + bofMessagecount + ", bofPrice=" + bofPrice
-				+ ", devicepricePerMonth=" + devicepricePerMonth + ", messagesPerMonthPerDevice="
-				+ messagesPerMonthPerDevice + ", amDevicepricePerMonth=" + amDevicepricePerMonth
-				+ ", amMessagesPerMonthPerDevice=" + amMessagesPerMonthPerDevice + ", pricePerMonth=" + pricePerMonth
-				+ ", messagesPerDay=" + messagesPerDay + ", messagesizePerKB=" + messagesizePerKB + "]";
+		return "Provider [userCost=" + userCost + "]";
 	}
 
 	private static ArrayList<Provider> providerList = new ArrayList<Provider>();
@@ -243,6 +239,8 @@ public abstract class Provider extends Timed{
 		
 		nList = doc.getElementsByTagName("azure");
 		if(nList.item(0).getAttributes().item(0).getNodeValue().equals("true")){
+			p.setPeriod(Long.parseLong(nList.item(0).getAttributes().item(1).getNodeValue()));
+			p.setFreq(p.getPeriod()*24*60*60*1000);
 			nList = doc.getElementsByTagName("price-per-month");
 			p.setPricePerMonth(Double.parseDouble(nList.item(0).getTextContent()));
 			nList = doc.getElementsByTagName("messages-per-day");
