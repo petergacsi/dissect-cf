@@ -18,6 +18,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
+import providers.CloudsProvider;
 import providers.Provider;
 
 /**
@@ -79,7 +80,7 @@ public class Scenario {
 						System.out.println("rossz freq ertek! ");
 						System.exit(0);
 					}
-					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent()+10000L);
+					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent());
 					if (time < -1) {
 						System.out.println("rossz time ertek! ");
 						System.exit(0);
@@ -175,9 +176,10 @@ public class Scenario {
 					}
 					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
 				}
-
+				Provider.readProviderXml(new CloudsProvider(),providerfile,filesize);
 				Timed.simulateUntilLastEvent();
-				Provider.readProviderXml(providerfile, null, null,filesize);
+				
+				
 			}
 			// hasznos infok:
 			if(print==1){

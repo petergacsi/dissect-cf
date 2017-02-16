@@ -36,6 +36,11 @@ public class Station extends Timed {
 		private int ratio;
 		
 		
+		
+		public long getLifetime() {
+			return lifetime;
+		}
+
 		public int getSensornumber() {
 			return sensornumber;
 		}
@@ -91,13 +96,14 @@ public class Station extends Timed {
 	private int cloudnumber;
 	private int messagecount;
 	
-	void setMessagecount(int messagecount) {
+	public void setMessagecount(int messagecount) {
 		this.messagecount = messagecount;
 	}
 
 	public int getMessagecount() {
 		return messagecount;
 	}
+	
 
 	public long generatedfilesize;
 	public static long allstationsize=0;

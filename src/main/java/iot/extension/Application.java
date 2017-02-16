@@ -105,6 +105,10 @@ public class Application extends Timed {
 	 */
 	private void startStation() {
 		if(Scenario.scenscan==0){
+			for(Provider p : Provider.getProviderList()){
+				p.startProvider();
+			}
+			Provider.lateStart = Timed.getFireCount();
 			System.out.println("Scenario started at: " + Timed.getFireCount());
 			Scenario.scenscan++;
 		}
