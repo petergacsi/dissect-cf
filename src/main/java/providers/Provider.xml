@@ -8,24 +8,16 @@
 	</bluemix> 
 
 	<amazon price="5" messagecount="1000000" 
-		exchangerate="0.914039185" calculate="false">512</amazon> 
+		exchangerate="0.95" calculate="false">512</amazon> 
 
-	<oracle calculate="false" period="31"> 
-		<!-- other tiers available, just change the position of the comments -->
-	<!-- 
-		<messages-per-month-per-device>100000</messages-per-month-per-device>
-		<deviceprice-per-month>2.32</deviceprice-per-month>
-		<messages-per-month-per-device>100000</messages-per-month-per-device>
-		<deviceprice-per-month>3.47</deviceprice-per-month>
+	<oracle calculate="true" period="31"> 
+		<deviceprice-per-month>0.93</deviceprice-per-month>
 		<messages-per-month-per-device>15000</messages-per-month-per-device>
-		<deviceprice-per-month>0.93</deviceprice-per-month> -->
-		<messages-per-month-per-device>1500</messages-per-month-per-device>
-		<deviceprice-per-month>0.46015</deviceprice-per-month>
 		<am-messages-per-month-per-device>1000</am-messages-per-month-per-device>
 		<am-deviceprice-per-month>0.02344</am-deviceprice-per-month>
 	</oracle> 
 
-	<azure calculate="true" period="1">
+	<azure calculate="false" period="1">
 		<price-per-month>421.65</price-per-month>
 		<messages-per-day>6000000</messages-per-day>
 		<messagesize-per-KB>4</messagesize-per-KB>

@@ -19,12 +19,14 @@ import iot.extension.Station;
 public class CloudsProvider extends Provider {
 
 	private long usedMessage = 0;
-	public CloudsProvider() {
-		super();
+
+	public CloudsProvider(long simulatedTime) {
+		super(simulatedTime);
 	}
 
 	@Override
 	protected void costCounter(int filesize) {
+		this.setUserCost(0.0);
 		//amazon
 		if(this.getBofPrice()>0 && this.getBlockOfData()>0){
 			if (filesize <= this.getBlockOfData()) {
@@ -36,8 +38,13 @@ public class CloudsProvider extends Provider {
 			}
 		}
 		//bluemix
-		if(this.getPricePerMB()>0){
-			double tmp = (double) Station.allstationsize / 1048576;
+		if(this.bmList.size()!=0){
+			double tmp= (double) Station.allstationsize / (double)1048576;
+			for(Bluemix bm : this.bmList){
+				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {
+					this.setPricePerMB(bm.price);
+				}
+			}
 			this.setUserCost(tmp*this.getPricePerMB());
 		}
 		//oracle
@@ -71,7 +78,6 @@ public class CloudsProvider extends Provider {
 			}
 		}
 		//azure
-		
 		if(this.getPricePerMB()>=0 && this.getMessagesPerDay()>0 && filesize<=(this.getMessagesizePerKB()*1024)){
 			long totalMassages=Station.allstationsize  / filesize;
 			long msg = totalMassages - usedMessage;
@@ -91,12 +97,7 @@ public class CloudsProvider extends Provider {
 				System.exit(1);
 			}
 		}
-			
-		
-		
-		
 		/******************************************************************/
-		//System.out.println("Usercost is: " + this.getUserCost());
 		// shutdown test
 		boolean tmp = false;
 		for(Application a : Scenario.getApp()){

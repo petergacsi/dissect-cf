@@ -32,7 +32,7 @@ public class Scenario {
 	public static long scenscan = 0;
 	public static long[] stationvalue; 
 	private int filesize;
-	
+	private long simulatedTime;
 	
 	public static ArrayList<Application> getApp() {
 		return app;
@@ -48,6 +48,7 @@ public class Scenario {
 	 */
 	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,String providerfile,int print,int cloudcount,long appfreq) throws Exception {
 		long tasksize=-1; // TODO: ez miert kell?!
+
 		stationvalue = new long[cloudcount];
 		if(cloudcount<1){
 			System.out.println("Cloudcount ertekenek legalabb 1-nek kell lennie!");
@@ -85,10 +86,13 @@ public class Scenario {
 						System.out.println("rossz time ertek! ");
 						System.exit(0);
 					}
+					this.simulatedTime=time;
+					
 					final long starttime = Long.parseLong(
 							eElement.getElementsByTagName("time").item(0).getAttributes().item(0).getNodeValue());
 					final long stoptime = Long.parseLong(
 							eElement.getElementsByTagName("time").item(0).getAttributes().item(1).getNodeValue());
+
 					if (starttime < 0 || (starttime > time && starttime < -1) || starttime > stoptime) {
 						System.out.println("rossz starttime/stoptime ertek! ");
 						System.exit(0);
@@ -176,7 +180,7 @@ public class Scenario {
 					}
 					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
 				}
-				Provider.readProviderXml(new CloudsProvider(),providerfile,filesize);
+				Provider.readProviderXml(new CloudsProvider(this.simulatedTime),providerfile,filesize);
 				Timed.simulateUntilLastEvent();
 				
 				
@@ -242,6 +246,6 @@ public class Scenario {
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			int print=Integer.parseInt(args[3]);
-			new Scenario(null,null,datafile,cloudfile,providerfile,0/*print*/,1,60000);	
+			new Scenario(null,null,datafile,cloudfile,providerfile,1,1,5*60000);	
 		}
 }

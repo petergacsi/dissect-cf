@@ -17,8 +17,19 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import iot.extension.Station;
 
 public abstract class Provider extends Timed{
+	protected  class Bluemix{
+		double mbto;
+		double mbfrom;
+		double price;
+		
+		public Bluemix(double mbto, double mbfrom, double price) {
+			this.mbto=mbto;
+			this.mbfrom=mbfrom;
+			this.price=price;
+		}
+	}
 	
-	public Provider(){
+	public Provider(long simulatedTime){
 		this.userCost=0.0;
 		this.pricePerMB=0.0;
 		this.blockOfData=0;
@@ -33,29 +44,41 @@ public abstract class Provider extends Timed{
 		this.messagesPerDay=0;
 		this.messagesizePerKB=0;
 		this.period=0;
+		this.freq=simulatedTime;
+		this.bmList=new ArrayList<Bluemix>();
 	}
 	
 	public void startProvider(){
-		subscribe(this.getFreq());
+		
+		subscribe(86400000);
+		//subscribe(this.getFreq());
 	}
 	
 	public void stopProvider(){
-		System.out.println(this.toString());
 		new DeferredEvent(Provider.lateStart){
 			@Override
 			protected void eventAction() {
 				unsubscribe();
 			}
 		};
-		
+		System.out.println(this.toString());
+		System.out.println("~~~~~~~~~~~~");
 	}
 	
+	private static ArrayList<Provider> providerList = new ArrayList<Provider>();
 	@Override
 	public String toString() {
-		return "Provider [userCost=" + userCost + "]";
+		return "Provider [filesize=" + filesize + ", freq=" + freq + ", userCost=" + userCost + ", pricePerMB="
+				+ pricePerMB + ", blockOfData=" + blockOfData + ", exchangeRate=" + exchangeRate + ", bofMessagecount="
+				+ bofMessagecount + ", bofPrice=" + bofPrice + ", devicepricePerMonth=" + devicepricePerMonth
+				+ ", messagesPerMonthPerDevice=" + messagesPerMonthPerDevice + ", amDevicepricePerMonth="
+				+ amDevicepricePerMonth + ", amMessagesPerMonthPerDevice=" + amMessagesPerMonthPerDevice + ", period="
+				+ period + ", pricePerMonth=" + pricePerMonth + ", messagesPerDay=" + messagesPerDay
+				+ ", messagesizePerKB=" + messagesizePerKB + "]";
 	}
 
-	private static ArrayList<Provider> providerList = new ArrayList<Provider>();
+
+
 	public static long lateStart;
 	protected int filesize;
 	protected long freq;
@@ -78,7 +101,7 @@ public abstract class Provider extends Timed{
 	private long messagesPerDay;
 	private long messagesizePerKB;
 
-	
+	protected ArrayList<Bluemix> bmList;
 	public static ArrayList<Provider> getProviderList() {
 		return providerList;
 	}
@@ -250,6 +273,7 @@ public abstract class Provider extends Timed{
 		}
 
 		nList = doc.getElementsByTagName("bluemix");
+		
 		if(nList.item(0).getAttributes().item(0).getNodeValue().equals("true")){
 			nList = doc.getElementsByTagName("price-per-MB");
 
@@ -259,18 +283,14 @@ public abstract class Provider extends Timed{
 				mbfrom = Double.parseDouble(nNode.getAttributes().item(0).getTextContent());
 				mbto = Double.parseDouble(nNode.getAttributes().item(1).getTextContent());
 				price = Double.parseDouble(nNode.getTextContent());
+				
 				if (mbto == -1) {
 					mbto = Double.MAX_VALUE;
 				}
-				double tmp = (double) Station.allstationsize / 1048576;
-				if (tmp <= mbto && tmp >= mbfrom) {
-					p.setPricePerMB(price);
-				}
+				System.out.println(mbto +" "+mbfrom+" "+price);
+				p.bmList.add(p.new Bluemix(mbto, mbfrom, price));
 			}
 		}
 		Provider.providerList.add(p);
-		//p.startProvider(p.getFreq());
-		//p.costCounter(filesize);
-		//System.out.println(p);
 	}
 }
