@@ -27,7 +27,7 @@ public class CloudsProvider extends Provider {
 
 	@Override
 	protected void IotCostCounter(int filesize) {
-		this.setUserIotCost(0.0);
+		//this.setUserIotCost(0.0);
 		//amazon
 		if(this.getBofPrice()>0 && this.getBlockOfData()>0){
 			if (filesize <= this.getBlockOfData()) {
@@ -98,6 +98,13 @@ public class CloudsProvider extends Provider {
 				System.exit(1);
 			}
 		}
+		
+	}
+
+	@Override
+	public void tick(long fires) {
+		this.IotCostCounter(this.filesize);
+		this.CloudCostCounter();
 		/******************************************************************/
 		// shutdown test
 		boolean tmp = false;
@@ -112,16 +119,10 @@ public class CloudsProvider extends Provider {
 	}
 
 	@Override
-	public void tick(long fires) {
-		this.IotCostCounter(this.filesize);
-		this.CloudCostCounter();
-	}
-
-	@Override
 	protected void CloudCostCounter() {
 		double cost1,cost2;
 		int j=0;
-		cost1 = Timed.getFireCount()/(60*1000)*this.getGbHourPrice();
+		cost1 = Scenario.scenscan/(60*1000)*this.getGbHourPrice();
 		for(Application a : Scenario.getApp()){
 			for(VmCollector vmcl : a.vmlist){
 				if(vmcl.isWorked()){
@@ -130,6 +131,6 @@ public class CloudsProvider extends Provider {
 			}
 		}
 		cost2 = j*this.getInstancePrice();
-		this.setUserCloudCost(cost1+cost2);
+		this.setUserCloudCost((cost1+cost2));
 	}
 }

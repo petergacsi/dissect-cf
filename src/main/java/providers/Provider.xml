@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <providers>
 
-	<bluemix calculate="true"> 
+	<bluemix calculate="false"> 
 		<price-per-MB mbfrom="1" mbto="499999">0.00097</price-per-MB> 
 		<price-per-MB mbfrom="450000" mbto="6999999">0.00068</price-per-MB>
 		<price-per-MB mbfrom="7000000" mbto="-1">0.00014</price-per-MB>	
@@ -10,7 +10,7 @@
 	<amazon price="5" messagecount="1000000" 
 		exchangerate="0.95" calculate="false">512</amazon> 
 
-	<oracle calculate="false" period="31"> 
+	<oracle calculate="true" period="31"> 
 		<deviceprice-per-month>0.93</deviceprice-per-month>
 		<messages-per-month-per-device>15000</messages-per-month-per-device>
 		<am-messages-per-month-per-device>1000</am-messages-per-month-per-device>

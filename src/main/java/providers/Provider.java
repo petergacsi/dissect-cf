@@ -51,7 +51,7 @@ public abstract class Provider extends Timed{
 	
 	public void startProvider(){
 		
-		subscribe(86400000);
+		subscribe(this.freq);
 		//subscribe(this.getFreq());
 	}
 	
@@ -270,14 +270,11 @@ public abstract class Provider extends Timed{
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
-
-		nList = doc.getElementsByTagName("instance-price");
-		p.setGbHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
-		nList = doc.getElementsByTagName("gbhour-per-price");
-		p.setInstancePrice(Double.parseDouble(nList.item(0).getTextContent()));
-		System.out.println(p.getGbHourPrice()+" ASDASDASD "+p.getInstancePrice());
-
 		
+		nList = doc.getElementsByTagName("gbhour-per-price");
+		p.setGbHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
+		nList = doc.getElementsByTagName("instance-price");
+		p.setInstancePrice(Double.parseDouble(nList.item(0).getTextContent()));
 	}
 	
 	public static <P extends Provider> void readProviderXml(P p, String provider,String cprovider, int filesize)
@@ -346,6 +343,7 @@ public abstract class Provider extends Timed{
 		if(cprovider!=null){
 			Provider.readCProviderXml(p,cprovider);
 		}
+		//System.out.println(p);
 		Provider.providerList.add(p);
 	}
 }
