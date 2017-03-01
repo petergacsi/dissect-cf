@@ -280,18 +280,18 @@ public class Application extends Timed {
 			}
 			//System.out.println("osszes: "+Station.allstationsize +" feldolgozott: " +Application.allgenerateddatasize+ " ido: "+Timed.getFireCount());
 		}
-		this.turnoffVM();
+		
 
 		/* ------------------------------------ */
 		int task = 0;
 		for (VmCollector vmcl : this.vmlist) {
-			if (vmcl.tasknumber > 0 && vmcl.worked && vmcl.isworking
+			if (vmcl.tasknumber >= 0  && vmcl.isworking
 					&& vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				task++;
 			}
 		}
 		this.tmap.put(Timed.getFireCount(), task);
-
+		this.turnoffVM();
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState()
 				&& (Scenario.stationvalue[this.stations.get(0).getCloudnumber()]) == this.allgenerateddatasize
