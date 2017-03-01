@@ -15,6 +15,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import iot.extension.Application;
 import iot.extension.Scenario;
 import iot.extension.Station;
+import iot.extension.Application.VmCollector;
 
 public class CloudsProvider extends Provider {
 
@@ -25,15 +26,15 @@ public class CloudsProvider extends Provider {
 	}
 
 	@Override
-	protected void costCounter(int filesize) {
-		this.setUserCost(0.0);
+	protected void IotCostCounter(int filesize) {
+		this.setUserIotCost(0.0);
 		//amazon
 		if(this.getBofPrice()>0 && this.getBlockOfData()>0){
 			if (filesize <= this.getBlockOfData()) {
-				this.setUserCost(Station.allstationsize / filesize * this.getBofPrice() * this.getExchangeRate()
+				this.setUserIotCost(Station.allstationsize / filesize * this.getBofPrice() * this.getExchangeRate()
 						/ this.getBofMessagecount());
 			} else {
-				this.setUserCost(((Station.allstationsize / this.getBlockOfData()) + 1) * this.getBofPrice()
+				this.setUserIotCost(((Station.allstationsize / this.getBlockOfData()) + 1) * this.getBofPrice()
 						* this.getExchangeRate() / this.getBofMessagecount());
 			}
 		}
@@ -45,7 +46,7 @@ public class CloudsProvider extends Provider {
 					this.setPricePerMB(bm.price);
 				}
 			}
-			this.setUserCost(tmp*this.getPricePerMB());
+			this.setUserIotCost(tmp*this.getPricePerMB());
 		}
 		//oracle
 		if(this.getAmMessagesPerMonthPerDevice()>0){
@@ -54,11 +55,11 @@ public class CloudsProvider extends Provider {
 					long month = s.sd.getLifetime()/(this.getFreq());
 					if(month==0){
 						month=1;
-						this.setUserCost(this.getUserCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
+						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
 					}else if(s.sd.getLifetime()%(this.getFreq())!=0){
-						this.setUserCost(this.getUserCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*(month+1));
+						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*(month+1));
 					}else{
-						this.setUserCost(this.getUserCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
+						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
 					}
 					/* additional cost*/
 					long device = s.getMessagecount()/s.sd.getSensornumber();// 1 device hany uzenetet generalt
@@ -67,11 +68,11 @@ public class CloudsProvider extends Provider {
 						device-=this.getMessagesPerMonthPerDevice();
 						long whole=device/this.getAmMessagesPerMonthPerDevice();
 						if(whole==0){
-							this.setUserCost(this.getUserCost()+this.getAmDevicepricePerMonth());
+							this.setUserIotCost(this.getUserIotCost()+this.getAmDevicepricePerMonth());
 						}else if((device%this.getAmMessagesPerMonthPerDevice())!=0){
-							this.setUserCost(this.getUserCost()+this.getAmDevicepricePerMonth()*(whole+1));
+							this.setUserIotCost(this.getUserIotCost()+this.getAmDevicepricePerMonth()*(whole+1));
 						}else{
-							this.setUserCost(this.getUserCost()+this.getAmDevicepricePerMonth()*(whole));
+							this.setUserIotCost(this.getUserIotCost()+this.getAmDevicepricePerMonth()*(whole));
 						}
 					} 
 				}
@@ -86,11 +87,11 @@ public class CloudsProvider extends Provider {
 				long month = Timed.getFireCount()/((this.getFreq()*31));
 				if(month==0){
 					month=1;
-					this.setUserCost(this.getPricePerMonth()*month);
+					this.setUserIotCost(this.getPricePerMonth()*month);
 				}else if(Timed.getFireCount()%(this.getFreq())!=0){
-					this.setUserCost(this.getPricePerMonth()*(month+1));
+					this.setUserIotCost(this.getPricePerMonth()*(month+1));
 				}else{
-					this.setUserCost(this.getPricePerMonth()*month);
+					this.setUserIotCost(this.getPricePerMonth()*month);
 				}
 			}else{
 				System.err.println("You can't use this tier of Azure!");
@@ -112,6 +113,23 @@ public class CloudsProvider extends Provider {
 
 	@Override
 	public void tick(long fires) {
-		this.costCounter(this.filesize);
+		this.IotCostCounter(this.filesize);
+		this.CloudCostCounter();
+	}
+
+	@Override
+	protected void CloudCostCounter() {
+		double cost1,cost2;
+		int j=0;
+		cost1 = Timed.getFireCount()/(60*1000)*this.getGbHourPrice();
+		for(Application a : Scenario.getApp()){
+			for(VmCollector vmcl : a.vmlist){
+				if(vmcl.isWorked()){
+					j++;
+				}
+			}
+		}
+		cost2 = j*this.getInstancePrice();
+		this.setUserCloudCost(cost1+cost2);
 	}
 }

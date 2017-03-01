@@ -30,7 +30,8 @@ public abstract class Provider extends Timed{
 	}
 	
 	public Provider(long simulatedTime){
-		this.userCost=0.0;
+		this.userIotCost=0.0;
+		this.userCloudCost=0.0;
 		this.pricePerMB=0.0;
 		this.blockOfData=0;
 		this.exchangeRate=0.0;
@@ -66,24 +67,33 @@ public abstract class Provider extends Timed{
 	}
 	
 	private static ArrayList<Provider> providerList = new ArrayList<Provider>();
+	
+	
 	@Override
 	public String toString() {
-		return "Provider [filesize=" + filesize + ", freq=" + freq + ", userCost=" + userCost + ", pricePerMB="
-				+ pricePerMB + ", blockOfData=" + blockOfData + ", exchangeRate=" + exchangeRate + ", bofMessagecount="
-				+ bofMessagecount + ", bofPrice=" + bofPrice + ", devicepricePerMonth=" + devicepricePerMonth
-				+ ", messagesPerMonthPerDevice=" + messagesPerMonthPerDevice + ", amDevicepricePerMonth="
-				+ amDevicepricePerMonth + ", amMessagesPerMonthPerDevice=" + amMessagesPerMonthPerDevice + ", period="
-				+ period + ", pricePerMonth=" + pricePerMonth + ", messagesPerDay=" + messagesPerDay
-				+ ", messagesizePerKB=" + messagesizePerKB + "]";
+		return "Provider [instancePrice=" + instancePrice + ", gbHourPrice=" + gbHourPrice + ", filesize=" + filesize
+				+ ", freq=" + freq + ", userIotCost=" + userIotCost + ", userCloudCost=" + userCloudCost
+				+ ", pricePerMB=" + pricePerMB + ", blockOfData=" + blockOfData + ", exchangeRate=" + exchangeRate
+				+ ", bofMessagecount=" + bofMessagecount + ", bofPrice=" + bofPrice + ", devicepricePerMonth="
+				+ devicepricePerMonth + ", messagesPerMonthPerDevice=" + messagesPerMonthPerDevice
+				+ ", amDevicepricePerMonth=" + amDevicepricePerMonth + ", amMessagesPerMonthPerDevice="
+				+ amMessagesPerMonthPerDevice + ", period=" + period + ", pricePerMonth=" + pricePerMonth
+				+ ", messagesPerDay=" + messagesPerDay + ", messagesizePerKB=" + messagesizePerKB + ", bmList=" + bmList
+				+ "]";
 	}
 
+	// Cloud side variables
+	/* private double cpu; TODO: currently not necessary
+	private long memory; */
+	private double instancePrice;
+	private double gbHourPrice;
 
-
+	// IoT side variables
 	public static long lateStart;
 	protected int filesize;
 	protected long freq;
-	private double userCost;
-
+	private double userIotCost;
+	private double userCloudCost;
 	private double pricePerMB;
 
 	private long blockOfData;
@@ -106,6 +116,23 @@ public abstract class Provider extends Timed{
 		return providerList;
 	}
 
+		
+	protected double getInstancePrice() {
+		return instancePrice;
+	}
+
+	protected void setInstancePrice(double instancePrice) {
+		this.instancePrice = instancePrice;
+	}
+
+	protected double getGbHourPrice() {
+		return gbHourPrice;
+	}
+
+	protected void setGbHourPrice(double gbHourPrice) {
+		this.gbHourPrice = gbHourPrice;
+	}
+
 	protected long getFreq() {
 		return freq;
 	}
@@ -114,12 +141,19 @@ public abstract class Provider extends Timed{
 		this.freq = freq;
 	}
 
-	protected double getUserCost() {
-		return userCost;
+	protected double getUserIotCost() {
+		return userIotCost;
 	}
 
-	protected void setUserCost(double userCost) {
-		this.userCost = userCost;
+	protected void setUserIotCost(double userCost) {
+		this.userIotCost = userCost;
+	}
+	protected double getUserCloudCost() {
+		return userCloudCost;
+	}
+
+	protected void setUserCloudCost(double userCost) {
+		this.userCloudCost = userCost;
 	}
 
 	protected double getPricePerMB() {
@@ -226,12 +260,30 @@ public abstract class Provider extends Timed{
 		this.period = period;
 	}
 
-	protected abstract void costCounter(int filesize);
+	protected abstract void IotCostCounter(int filesize);
+	protected abstract void CloudCostCounter();
+	
+	private static <P extends Provider> void readCProviderXml(P p,String datafile) throws ParserConfigurationException, SAXException, IOException{
+		File fXmlFile = new File(datafile);
+		NodeList nList;
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(fXmlFile);
+		doc.getDocumentElement().normalize();
 
-	public static <P extends Provider> void readProviderXml(P p, String datafile, int filesize)
+		nList = doc.getElementsByTagName("instance-price");
+		p.setGbHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
+		nList = doc.getElementsByTagName("gbhour-per-price");
+		p.setInstancePrice(Double.parseDouble(nList.item(0).getTextContent()));
+		System.out.println(p.getGbHourPrice()+" ASDASDASD "+p.getInstancePrice());
+
+		
+	}
+	
+	public static <P extends Provider> void readProviderXml(P p, String provider,String cprovider, int filesize)
 			throws ParserConfigurationException, SAXException, IOException {
 		p.filesize=filesize;
-		File fXmlFile = new File(datafile);
+		File fXmlFile = new File(provider);
 		NodeList nList;
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -290,6 +342,9 @@ public abstract class Provider extends Timed{
 				System.out.println(mbto +" "+mbfrom+" "+price);
 				p.bmList.add(p.new Bluemix(mbto, mbfrom, price));
 			}
+		}
+		if(cprovider!=null){
+			Provider.readCProviderXml(p,cprovider);
 		}
 		Provider.providerList.add(p);
 	}

@@ -43,7 +43,11 @@ public class Application extends Timed {
 		 int tasknumber;
 		 boolean worked;
 		 PhysicalMachine pm;
-
+		 
+		 public boolean isWorked(){
+				return worked;
+			}
+		 
 		VmCollector(VirtualMachine vm, boolean isworking) {
 			this.vm = vm;
 			this.isworking = isworking;

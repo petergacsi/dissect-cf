@@ -46,7 +46,7 @@ public class Scenario {
 	 * @param cloudfile az IaaS felhot definialo XML fajl
 	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,String providerfile,int print,int cloudcount,long appfreq) throws Exception {
+	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,String providerfile,String cproviderfile,int print,int cloudcount,long appfreq) throws Exception {
 		long tasksize=-1; // TODO: ez miert kell?!
 
 		stationvalue = new long[cloudcount];
@@ -180,7 +180,8 @@ public class Scenario {
 					}
 					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
 				}
-				Provider.readProviderXml(new CloudsProvider(this.simulatedTime),providerfile,filesize);
+
+				Provider.readProviderXml(new CloudsProvider(this.simulatedTime), providerfile,cproviderfile,filesize);
 				Timed.simulateUntilLastEvent();
 				
 				
@@ -245,7 +246,8 @@ public class Scenario {
 			String datafile=args[0];
 			String cloudfile=args[1];
 			String providerfile=args[2];
-			int print=Integer.parseInt(args[3]);
-			new Scenario(null,null,datafile,cloudfile,providerfile,1,1,5*60000);	
+			String cproviderfile=args[3];
+			int print=Integer.parseInt(args[4]);
+			new Scenario(null,null,datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	
 		}
 }
