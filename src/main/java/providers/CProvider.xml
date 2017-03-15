@@ -2,7 +2,7 @@
 <providers>
 	<provider>
 		<ram>4294967296</ram>
-		<cpucores>8</cpucores>
+		<cpucores>1</cpucores>
 		<instance-price>18.15</instance-price>
 		<gbhour-per-price>0.0526</gbhour-per-price>
 	</provider>

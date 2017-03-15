@@ -14,6 +14,8 @@ import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import iot.extension.Application;
+import iot.extension.Scenario;
 import iot.extension.Station;
 
 public abstract class Provider extends Timed{
@@ -71,20 +73,20 @@ public abstract class Provider extends Timed{
 	
 	@Override
 	public String toString() {
-		return "Provider [instancePrice=" + instancePrice + ", gbHourPrice=" + gbHourPrice + ", filesize=" + filesize
-				+ ", freq=" + freq + ", userIotCost=" + userIotCost + ", userCloudCost=" + userCloudCost
-				+ ", pricePerMB=" + pricePerMB + ", blockOfData=" + blockOfData + ", exchangeRate=" + exchangeRate
-				+ ", bofMessagecount=" + bofMessagecount + ", bofPrice=" + bofPrice + ", devicepricePerMonth="
-				+ devicepricePerMonth + ", messagesPerMonthPerDevice=" + messagesPerMonthPerDevice
-				+ ", amDevicepricePerMonth=" + amDevicepricePerMonth + ", amMessagesPerMonthPerDevice="
-				+ amMessagesPerMonthPerDevice + ", period=" + period + ", pricePerMonth=" + pricePerMonth
-				+ ", messagesPerDay=" + messagesPerDay + ", messagesizePerKB=" + messagesizePerKB + ", bmList=" + bmList
-				+ "]";
+		return "Provider [cpu=" + cpu + ", memory=" + memory + ", instancePrice=" + instancePrice + ", gbHourPrice="
+				+ gbHourPrice + ", filesize=" + filesize + ", freq=" + freq + ", userIotCost=" + userIotCost
+				+ ", userCloudCost=" + userCloudCost + ", pricePerMB=" + pricePerMB + ", blockOfData=" + blockOfData
+				+ ", exchangeRate=" + exchangeRate + ", bofMessagecount=" + bofMessagecount + ", bofPrice=" + bofPrice
+				+ ", devicepricePerMonth=" + devicepricePerMonth + ", messagesPerMonthPerDevice="
+				+ messagesPerMonthPerDevice + ", amDevicepricePerMonth=" + amDevicepricePerMonth
+				+ ", amMessagesPerMonthPerDevice=" + amMessagesPerMonthPerDevice + ", period=" + period
+				+ ", pricePerMonth=" + pricePerMonth + ", messagesPerDay=" + messagesPerDay + ", messagesizePerKB="
+				+ messagesizePerKB + ", bmList=" + bmList + "]";
 	}
 
 	// Cloud side variables
-	/* private double cpu; TODO: currently not necessary
-	private long memory; */
+	private double cpu;
+	private long memory; 
 	private double instancePrice;
 	private double gbHourPrice;
 
@@ -260,8 +262,43 @@ public abstract class Provider extends Timed{
 		this.period = period;
 	}
 
+	
+	
+	public double getCpu() {
+		return cpu;
+	}
+
+	protected void setCpu(double cpu) {
+		this.cpu = cpu;
+	}
+
+	public long getMemory() {
+		return memory;
+	}
+
+	protected void setMemory(long memory) {
+		this.memory = memory;
+	}
+
 	protected abstract void IotCostCounter(int filesize);
 	protected abstract void CloudCostCounter();
+	
+	@Override
+	public void tick(long fires) {
+		this.IotCostCounter(this.filesize);
+		this.CloudCostCounter();
+		/******************************************************************/
+		// shutdown test
+		boolean tmp = false;
+		for(Application a : Scenario.getApp()){
+			if(a.isSubscribed()){
+				tmp = true;
+			}
+		}
+		if(tmp==false){
+			this.stopProvider();
+		}
+	}
 	
 	private static <P extends Provider> void readCProviderXml(P p,String datafile) throws ParserConfigurationException, SAXException, IOException{
 		File fXmlFile = new File(datafile);
@@ -275,6 +312,10 @@ public abstract class Provider extends Timed{
 		p.setGbHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
 		nList = doc.getElementsByTagName("instance-price");
 		p.setInstancePrice(Double.parseDouble(nList.item(0).getTextContent()));
+		nList = doc.getElementsByTagName("ram");
+		p.setMemory(Long.parseLong(nList.item(0).getTextContent()));
+		nList = doc.getElementsByTagName("cpucores");
+		p.setCpu(Double.parseDouble(nList.item(0).getTextContent()));
 	}
 	
 	public static <P extends Provider> void readProviderXml(P p, String provider,String cprovider, int filesize)

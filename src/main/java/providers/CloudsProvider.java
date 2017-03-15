@@ -101,22 +101,7 @@ public class CloudsProvider extends Provider {
 		
 	}
 
-	@Override
-	public void tick(long fires) {
-		this.IotCostCounter(this.filesize);
-		this.CloudCostCounter();
-		/******************************************************************/
-		// shutdown test
-		boolean tmp = false;
-		for(Application a : Scenario.getApp()){
-			if(a.isSubscribed()){
-				tmp = true;
-			}
-		}
-		if(tmp==false){
-			this.stopProvider();
-		}
-	}
+	
 
 	@Override
 	protected void CloudCostCounter() {

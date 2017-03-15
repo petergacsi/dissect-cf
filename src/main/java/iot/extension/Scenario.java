@@ -1,16 +1,18 @@
 package iot.extension;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import at.ac.uibk.dps.cloud.simulator.test.simple.cloud.vmscheduler.BasicSchedulingTest.AssertFulScheduler;
+import org.xml.sax.SAXException;
 import org.w3c.dom.Node;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -31,22 +33,58 @@ public class Scenario {
 	private static ArrayList<Application> app = new ArrayList<Application>();
 	public static long scenscan = 0;
 	public static long[] stationvalue; 
-	private int filesize;
-	private long simulatedTime;
+	private static int filesize;
+	private static long simulatedTime;
 	
 	public static ArrayList<Application> getApp() {
 		return app;
 	}
+	private void loging() throws FileNotFoundException, UnsupportedEncodingException{
+			int i=0;
+			int j=0;
+			for(Application a : app){
+				System.out.println(a.getName()+ " stations: "+ a.stations.size());
+				for(VmCollector vmcl : a.vmlist){
+					if(vmcl.worked){
+						j++;
+						i+=vmcl.tasknumber;
+					}
+				}
+				for(VmCollector vmcl : a.vmlist){
+					if(vmcl.worked && vmcl.tasknumber>0){
+						System.out.println(vmcl.vm+" : "+vmcl.tasknumber);
+					}
+				}
+				
+				PrintWriter writer = new PrintWriter("tasks-"+a.stations.get(0).getCloudnumber()+".csv", "UTF-8");	
+				for( Long s : a.tmap.keySet() )
+				{
+					writer.println(s + "," + a.tmap.get(s));
 
-	/**
-	 * Feldolgozza a Station-oket leiro XML fajlt es elinditja a szimulaciot.
-	 * @param va a virtualis kepfajl, default ertek hasznalathoz null-kent keruljon atadasra
-	 * @param arc a VM eroforrasigenye, default ertek hasznalathoz null-kent keruljon atadasra
-	 * @param datafile a Station-okat definialo XML fajl 
-	 * @param cloudfile az IaaS felhot definialo XML fajl
-	 * @param print logolasi funkcio, 1 - igen, 2 - nem
-	 */
-	public Scenario(VirtualAppliance va,AlterableResourceConstraints arc, String datafile,String cloudfile,String providerfile,String cproviderfile,int print,int cloudcount,long appfreq) throws Exception {
+				}
+				writer.close();
+			}
+			
+			System.out.println("~~~~~~~~~~~~");
+			System.out.println("VM: "+j + " tasks: "+i);
+			System.out.println("~~~~~~~~~~~~");
+			System.out.println("All filesize: "+Station.allstationsize);
+			System.out.println("~~~~~~~~~~~~");
+			System.out.println("Scneario finished at: "+Scenario.scenscan);
+			System.out.println("~~~~~~~~~~~~");
+			for(Cloud c : Scenario.clouds){
+				System.out.println(c.getIaas().repositories.toString());
+				for (PhysicalMachine p : c.getIaas().machines) {
+					if ( p.localDisk.getFreeStorageCapacity() != p.localDisk.getMaxStorageCapacity()) {
+						System.out.println(p);
+					}
+				}
+				System.out.println("~~~~~~~~~~~~");
+		}
+	}
+	
+	
+	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException{
 		long tasksize=-1; // TODO: ez miert kell?!
 
 		stationvalue = new long[cloudcount];
@@ -55,11 +93,11 @@ public class Scenario {
 			System.exit(0);
 		}
 		
-		if (datafile.isEmpty()) {
+		if (stationfile.isEmpty()) {
 			System.out.println("Datafile nem lehet null");
 			System.exit(0);
 		} else {
-			File fXmlFile = new File(datafile);
+			File fXmlFile = new File(stationfile);
 			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document doc = dBuilder.parse(fXmlFile);
@@ -86,7 +124,6 @@ public class Scenario {
 						System.out.println("rossz time ertek! ");
 						System.exit(0);
 					}
-					this.simulatedTime=time;
 					
 					final long starttime = Long.parseLong(
 							eElement.getElementsByTagName("time").item(0).getAttributes().item(0).getNodeValue());
@@ -105,7 +142,7 @@ public class Scenario {
 					}
 					final int filesize=Integer.parseInt(eElement.getElementsByTagName("snumber").item(0)
 							.getAttributes().item(0).getNodeValue());
-					this.filesize=filesize;
+					Scenario.filesize=filesize;
 					if (filesize < 1) {
 						System.out.println("rossz filesize ertek! ");
 						System.exit(0);
@@ -154,17 +191,19 @@ public class Scenario {
 						Scenario.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
 						
 					}
-
+					Scenario.simulatedTime=(Scenario.simulatedTime<time)?time:Scenario.simulatedTime;
 					}
 				}
 			}
 			
 			if(tasksize!=-1){
-
+				CloudsProvider cp = new CloudsProvider(Scenario.simulatedTime);
+				Provider.readProviderXml(cp, providerfile,cproviderfile,filesize);
 				int maxstation = Scenario.stations.size() / cloudcount;
+				AlterableResourceConstraints arc = new AlterableResourceConstraints(cp.getCpu(),0.001,cp.getMemory());
 				for(int i=0;i<cloudcount;i++){
 					Scenario.stationvalue[i]=0;
-					Cloud cloud = new Cloud(null,null,cloudfile);
+					Cloud cloud = new Cloud(null,arc,cloudfile);
 					Scenario.clouds.add(cloud);
 					ArrayList<Station> stations = new ArrayList<Station>();
 					int stationcounter=Scenario.stations.size()-1;
@@ -178,62 +217,24 @@ public class Scenario {
 							break;
 						}
 					}
-					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:"));
+					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:",Provider.getProviderList().get(0)));
 				}
-
-				Provider.readProviderXml(new CloudsProvider(this.simulatedTime), providerfile,cproviderfile,filesize);
-				Timed.simulateUntilLastEvent();
-				
-				
 			}
-			// hasznos infok:
-			if(print==1){
-				
-				
-				int i=0;
-				int j=0;
-				for(Application a : app){
-					System.out.println(a.getName()+ " stations: "+ a.stations.size());
-					for(VmCollector vmcl : a.vmlist){
-						if(vmcl.worked){
-							j++;
-							i+=vmcl.tasknumber;
-						}
-					}
-					for(VmCollector vmcl : a.vmlist){
-						if(vmcl.worked && vmcl.tasknumber>0){
-							System.out.println(vmcl.vm+" : "+vmcl.tasknumber);
-						}
-					}
-					
-					PrintWriter writer = new PrintWriter("tasks-"+a.stations.get(0).getCloudnumber()+".csv", "UTF-8");	
-					for( Long s : a.tmap.keySet() )
-					{
-						writer.println(s + "," + a.tmap.get(s));
+		
+	}
 
-					}
-					writer.close();
-				}
-				
-				System.out.println("~~~~~~~~~~~~");
-				System.out.println("VM: "+j + " tasks: "+i);
-				System.out.println("~~~~~~~~~~~~");
-				System.out.println("All filesize: "+Station.allstationsize);
-				System.out.println("~~~~~~~~~~~~");
-				System.out.println("Scneario finished at: "+Scenario.scenscan);
-				System.out.println("~~~~~~~~~~~~");
-				for(Cloud c : Scenario.clouds){
-					System.out.println(c.getIaas().repositories.toString());
-					for (PhysicalMachine p : c.getIaas().machines) {
-						if ( p.localDisk.getFreeStorageCapacity() != p.localDisk.getMaxStorageCapacity()) {
-							System.out.println(p);
-						}
-					}
-					System.out.println("~~~~~~~~~~~~");
-				}
-				
-			}
-			
+	/**
+	 * Feldolgozza a Station-oket leiro XML fajlt es elinditja a szimulaciot.
+	 * @param va a virtualis kepfajl, default ertek hasznalathoz null-kent keruljon atadasra
+	 * @param arc a VM eroforrasigenye, default ertek hasznalathoz null-kent keruljon atadasra
+	 * @param datafile a Station-okat definialo XML fajl 
+	 * @param cloudfile az IaaS felhot definialo XML fajl
+	 * @param print logolasi funkcio, 1 - igen, 2 - nem
+	 */
+	public Scenario(String datafile,String cloudfile,String providerfile,String cproviderfile,int print,int cloudcount,long appfreq) throws Exception {
+			Scenario.readStationXml(datafile, cloudfile, providerfile, cproviderfile, cloudcount, print, appfreq);	
+			Timed.simulateUntilLastEvent();
+			if(print==1) this.loging();
 		}
 
 		/**
@@ -248,6 +249,6 @@ public class Scenario {
 			String providerfile=args[2];
 			String cproviderfile=args[3];
 			int print=Integer.parseInt(args[4]);
-			new Scenario(null,null,datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	
+			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	
 		}
 }

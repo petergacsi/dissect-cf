@@ -23,7 +23,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 
 /**
  * Ez az osztaly dolgozza fel a Station-ok altal generalt adatokat ComputeTask-okban.
- * Elinditja a Station-öket, illetve kezeli a virtualis gepek inditasat es leallitasat is.
+ * Elinditja a Station-ï¿½ket, illetve kezeli a virtualis gepek inditasat es leallitasat is.
  */
 public class Application extends Timed {
 
@@ -43,6 +43,7 @@ public class Application extends Timed {
 		 int tasknumber;
 		 boolean worked;
 		 PhysicalMachine pm;
+		 long workingTime;
 		 
 		 public boolean isWorked(){
 				return worked;
@@ -53,6 +54,7 @@ public class Application extends Timed {
 			this.isworking = isworking;
 			this.tasknumber = 0;
 			this.worked = false;
+			this.workingTime=0;
 		}
 	}
 	
@@ -69,7 +71,7 @@ public class Application extends Timed {
 	private Cloud cloud;
 	public ArrayList<Station> stations;
 	private String name;
-	
+	private Provider provider; //TODO: app = user, egyeni arazas
 	
 	public String getName() {
 		return name;
@@ -78,7 +80,7 @@ public class Application extends Timed {
 	/**
 	 * Privat konstruktor, hogy csak osztalyon belulrol lehessen hivni
 	 */
-	public Application(final long freq,long tasksize, boolean delay, int print,Cloud cloud,ArrayList<Station> stations,String name) {
+	public Application(final long freq,long tasksize, boolean delay, int print,Cloud cloud,ArrayList<Station> stations,String name,Provider p) {
 		subscribe(freq);
 		this.print = print;
 		this.vmlist = new ArrayList<VmCollector>();
@@ -87,6 +89,7 @@ public class Application extends Timed {
 		this.cloud = cloud;
 		this.stations = stations;
 		this.name = name;
+		this.provider=p;
 	}
 
 	/**
@@ -95,8 +98,8 @@ public class Application extends Timed {
 	private VmCollector VmSearch() {
 		VmCollector vmc = null;
 		for (int i = 0; i < this.vmlist.size(); i++) {
-			if (this.vmlist.get(i).isworking == false
-					&& this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.RUNNING)) {
+			if ((this.vmlist.get(i).isworking == false
+					&& this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.RUNNING))) {
 				vmc = this.vmlist.get(i);
 				return vmc;
 			}
