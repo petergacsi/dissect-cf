@@ -107,7 +107,7 @@ public class CloudsProvider extends Provider {
 	protected void CloudCostCounter() {
 		double cost1,cost2;
 		int j=0;
-		cost1 = Scenario.scenscan/(60*1000)*this.getGbHourPrice();
+		cost1 = Scenario.finishedTime/(60*1000)*this.getGbHourPrice();
 		for(Application a : Scenario.getApp()){
 			for(VmCollector vmcl : a.vmlist){
 				if(vmcl.isWorked()){

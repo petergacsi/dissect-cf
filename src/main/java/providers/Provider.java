@@ -48,6 +48,8 @@ public abstract class Provider extends Timed{
 		this.messagesizePerKB=0;
 		this.period=0;
 		this.freq=simulatedTime;
+		this.cpu=0.0;
+		this.memory=0;
 		this.bmList=new ArrayList<Bluemix>();
 	}
 	

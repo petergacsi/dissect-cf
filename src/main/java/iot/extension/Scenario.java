@@ -31,7 +31,7 @@ public class Scenario {
 	private static ArrayList<Station> stations = new ArrayList<Station>();
 	private static ArrayList<Cloud> clouds = new ArrayList<Cloud>();
 	private static ArrayList<Application> app = new ArrayList<Application>();
-	public static long scenscan = 0;
+	public static long finishedTime = 0;
 	public static long[] stationvalue; 
 	private static int filesize;
 	private static long simulatedTime;
@@ -70,7 +70,7 @@ public class Scenario {
 			System.out.println("~~~~~~~~~~~~");
 			System.out.println("All filesize: "+Station.allstationsize);
 			System.out.println("~~~~~~~~~~~~");
-			System.out.println("Scneario finished at: "+Scenario.scenscan);
+			System.out.println("Scneario finished at: "+Scenario.finishedTime);
 			System.out.println("~~~~~~~~~~~~");
 			for(Cloud c : Scenario.clouds){
 				System.out.println(c.getIaas().repositories.toString());

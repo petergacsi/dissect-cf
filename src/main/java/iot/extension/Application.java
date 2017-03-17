@@ -111,13 +111,13 @@ public class Application extends Timed {
 	 * A metodus elinditja az osszes Station mukodeset
 	 */
 	private void startStation() {
-		if(Scenario.scenscan==0){
+		if(Scenario.finishedTime==0){
 			for(Provider p : Provider.getProviderList()){
 				p.startProvider();
 			}
 			Provider.lateStart = Timed.getFireCount();
 			System.out.println("Scenario started at: " + Timed.getFireCount());
-			Scenario.scenscan++;
+			Scenario.finishedTime++;
 		}
 		if (this.i == 0) {
 			this.i++;
@@ -301,7 +301,7 @@ public class Application extends Timed {
 				&& this.allgenerateddatasize != 0) {
 			unsubscribe();
 			System.out.println("~~~~~~~~~~~~");
-			Scenario.scenscan=Timed.getFireCount();
+			Scenario.finishedTime=Timed.getFireCount();
 			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
