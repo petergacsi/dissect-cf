@@ -4,6 +4,6 @@
 		<ram>4294967296</ram>
 		<cpucores>1</cpucores>
 		<instance-price>18.15</instance-price>
-		<gbhour-per-price>0.0526</gbhour-per-price>
+		<hour-per-price>0.0526</hour-per-price>
 	</provider>
 </providers>

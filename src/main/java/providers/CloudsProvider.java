@@ -110,7 +110,7 @@ public class CloudsProvider extends Provider {
 		int j=0;
 		for(Application a : Scenario.getApp()){
 			for(VmCollector vmc : a.vmlist){
-				cost1 += vmc.workingTime/(60*1000*60)*this.getGbHourPrice();
+				cost1 += vmc.workingTime/(60*1000*60)*this.getHourPrice();
 			}
 		}
 		

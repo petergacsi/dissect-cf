@@ -76,7 +76,7 @@ public abstract class Provider extends Timed{
 	@Override
 	public String toString() {
 		return "Provider [cpu=" + cpu + ", memory=" + memory + ", instancePrice=" + instancePrice + ", gbHourPrice="
-				+ gbHourPrice + ", filesize=" + filesize + ", freq=" + freq + ", userIotCost=" + userIotCost
+				+ hourPrice + ", filesize=" + filesize + ", freq=" + freq + ", userIotCost=" + userIotCost
 				+ ", userCloudCost=" + userCloudCost + ", pricePerMB=" + pricePerMB + ", blockOfData=" + blockOfData
 				+ ", exchangeRate=" + exchangeRate + ", bofMessagecount=" + bofMessagecount + ", bofPrice=" + bofPrice
 				+ ", devicepricePerMonth=" + devicepricePerMonth + ", messagesPerMonthPerDevice="
@@ -90,7 +90,7 @@ public abstract class Provider extends Timed{
 	private double cpu;
 	private long memory; 
 	private double instancePrice;
-	private double gbHourPrice;
+	private double hourPrice;
 
 	// IoT side variables
 	public static long lateStart;
@@ -129,12 +129,12 @@ public abstract class Provider extends Timed{
 		this.instancePrice = instancePrice;
 	}
 
-	protected double getGbHourPrice() {
-		return gbHourPrice;
+	protected double getHourPrice() {
+		return hourPrice;
 	}
 
-	protected void setGbHourPrice(double gbHourPrice) {
-		this.gbHourPrice = gbHourPrice;
+	protected void setHourPrice(double hourPrice) {
+		this.hourPrice = hourPrice;
 	}
 
 	protected long getFreq() {
@@ -310,8 +310,8 @@ public abstract class Provider extends Timed{
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
 		
-		nList = doc.getElementsByTagName("gbhour-per-price");
-		p.setGbHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
+		nList = doc.getElementsByTagName("hour-per-price");
+		p.setHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
 		nList = doc.getElementsByTagName("instance-price");
 		p.setInstancePrice(Double.parseDouble(nList.item(0).getTextContent()));
 		nList = doc.getElementsByTagName("ram");
