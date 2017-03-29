@@ -302,22 +302,23 @@ public abstract class Provider extends Timed{
 		}
 	}
 	
-	private static <P extends Provider> void readCProviderXml(P p,String datafile) throws ParserConfigurationException, SAXException, IOException{
+	private static <P extends Provider> void readCProviderXml(P p,String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException{
 		File fXmlFile = new File(datafile);
-		NodeList nList;
+		NodeList nList,nList2;
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
 		
-		nList = doc.getElementsByTagName("hour-per-price");
-		p.setHourPrice(Double.parseDouble(nList.item(0).getTextContent()));
-		nList = doc.getElementsByTagName("instance-price");
-		p.setInstancePrice(Double.parseDouble(nList.item(0).getTextContent()));
-		nList = doc.getElementsByTagName("ram");
-		p.setMemory(Long.parseLong(nList.item(0).getTextContent()));
-		nList = doc.getElementsByTagName("cpucores");
-		p.setCpu(Double.parseDouble(nList.item(0).getTextContent()));
+		nList = doc.getElementsByTagName(target);
+		for (int temp = 0; temp < nList.item(0).getChildNodes().getLength(); temp++){
+			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals(size)){
+				p.setMemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
+				p.setCpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
+				p.setInstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
+				p.setHourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
+			}
+		}
 	}
 	
 	public static <P extends Provider> void readProviderXml(P p, String provider,String cprovider, int filesize)
@@ -329,6 +330,10 @@ public abstract class Provider extends Timed{
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
+
+		String size,target;
+		size= doc.getElementsByTagName("providers").item(0).getAttributes().item(0).getNodeValue();
+		target= doc.getElementsByTagName("providers").item(0).getAttributes().item(1).getNodeValue();
 
 		nList = doc.getElementsByTagName("amazon");
 		if(nList.item(0).getAttributes().item(0).getNodeValue().equals("true")){
@@ -384,7 +389,7 @@ public abstract class Provider extends Timed{
 			}
 		}
 		if(cprovider!=null){
-			Provider.readCProviderXml(p,cprovider);
+			Provider.readCProviderXml(p,cprovider,size,target);
 		}
 		//System.out.println(p);
 		Provider.providerList.add(p);

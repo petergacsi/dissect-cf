@@ -1,9 +1,102 @@
 <?xml version="1.0"?>
 <providers>
-	<provider>
-		<ram>4294967296</ram>
-		<cpucores>1</cpucores>
-		<instance-price>18.15</instance-price>
-		<hour-per-price>0.0526</hour-per-price>
-	</provider>
+
+ 	<!-- 1core,2GB RAM -->
+	<!-- 2core,8GB RAM -->
+	<!-- 8core,32GB RAM -->
+	<amazon>		
+		<small>
+			<ram>2147483648</ram>
+			<cpucores>1</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.023</hour-per-price>
+		</small>
+		<medium> 
+			<ram>8589934592</ram>
+			<cpucores>2</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.094</hour-per-price>
+		</medium>
+		<large> 
+			<ram>34359738368</ram>
+			<cpucores>8</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.376</hour-per-price>
+		</large>
+	</amazon> 
+	
+	<!-- 1core,1.75GB RAM -->
+	<!-- 2core,3.50GB RAM -->
+	<!-- 8core,14GB RAM -->
+	<azure>
+		<small> 
+			<ram>1879048192</ram>
+			<cpucores>1</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.02</hour-per-price>
+		</small>
+		<medium> 
+			<ram>3758096384</ram>
+			<cpucores>2</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.058</hour-per-price>
+		</medium>
+		<large> 
+			<ram>15032385536</ram>
+			<cpucores>8</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.297</hour-per-price>
+		</large>
+	</azure>
+	
+	 <!-- 1core,1GB RAM -->
+	 <!-- 4core,4GB RAM -->
+	 <!-- 8core,8GB RAM -->
+	<bluemix> 
+		<small>
+			<ram>1073741824</ram>
+			<cpucores>1</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.038</hour-per-price>
+		</small>
+		<medium>
+			<ram>4294967296</ram>
+			<cpucores>4</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.150</hour-per-price>
+		</medium>
+		<large> 
+			<ram>8589934592</ram>
+			<cpucores>8</cpucores>
+			<instance-price>0</instance-price>
+			<hour-per-price>0.296</hour-per-price>
+		</large>
+	</bluemix> 
+
+	<!-- 1core,15GB RAM -->
+	<!-- 2core,15GB RAM -->
+	<!-- 4core,15GB RAM -->
+	<oracle> 
+		<small> 
+			<ram>16106127360</ram>
+			<cpucores>1</cpucores>
+			<instance-price>75</instance-price>
+			<hour-per-price>0</hour-per-price>
+		</small>
+		<medium> 
+			<ram>16106127360</ram>
+			<cpucores>2</cpucores>
+			<instance-price>139</instance-price>
+			<hour-per-price>0</hour-per-price>
+		</medium>
+		<large>
+			<ram>16106127360</ram>
+			<cpucores>4</cpucores>
+			<instance-price>268</instance-price>
+			<hour-per-price>0</hour-per-price>
+		</large>
+	</oracle> 
+
+	
+	
 </providers>
