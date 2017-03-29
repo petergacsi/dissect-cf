@@ -31,7 +31,7 @@ public class Application extends Timed {
 	 * Osztalyba foglalja az adott virtualis gepet, a VM altal elvegzett osszes feladat 
 	 * es az adott VM allapotat (dolgozik-e eppen feladaton,vagy sem).
 	 */
-	public static class VmCollector {
+	public  class VmCollector {
 		@Override
 		public String toString() {
 			return "VmCollector [vm=" + vm + ", isworking=" + isworking + ", tasknumber=" + tasknumber + ", worked="
@@ -43,7 +43,8 @@ public class Application extends Timed {
 		 int tasknumber;
 		 boolean worked;
 		 PhysicalMachine pm;
-		 long workingTime;
+		 long lastWorked;
+		 public long workingTime;
 		 
 		 public boolean isWorked(){
 				return worked;
@@ -55,6 +56,7 @@ public class Application extends Timed {
 			this.tasknumber = 0;
 			this.worked = false;
 			this.workingTime=0;
+			this.lastWorked=Timed.getFireCount();
 		}
 	}
 	
@@ -202,6 +204,7 @@ public class Application extends Timed {
 				if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && vmcl.isworking == false) {
 					reqshutdown--;
 					try {
+						vmcl.lastWorked=Timed.getFireCount();
 						vmcl.vm.switchoff(true);
 						stopped_vm++;
 					} catch (StateChangeException e) {
@@ -212,6 +215,16 @@ public class Application extends Timed {
 		}
 		//System.out.println("leallitott VM: "+stopped_vm + " ido: "+Timed.getFireCount());
 	}	
+	
+	
+	private void countVmRunningTime(){
+		for(VmCollector vmc : this.vmlist ){
+			if(vmc.vm.getState().equals(VirtualMachine.State.RUNNING)){
+				vmc.workingTime+=(Timed.getFireCount()-vmc.lastWorked);
+				vmc.lastWorked=Timed.getFireCount();
+			}
+		}
+	}
 	
 	@Override
 	/**
@@ -283,7 +296,7 @@ public class Application extends Timed {
 			}
 			//System.out.println("osszes: "+Station.allstationsize +" feldolgozott: " +Application.allgenerateddatasize+ " ido: "+Timed.getFireCount());
 		}
-		
+		this.countVmRunningTime();	
 
 		/* ------------------------------------ */
 		int task = 0;

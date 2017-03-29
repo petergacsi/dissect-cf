@@ -50,11 +50,14 @@ public class Scenario {
 						i+=vmcl.tasknumber;
 					}
 				}
+				
 				for(VmCollector vmcl : a.vmlist){
 					if(vmcl.worked && vmcl.tasknumber>0){
-						System.out.println(vmcl.vm+" : "+vmcl.tasknumber);
+						System.out.println(vmcl.vm+" : "+vmcl.tasknumber+" : "+vmcl.workingTime);
+						
 					}
 				}
+				
 				
 				PrintWriter writer = new PrintWriter("tasks-"+a.stations.get(0).getCloudnumber()+".csv", "UTF-8");	
 				for( Long s : a.tmap.keySet() )

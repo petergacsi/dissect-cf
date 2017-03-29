@@ -23,6 +23,7 @@ public class CloudsProvider extends Provider {
 
 	public CloudsProvider(long simulatedTime) {
 		super(simulatedTime);
+
 	}
 
 	@Override
@@ -105,9 +106,14 @@ public class CloudsProvider extends Provider {
 
 	@Override
 	protected void CloudCostCounter() {
-		double cost1,cost2;
+		double cost1=0,cost2;
 		int j=0;
-		cost1 = Scenario.finishedTime/(60*1000)*this.getGbHourPrice();
+		for(Application a : Scenario.getApp()){
+			for(VmCollector vmc : a.vmlist){
+				cost1 += vmc.workingTime/(60*1000*60)*this.getGbHourPrice();
+			}
+		}
+		
 		for(Application a : Scenario.getApp()){
 			for(VmCollector vmcl : a.vmlist){
 				if(vmcl.isWorked()){
