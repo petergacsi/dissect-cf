@@ -292,7 +292,7 @@ public abstract class Provider extends Timed{
 		/******************************************************************/
 		// shutdown test
 		boolean tmp = false;
-		for(Application a : Scenario.getApp()){
+		for(Application a : Application.getApp()){
 			if(a.isSubscribed()){
 				tmp = true;
 			}

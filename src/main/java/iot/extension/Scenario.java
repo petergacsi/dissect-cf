@@ -17,32 +17,25 @@ import org.w3c.dom.Node;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
-import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
 import providers.CloudsProvider;
 import providers.Provider;
 
 /**
- * Az osztaly fo feladata az egyes Szcenariok lefuttasa, illetve logolasa
- *
- */
+  *  Main task of this class to run the whole simulation based on XML files.
+  *  Az osztaly fo feladata, hogy lefuttassa a teljes szimulaciot XML fajlok alapjan.
+  */
 public class Scenario {
-	private static ArrayList<Station> stations = new ArrayList<Station>();
-	private static ArrayList<Cloud> clouds = new ArrayList<Cloud>();
-	private static ArrayList<Application> app = new ArrayList<Application>();
-	public static long finishedTime = 0;
-	public static long[] stationvalue; 
+	
 	private static int filesize;
 	private static long simulatedTime;
 	
-	public static ArrayList<Application> getApp() {
-		return app;
-	}
+
 	private void loging() throws FileNotFoundException, UnsupportedEncodingException{
 			int i=0;
 			int j=0;
-			for(Application a : app){
+			for(Application a : Application.getApp()){
 				System.out.println(a.getName()+ " stations: "+ a.stations.size());
 				for(VmCollector vmcl : a.vmlist){
 					if(vmcl.worked){
@@ -73,9 +66,9 @@ public class Scenario {
 			System.out.println("~~~~~~~~~~~~");
 			System.out.println("All filesize: "+Station.allstationsize);
 			System.out.println("~~~~~~~~~~~~");
-			System.out.println("Scneario finished at: "+Scenario.finishedTime);
+			System.out.println("Scneario finished at: "+Application.getFinishedTime());
 			System.out.println("~~~~~~~~~~~~");
-			for(Cloud c : Scenario.clouds){
+			for(Cloud c : Cloud.getClouds()){
 				System.out.println(c.getIaas().repositories.toString());
 				for (PhysicalMachine p : c.getIaas().machines) {
 					if ( p.localDisk.getFreeStorageCapacity() != p.localDisk.getMaxStorageCapacity()) {
@@ -90,7 +83,7 @@ public class Scenario {
 	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException{
 		long tasksize=-1; // TODO: ez miert kell?!
 
-		stationvalue = new long[cloudcount];
+		Station.setStationvalue(new long[cloudcount]); 
 		if(cloudcount<1){
 			System.out.println("Cloudcount ertekenek legalabb 1-nek kell lennie!");
 			System.exit(0);
@@ -191,7 +184,7 @@ public class Scenario {
 						Stationdata sd = new Stationdata(time, starttime, stoptime, filesize, snumber, freq,
 								eElement.getElementsByTagName("name").item(0).getTextContent()+" "+i,
 								eElement.getElementsByTagName("torepo").item(0).getTextContent(), ratio);
-						Scenario.stations.add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
+						Station.getStations().add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
 						
 					}
 					Scenario.simulatedTime=(Scenario.simulatedTime<time)?time:Scenario.simulatedTime;
@@ -202,25 +195,25 @@ public class Scenario {
 			if(tasksize!=-1){
 				CloudsProvider cp = new CloudsProvider(Scenario.simulatedTime);
 				Provider.readProviderXml(cp, providerfile,cproviderfile,filesize);
-				int maxstation = Scenario.stations.size() / cloudcount;
+				int maxstation = Station.getStations().size() / cloudcount;
 				AlterableResourceConstraints arc = new AlterableResourceConstraints(cp.getCpu(),0.001,cp.getMemory());
 				for(int i=0;i<cloudcount;i++){
-					Scenario.stationvalue[i]=0;
-					Cloud cloud = new Cloud(null,arc,cloudfile);
-					Scenario.clouds.add(cloud);
+					Station.getStationvalue()[i]=0;
+					Cloud cloud = new Cloud(null,arc,cloudfile,null);
+					Cloud.getClouds().add(cloud);
 					ArrayList<Station> stations = new ArrayList<Station>();
-					int stationcounter=Scenario.stations.size()-1;
+					int stationcounter=Station.getStations().size()-1;
 					while(stationcounter>=0){
-						Scenario.stations.get(stationcounter).setCloud(cloud);
-						Scenario.stations.get(stationcounter).setCloudnumber(i);
-						stations.add(Scenario.stations.get(stationcounter));
-						Scenario.stations.remove(stationcounter);
+						Station.getStations().get(stationcounter).setCloud(cloud);
+						Station.getStations().get(stationcounter).setCloudnumber(i);
+						stations.add(Station.getStations().get(stationcounter));
+						Station.getStations().remove(stationcounter);
 						stationcounter--;
 						if(stations.size()>maxstation){
 							break;
 						}
 					}
-					app.add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:",Provider.getProviderList().get(0)));
+					Application.getApp().add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:",Provider.getProviderList().get(0)));
 				}
 			}
 		

@@ -1,25 +1,17 @@
 package iot.extension;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 import java.util.TreeMap;
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import iot.extension.Application.VmCollector;
 import providers.Provider;
-import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 
 /**
  * Ez az osztaly dolgozza fel a Station-ok altal generalt adatokat ComputeTask-okban.
@@ -60,6 +52,13 @@ public class Application extends Timed {
 		}
 	}
 	
+	public static ArrayList<Application> getApp() {
+		return app;
+	}
+
+	private static ArrayList<Application> app = new ArrayList<Application>();
+	private static long finishedTime;
+	private static int starterVar = 0; 
 	private  int i = 0;
 	public ArrayList<VmCollector> vmlist;
 	private int print;
@@ -75,6 +74,15 @@ public class Application extends Timed {
 	private String name;
 	private Provider provider; //TODO: app = user, egyeni arazas
 	
+	
+	public static long getFinishedTime() {
+		return finishedTime;
+	}
+
+	public static void setFinishedTime(long finishedTime) {
+		Application.finishedTime = finishedTime;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -113,13 +121,13 @@ public class Application extends Timed {
 	 * A metodus elinditja az osszes Station mukodeset
 	 */
 	private void startStation() {
-		if(Scenario.finishedTime==0){
+		if(Application.starterVar==0){
 			for(Provider p : Provider.getProviderList()){
 				p.startProvider();
 			}
 			Provider.lateStart = Timed.getFireCount();
 			System.out.println("Scenario started at: " + Timed.getFireCount());
-			Scenario.finishedTime++;
+			Application.starterVar++;
 		}
 		if (this.i == 0) {
 			this.i++;
@@ -131,11 +139,11 @@ public class Application extends Timed {
 
 						@Override
 						protected void eventAction() {
-							s.startMeter(s.sd.freq);
+							s.startMeter(s.sd.getFreq());
 						}
 					};
 				} else {
-					s.startMeter(s.sd.freq);
+					s.startMeter(s.sd.getFreq());
 				}
 			}
 		}
@@ -239,7 +247,7 @@ public class Application extends Timed {
 			this.startStation();
 		}
 		 // ha erkezett be a kozponti repoba feldolgozatlan adat
-		this.localfilesize = (Scenario.stationvalue[this.stations.get(0).getCloudnumber()] - this.allgenerateddatasize); 
+		this.localfilesize = (Station.getStationvalue()[this.stations.get(0).getCloudnumber()] - this.allgenerateddatasize); 
 		if (this.localfilesize > 0) { 
 			long processed = 0;
 			boolean havevm = true;
@@ -310,11 +318,11 @@ public class Application extends Timed {
 		this.turnoffVM();
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState()
-				&& (Scenario.stationvalue[this.stations.get(0).getCloudnumber()]) == this.allgenerateddatasize
+				&& (Station.getStationvalue()[this.stations.get(0).getCloudnumber()]) == this.allgenerateddatasize
 				&& this.allgenerateddatasize != 0) {
 			unsubscribe();
 			System.out.println("~~~~~~~~~~~~");
-			Scenario.finishedTime=Timed.getFireCount();
+			Application.finishedTime=Timed.getFireCount();
 			
 			for (VmCollector vmcl : this.vmlist) {
 				try {

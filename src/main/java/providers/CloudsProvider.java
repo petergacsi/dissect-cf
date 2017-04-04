@@ -51,7 +51,7 @@ public class CloudsProvider extends Provider {
 		}
 		//oracle
 		if(this.getAmMessagesPerMonthPerDevice()>0){
-			for(Application a : Scenario.getApp()){
+			for(Application a : Application.getApp()){
 				for(Station s : a.stations){
 					long month = s.sd.getLifetime()/(this.getFreq());
 					if(month==0){
@@ -108,13 +108,13 @@ public class CloudsProvider extends Provider {
 	protected void CloudCostCounter() {
 		double cost1=0,cost2;
 		int j=0;
-		for(Application a : Scenario.getApp()){
+		for(Application a : Application.getApp()){
 			for(VmCollector vmc : a.vmlist){
 				cost1 += vmc.workingTime/(60*1000*60)*this.getHourPrice();
 			}
 		}
 		
-		for(Application a : Scenario.getApp()){
+		for(Application a : Application.getApp()){
 			for(VmCollector vmcl : a.vmlist){
 				if(vmcl.isWorked()){
 					j++;

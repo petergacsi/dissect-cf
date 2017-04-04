@@ -3,9 +3,6 @@ package iot.extension;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-
-import org.omg.Messaging.SyncScopeHelper;
-
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.*;
@@ -16,47 +13,107 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.*;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
 
 /**
- * Az osztaly szimulalja egy IoT eszkoz mukodeset, ehhez megvalositja az ososzaly tick() metodusat,
- * illetve kozos halozatba kerul a kozponti IaaS felhovel. 
+ * This class simulates one of the IoT world's entity which is the smart device. Behavior of the class 
+ * depends on time (as recurring event).
+ * Az osztaly szimulalja egy IoT okos eszkoz mukodeset. A szimulacio soran idotol fuggo, visszatero esemenykent mukodik.
  */
 public class Station extends Timed {
 
 	/**
-	 * Kulon osztaly a Station fobb adatainak a konnyebb attekinthetoseg es peldanyositas erdekeben
+	 * This class helps to handle the attributon of station because for transparency and instantiation.
+	 * Kulon osztaly a Station fobb adatainak a konnyebb attekinthetoseg es peldanyositas erdekeben.
 	 */
 	public static class Stationdata {
+		
+		/**
+		 *
+		 * The final time when the station send data.
+		 * Az utolso ido, mikor a station meg adatot fog kuldeni.
+		 */
 		private long lifetime;
+		
+		/**
+		 *  The time when the station starts generating and sending data.	
+		 *  Az az ido, mikor a station elkezdi az adatgeneralast es az adatkuldest.
+		 */
 		private long starttime;
+		
+		/**
+		 *  The time when the station stops generating and sending data.	
+		 *  Az az ido, mikor a station befejezi az adatgeneralast es az adatkuldest.
+		 */
 		private long stoptime;
+		
+		/**
+		 *  Size of the generated data.
+		 *  A generalt adatmerete.
+		 */
 		private int filesize;
+		
+		/**
+		 *  Number of the station's sensors.
+		 *  A station szenzorjainak a szama.
+		 */
 		private int sensornumber;
-		long freq;
+		
+		/**
+		 *  The frequncy which tells the time between generating-sending data.
+		 *  A frekvencia, amely megmondja mennyi ido teljen el 2 adatgeneralas es adatkuldes kozott.
+		 */
+		private long freq;
+		
+		/**
+		 * Name ID of the station.
+		 * Station azonosito.
+		 */
 		private String name;
+		
+		/**
+		 * Name ID of the repository which will receive the data
+		 * A repository ID, amelyik fogadja az adatot.
+		 */
 		private String torepo;
+		
+		/**
+		 *  It tells how much unit of data will be locally store before sending.
+		 *  Arany, amely megmondja, hogy hany egysegnyi adat legyen lokalisan eltarolva kuldes elott.
+		 */
 		private int ratio;
-		
-		
-		
+
+		/**
+		 * Getter method for data sending-generating frequency of the station. Getter metodus a station frekvenciajahoz.
+		 */
+		public long getFreq() {
+			return freq;
+		}
+
+		/**
+		 * Getter method for the final time when data sending can happen. Getter metodus a vegso idohoz amikor tortenhet meg adatkuldes. 
+		 */
 		public long getLifetime() {
 			return lifetime;
 		}
 
+		/**
+		 * Getter method for the number of station's sensors. Getter metodus a station szenzorainak szamahoz.
+		 */
 		public int getSensornumber() {
 			return sensornumber;
 		}
 
 		/**
-		 * @param lt lifetime, a szimulacio teljes idotartama
-		 * @param st starttime, a station mukodesenek kezdete
-		 * @param stt stoptime, a station mukodesenek vege
-		 * @param fs filesize, egy meres soran generalt fajlmeret
-		 * @param sn sensornumber, az osszes szenzorszam
-		 * @param freq freq, az adatgeneralas es az adatkuldes ismetlodesenek frekvenciaja
-		 * @param name name, egyedi azonosito
-		 * @param torepo torepo, az a Repository, ahova a station a generalt adatokat fogja kuldeni 
-		 * @param ratio ratio, erteketol fuggoen az adatok bizonyos ideig vissza lesznek tartva a kuldestol
+		 * Constructor creates useful and necessary data for work of a station.
+		 * @param lt final time to sending data - utolso ido adatkuldeshez
+		 * @param st time when the data sending and data generating starts - az az ido, mikor elkezdodik az adatgeneralas es adatkuldes
+		 * @param stt time when the data sending and data generating stops - az az ido, mikor befejezodik az adatgeneralas es adatkuldes
+		 * @param fs size of the generated data - a generalt adat merete
+		 * @param sn count of the sensors which generate the data - szenzorok szama,amelyek adatot generalnak
+		 * @param freq time frequency between generate-send data - frekvencia 2 adatgeneralas-kuldes kozott
+		 * @param name ID of the station - station azonosito
+		 * @param torepo ID of the repository (its name) - a cel repository neve
+		 * @param ratio how much unit of data will be locally store before sending - lokalis adattarolasi aranyt mondja meg az adatkuldes elott
 		 */
-		Stationdata(long lt, long st, long stt, int fs, int sn, long freq, String name, String torepo,
+		 public Stationdata(long lt, long st, long stt, int fs, int sn, long freq, String name, String torepo,
 				int ratio) {
 			this.lifetime = lt;
 			this.starttime = st;
@@ -69,14 +126,15 @@ public class Station extends Timed {
 			this.ratio = ratio;
 		}
 
-		@Override
 		/**
-		 * toString metodus, hasznos lehet debugolashoz
+		 * toString can be useful for debuging or loging.
+		 * toString metodus debugolashoz,logolashoz.
 		 */
+		@Override
 		public String toString() {
-			return "name=" + name + ", lifetime=" + lifetime + ", starttime=" + starttime + ", stoptime=" + stoptime
-					+ ", filesize=" + filesize + ", sensornumber=" + sensornumber + ", freq=" + freq + ", torepo="
-					+ torepo + " ,ratio=" + ratio;
+			return "Stationdata [lifetime=" + lifetime + ", starttime=" + starttime + ", stoptime=" + stoptime
+					+ ", filesize=" + filesize + ", sensornumber=" + sensornumber + ", freq=" + freq + ", name=" + name
+					+ ", torepo=" + torepo + ", ratio=" + ratio + "]";
 		}
 	}
 
@@ -93,9 +151,27 @@ public class Station extends Timed {
 	private boolean isWorking;
 	private boolean randommetering;
 	public Cloud cloud;
-	private int cloudnumber;
+	int cloudnumber;
 	private int messagecount;
+	private static ArrayList<Station> stations = new ArrayList<Station>();
+	private static long[] stationvalue; 
 	
+	public static ArrayList<Station> getStations() {
+		return stations;
+	}
+
+	public static void setStations(ArrayList<Station> stations) {
+		Station.stations = stations;
+	}
+
+	public static long[] getStationvalue() {
+		return stationvalue;
+	}
+
+	public static void setStationvalue(long[] stationvalue) {
+		Station.stationvalue = stationvalue;
+	}
+
 	public void setMessagecount(int messagecount) {
 		this.messagecount = messagecount;
 	}
@@ -277,10 +353,11 @@ public class Station extends Timed {
 					
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(60)+1;		
-					new Metering(this, i, sd.filesize,1000*randomInt,this.cloudnumber);
+					new Metering(this, i, sd.filesize,1000*randomInt);
+					
 				}else{
 					
-					new Metering(this, i, sd.filesize,1,this.cloudnumber);
+					new Metering(this, i, sd.filesize,1);
 				}
 				
 
