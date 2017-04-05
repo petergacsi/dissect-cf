@@ -53,17 +53,17 @@ public class CloudsProvider extends Provider {
 		if(this.getAmMessagesPerMonthPerDevice()>0){
 			for(Application a : Application.getApp()){
 				for(Station s : a.stations){
-					long month = s.sd.getLifetime()/(this.getFreq());
+					long month = s.getSd().getLifetime()/(this.getFreq());
 					if(month==0){
 						month=1;
-						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
-					}else if(s.sd.getLifetime()%(this.getFreq())!=0){
-						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*(month+1));
+						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.getSd().getSensornumber()*month);
+					}else if(s.getSd().getLifetime()%(this.getFreq())!=0){
+						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.getSd().getSensornumber()*(month+1));
 					}else{
-						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.sd.getSensornumber()*month);
+						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.getSd().getSensornumber()*month);
 					}
 					/* additional cost*/
-					long device = s.getMessagecount()/s.sd.getSensornumber();// 1 device hany uzenetet generalt
+					long device = s.getMessagecount()/s.getSd().getSensornumber();// 1 device hany uzenetet generalt
 					s.setMessagecount(0); 
 					if(device>this.getMessagesPerMonthPerDevice()){
 						device-=this.getMessagesPerMonthPerDevice();

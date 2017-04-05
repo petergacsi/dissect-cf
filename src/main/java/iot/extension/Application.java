@@ -139,11 +139,11 @@ public class Application extends Timed {
 
 						@Override
 						protected void eventAction() {
-							s.startMeter(s.sd.getFreq());
+							s.startMeter(s.getSd().getFreq());
 						}
 					};
 				} else {
-					s.startMeter(s.sd.getFreq());
+					s.startMeter(s.getSd().getFreq());
 				}
 			}
 		}

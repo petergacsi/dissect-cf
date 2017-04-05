@@ -245,6 +245,6 @@ public class Scenario {
 			String providerfile=args[2];
 			String cproviderfile=args[3];
 			int print=Integer.parseInt(args[4]);
-			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	
+			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,2,5*60000);	
 		}
 }
