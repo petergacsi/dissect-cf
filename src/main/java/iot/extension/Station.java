@@ -560,7 +560,7 @@ public class Station extends Timed {
 	 */
 	@Override
 	public void tick(long fires) {
-		// a meres a megadott ideig tart csak
+		// a meres a megadott ideig tart csak - metering takes the given time
 		if (Timed.getFireCount() < (sd.lifetime + this.time) && Timed.getFireCount() >= (sd.starttime + this.time)
 				&& Timed.getFireCount() <= (sd.stoptime + this.time)) {
 
@@ -578,14 +578,16 @@ public class Station extends Timed {
 
 			}
 		}
-		// de a station mukodese addig amig az osszes SO el nem lett kuldve
+		// a station mukodese addig amig az osszes SO el nem lett kuldve -
+		// stations work while there are data unsent
 		if (this.repo.getFreeStorageCapacity() == reposize && Timed.getFireCount() > (sd.lifetime + this.time)) {
 			this.stopMeter();
 		}
 
-		// kozponti tarolo a cel repo
+		// kozponti tarolo a cel repo - target is a cloud
 		if (this.cloud.getIaas().repositories.contains(this.torepo)) {
-			// megkeresi a celrepo-t es elkuldeni annak
+			// megkeresi a celrepo-t es elkuldeni annak - looking for the
+			// repository then sending the data
 			try {
 				if (this.torepo != null) {
 					if ((this.repo.getMaxStorageCapacity() - this.repo.getFreeStorageCapacity()) >= sd.ratio
@@ -599,7 +601,7 @@ public class Station extends Timed {
 				e.printStackTrace();
 			}
 		}
-		// share nothing felho
+		// shared nothing cloud
 		else {
 			if (this.pm.getState().equals(State.RUNNING) && this.i == 0) {
 				i++;
@@ -614,7 +616,8 @@ public class Station extends Timed {
 					e.printStackTrace();
 				}
 			}
-			// megkeresi a celrepo-t es elkuldeni annak
+			// megkeresi a celrepo-t es elkuldeni annak - looking for the
+			// repository then sending the data
 			try {
 				if ((this.repo.getMaxStorageCapacity() - this.repo.getFreeStorageCapacity()) >= sd.ratio * sd.filesize
 						|| isSubscribed() == false) {

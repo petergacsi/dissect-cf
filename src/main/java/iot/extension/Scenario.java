@@ -44,15 +44,15 @@ public class Scenario {
 					}
 				}
 				
-				for(VmCollector vmcl : a.vmlist){
-					if(vmcl.worked && vmcl.tasknumber>0){
-						System.out.println(vmcl.vm+" : "+vmcl.tasknumber+" : "+vmcl.workingTime);
-						
-					}
+				for(VmCollector vmcl : a.vmlist){						
+						if(vmcl.isWorked()){
+							//System.out.println(vmcl.vm+" : "+vmcl.tasknumber+" : "+vmcl.workingTime);
+						}
+						System.out.println(vmcl.vm+" : "+vmcl.tasknumber+" : "+vmcl.workingTime+" : "+vmcl.letehozva+ " : "+ vmcl.pm);
 				}
 				
 				
-				PrintWriter writer = new PrintWriter("tasks-"+a.stations.get(0).getCloudnumber()+".csv", "UTF-8");	
+				PrintWriter writer = new PrintWriter("src/main/java/iot/extension/experiments/scenario5/tasks-ON-Oracle"+".csv", "UTF-8");	
 				for( Long s : a.tmap.keySet() )
 				{
 					writer.println(s + "," + a.tmap.get(s));
@@ -240,11 +240,11 @@ public class Scenario {
 		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			String datafile=args[0];
+			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/java/iot/extension/experiments/scenario5/WeatherStation.xml";
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			String cproviderfile=args[3];
 			int print=Integer.parseInt(args[4]);
-			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,2,5*60000);	
+			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	
 		}
 }

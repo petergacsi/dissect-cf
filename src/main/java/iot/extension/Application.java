@@ -14,44 +14,95 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import providers.Provider;
 
 /**
+ * This class start virtual machines and run ComputeTasks on it depending on the generated data by the stations.
  * Ez az osztaly dolgozza fel a Station-ok altal generalt adatokat ComputeTask-okban.
- * Elinditja a Station-�ket, illetve kezeli a virtualis gepek inditasat es leallitasat is.
+ * Elinditja a Station-oket, illetve kezeli a virtualis gepek inditasat es leallitasat is.
  */
 public class Application extends Timed {
 
 	/**
+	 * This class collects the important data about a working virtual machine (number of tasks, working time,etc.).
 	 * Osztalyba foglalja az adott virtualis gepet, a VM altal elvegzett osszes feladat 
 	 * es az adott VM allapotat (dolgozik-e eppen feladaton,vagy sem).
 	 */
-	public  class VmCollector {
-		@Override
+	public class VmCollector {
+		
+		/**
+		 * toString method is useful for debuging and loging.
+		 */
+		 @Override
 		public String toString() {
 			return "VmCollector [vm=" + vm + ", isworking=" + isworking + ", tasknumber=" + tasknumber + ", worked="
-					+ worked + ", pm=" + pm + "]";
+					+ worked + ", pm=" + pm + ", lastWorked=" + lastWorked + ", workingTime=" + workingTime + "]";
 		}
-
-		 VirtualMachine vm;
-		 boolean isworking;
-		 int tasknumber;
-		 boolean worked;
-		 PhysicalMachine pm;
-		 long lastWorked;
-		 public long workingTime;
+		
+		/**
+		 * This virtual machine runs the ComputeTask.
+		 * Ez a virtualis gep fogja futtatni a ComputeTask-okat.
+		 */
+		VirtualMachine vm;
+		
+		/**
+		 * Helper variable to check free virtual machines and working virtual machines.
+		 * Segedvaltozo, amellyel eldontoheto, hogy eppen szabad-e a virtualis gep.
+		 */
+		boolean isworking;
+		
+		/**
+		 * This variable store the number of finished tasks.
+		 * Az elvegzett feladatok szamat tarolja.
+		 */
+		int tasknumber;
+		
+		/**
+		 * True, if the VM run at least 1 ComputeTask.
+		 * Igaz, ha legalabb egy feladatot elvegzett a virtualis gep.
+		 */
+		boolean worked;
+		
+		/**
+		 * The phisycal machine which serve the virtual machine.
+		 * A fizikai gep, amely kiszolgalja a virtualis gepet.
+		 */
+		PhysicalMachine pm;
+		
+		/**
+		 * It store the last time when the vm run a task.
+		 * Az utolso idot tartolja, amikor a virtualis gep inditott feladat.
+		 */
+		long lastWorked;
+		
+		/**
+		 * Full time when the virtual machines worked.
+		 * A teljes ido, amit egy virtualis gep munkaval toltott.
+		 */
+		public long workingTime;
 		 
-		 public boolean isWorked(){
+		/**
+		 * Getter method which tell us that the virtual machine have already started a task.
+		 * Getter metodus, ami megmondja, hogy csinalt-e mar feladatot a virtualis gep.
+		 */
+		public boolean isWorked(){
 				return worked;
-			}
-		 
-		VmCollector(VirtualMachine vm, boolean isworking) {
+		}
+		
+		
+		public long letehozva;
+		/**
+		 * Constructor create default VmCollector with default data.
+		 * @param vm virtual machine which allow to start ComputeTask- virtual gep, ami indithat ComputeTask-ot
+		 */
+		VmCollector(VirtualMachine vm) {
 			this.vm = vm;
-			this.isworking = isworking;
+			this.isworking = false;
 			this.tasknumber = 0;
 			this.worked = false;
 			this.workingTime=0;
 			this.lastWorked=Timed.getFireCount();
+			this.letehozva=Timed.getFireCount();
 		}
 	}
-	
+	//TODO: here we go
 	public static ArrayList<Application> getApp() {
 		return app;
 	}
@@ -156,11 +207,19 @@ public class Application extends Timed {
 		for (int i = 0; i < this.vmlist.size(); i++) {
 			if ((this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) /*|| TODO: Destroyed allapot jelentese?!
 					Application.vmlist.get(i).vm.getState().equals(VirtualMachine.State.DESTROYED)*/) 
-					&& this.vmlist.get(i).pm!=null) {
+					/*&& this.vmlist.get(i).pm!=null && this.cloud.getArc().compareTo(this.vmlist.get(i).pm.freeCapacities)<=0 */
+					){				
 				try {
+					if(this.vmlist.get(i).pm.freeCapacities.getRequiredCPUs()==0.0){
+						//return false;
+						//TODO: megvizsgalni,hogy ez egyaltalan elofordulhat? nem hozunk letre random vm-eket szoval elmeletileg ez az if torolheto, at kell gondolni.
+						System.err.println("Application - turnonVM method");
+						System.exit(0);
+					}
 					this.vmlist.get(i).vm.switchOn(
 							this.vmlist.get(i).pm.allocateResources( this.cloud.getArc(), false, PhysicalMachine.defaultAllocLen),
 							 this.cloud.getIaas().repositories.get(0));
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				} 
@@ -175,8 +234,25 @@ public class Application extends Timed {
 	private void generateAndAddVM() {
 		try {
 			if(this.turnonVM()==false){
-				this.vmlist.add(new VmCollector(
-						 this.cloud.getIaas().requestVM( this.cloud.getVa(),  this.cloud.getArc(),  this.cloud.getIaas().repositories.get(0), 1)[0], false));	
+				//TODO: ide kene 1 feltetel h ne kezdjen el random vm-eket fölöslegesen létrehozni
+				for (int i = 0; i < this.vmlist.size(); i++) {
+					System.err.println(this.vmlist.get(i).vm);
+				}
+				boolean vanpm = false;
+				for(PhysicalMachine pm : this.cloud.getIaas().machines){
+					System.err.println(pm.availableCapacities);
+					
+					if(pm.availableCapacities.getRequiredCPUs()>=this.cloud.getArc().getRequiredCPUs()){
+						vanpm=true;
+					}
+				}
+				if(vanpm){
+					this.vmlist.add(new VmCollector(
+							 this.cloud.getIaas().requestVM( this.cloud.getVa(),  this.cloud.getArc(),  this.cloud.getIaas().repositories.get(0), 1)[0]));	
+				}
+
+				
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

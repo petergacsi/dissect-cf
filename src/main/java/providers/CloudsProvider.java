@@ -106,13 +106,19 @@ public class CloudsProvider extends Provider {
 
 	@Override
 	protected void CloudCostCounter() {
-		double cost1=0,cost2;
+		double cost1=0,cost2,temp=0;
 		int j=0;
 		for(Application a : Application.getApp()){
 			for(VmCollector vmc : a.vmlist){
-				cost1 += vmc.workingTime/(60*1000*60)*this.getHourPrice();
+				if(vmc.isWorked()){
+					cost1 += vmc.workingTime/60/1000/60*this.getHourPrice();
+					temp += vmc.workingTime;
+				}
+				
 			}
 		}
+		System.out.println("DASLSDSDASDSA: "+cost1);
+		System.out.println("DASLSDSDASDSA: "+temp/1000);
 		
 		for(Application a : Application.getApp()){
 			for(VmCollector vmcl : a.vmlist){
