@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <application tasksize='250000'>
 <Station>
-<name number='200'>0</name>
+<name number='200'>0-5</name>
 <freq>60000</freq>
 <snumber size='50'>8</snumber>
-<time starttime='0' stoptime='28800000'>28800000</time>
+<time starttime='0' stoptime='18000000'>18000000</time>
 <maxinbw>1000</maxinbw>
 <maxoutbw>1000</maxoutbw>
 <diskbw>1000</diskbw>
@@ -14,10 +14,10 @@
 </Station>
 
 <Station>
-<name number='300'>499</name>
+<name number='500'>5-8</name>
 <freq>60000</freq>
 <snumber size='50'>8</snumber>
-<time starttime='21600000' stoptime='64800000'>64800000</time>
+<time starttime='18000000' stoptime='28800000'>28800000</time>
 <maxinbw>1000</maxinbw>
 <maxoutbw>1000</maxoutbw>
 <diskbw>1000</diskbw>
@@ -28,10 +28,10 @@
 
 
 <Station>
-<name number='200'>699</name>
+<name number='300'>8-16</name>
 <freq>60000</freq>
 <snumber size='50'>8</snumber>
-<time starttime='57600000' stoptime='86400000'>86400000</time>
+<time starttime='28800000' stoptime='57600000'>57600000</time>
 <maxinbw>1000</maxinbw>
 <maxoutbw>1000</maxoutbw>
 <diskbw>1000</diskbw>
@@ -39,6 +39,33 @@
 <reposize>60000</reposize>
 <ratio>1</ratio>
 </Station>
+
+<Station>
+<name number='1000'>16-20</name>
+<freq>60000</freq>
+<snumber size='50'>8</snumber>
+<time starttime='57600000' stoptime='72000000'>72000000</time>
+<maxinbw>1000</maxinbw>
+<maxoutbw>1000</maxoutbw>
+<diskbw>1000</diskbw>
+<torepo>ceph</torepo>
+<reposize>60000</reposize>
+<ratio>1</ratio>
+</Station>
+
+<Station>
+<name number='200'>20-24</name>
+<freq>60000</freq>
+<snumber size='50'>8</snumber>
+<time starttime='72000000' stoptime='86400000'>86400000</time>
+<maxinbw>1000</maxinbw>
+<maxoutbw>1000</maxoutbw>
+<diskbw>1000</diskbw>
+<torepo>ceph</torepo>
+<reposize>60000</reposize>
+<ratio>1</ratio>
+</Station>
+
 
 </application>
 
