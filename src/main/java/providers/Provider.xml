@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<providers size="large" target="bluemix">
+<providers size="large" target="oracle">
 
 	<bluemix calculate="true"> 
 		<price-per-MB mbfrom="1" mbto="499999">0.00097</price-per-MB> 

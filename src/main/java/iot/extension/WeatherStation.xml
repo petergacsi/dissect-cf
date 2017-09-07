@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<application tasksize='10000'>
+<application tasksize='250000'>
 <Station>
 <name number='1'>0</name>
 <freq>60000</freq>

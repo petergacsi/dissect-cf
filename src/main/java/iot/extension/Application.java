@@ -246,7 +246,7 @@ public class Application extends Timed {
 						vanpm=true;
 					}
 				}
-				if(vanpm){
+				if(vanpm){ // csak akkor kerjunk uj vm-et ha van fizikai eroforrasunkra.
 					this.vmlist.add(new VmCollector(
 							 this.cloud.getIaas().requestVM( this.cloud.getVa(),  this.cloud.getArc(),  this.cloud.getIaas().repositories.get(0), 1)[0]));	
 				}
@@ -289,7 +289,7 @@ public class Application extends Timed {
 					reqshutdown--;
 					try {
 						vmcl.lastWorked=Timed.getFireCount();
-						vmcl.vm.switchoff(true);
+						vmcl.vm.switchoff(false);
 						stopped_vm++;
 					} catch (StateChangeException e) {
 						e.printStackTrace();
@@ -385,7 +385,7 @@ public class Application extends Timed {
 		/* ------------------------------------ */
 		int task = 0;
 		for (VmCollector vmcl : this.vmlist) {
-			if (vmcl.tasknumber >= 0  && vmcl.isworking
+			if (vmcl.tasknumber >= 0  /*&& vmcl.isworking*/
 					&& vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				task++;
 			}

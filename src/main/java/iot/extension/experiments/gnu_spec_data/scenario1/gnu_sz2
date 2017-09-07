@@ -1,0 +1,17 @@
+reset
+set ylabel 'Sum of the costs' font 'Times,12'
+set xlabel 'Amount of data' font 'Times,12'
+set style data histograms
+set style histogram rowstacked gap 1
+set boxwidth 0.7 relative
+set grid ytics
+set yrange [0:4500]
+set label "3762.1" at -0.15,3850
+set label "3699.9" at 0.85,3800
+set label "3658.5" at 1.85,3750
+set style fill pattern 1.2 border -1
+set xtic 1 offset character 0,0 font 'Times,12'
+plot 'adatok' using 2 lc rgb "#FF0000" t "Costs of the IoT side", '' using 3:xticlabels(1) lc rgb "#0000FF"t "Costs of the Cloud side",
+
+
+

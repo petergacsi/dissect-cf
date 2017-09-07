@@ -1,0 +1,13 @@
+reset
+set xlabel 'Providers' font 'Times,12'
+set ylabel 'Sum of the costs in Euro in logarithmic scale' font 'Times,12'
+set style data histograms
+set style histogram gap 1
+set boxwidth 0.7 relative
+#set yrange[0:1600]
+set grid ytics
+set logscale y
+set style fill pattern 1.2 border -1
+set xtic 1 offset character 0,0 font 'Times,12'
+plot 's2_2_data' using 2:xtic(1) ti "fixed" lc rgb "#FF0000",\
+'' using 3 ti "random" lc rgb "#0000FF"

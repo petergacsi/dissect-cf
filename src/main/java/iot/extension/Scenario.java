@@ -52,7 +52,7 @@ public class Scenario {
 				}
 				
 				
-				PrintWriter writer = new PrintWriter("src/main/java/iot/extension/experiments/scenario5/tasks-ON-Oracle"+".csv", "UTF-8");	
+				PrintWriter writer = new PrintWriter("src/main/java/iot/extension/experiments/scenario3/task-5L4"+".csv", "UTF-8");	
 				for( Long s : a.tmap.keySet() )
 				{
 					writer.println(s + "," + a.tmap.get(s));
@@ -240,7 +240,7 @@ public class Scenario {
 		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/java/iot/extension/experiments/scenario5/WeatherStation.xml";
+			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/java/iot/extension/experiments/scenario4/WeatherStation487.xml";
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			String cproviderfile=args[3];

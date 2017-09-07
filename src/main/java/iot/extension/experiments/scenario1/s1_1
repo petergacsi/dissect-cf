@@ -1,0 +1,7 @@
+reset
+set ylabel 'Number of tasks' font 'Times,12'
+set xlabel 'Time in ms' font 'Times,12'
+set datafile sep ','
+set grid ytics
+set yrange [0:38]
+plot '50.csv'u 1:2 w l lw 3 lt rgb "#FF0000" dashtype 2 title "50 byte / message", '100.csv' u 1:2 w l lw 3  lt rgb "#0000FF" dashtype 1 title '100 byte / message', '200.csv' u 1:2 w l lw 3  lt rgb "#00FF00" dashtype 3 title '200 byte / message'

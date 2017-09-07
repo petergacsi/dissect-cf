@@ -14,7 +14,7 @@
 </Station>
 
 <Station>
-<name number='500'>5-8</name>
+<name number='700'>5-8</name>
 <freq>60000</freq>
 <snumber size='50'>8</snumber>
 <time starttime='18000000' stoptime='28800000'>28800000</time>
@@ -41,7 +41,7 @@
 </Station>
 
 <Station>
-<name number='1000'>16-20</name>
+<name number='500'>16-20</name>
 <freq>60000</freq>
 <snumber size='50'>8</snumber>
 <time starttime='57600000' stoptime='72000000'>72000000</time>
