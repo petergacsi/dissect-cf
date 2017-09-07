@@ -1,11 +1,15 @@
 package iot.extension;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
+import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
 import hu.mta.sztaki.lpds.cloud.simulator.*;
+import hu.mta.sztaki.lpds.cloud.simulator.energy.powermodelling.PowerState;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.State;
@@ -158,6 +162,24 @@ public class Station extends Timed {
 		}
 	}
 
+	public static final double minpower = 20;
+	public static final double idlepower = 200;
+	public static final double maxpower = 300;
+	public static final double diskDivider = 10;
+	public static final double netDivider = 20;
+	public final static Map<String, PowerState> defaultStorageTransitions;
+	public final static Map<String, PowerState> defaultNetworkTransitions;
+	
+	static {
+		try {
+			EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions = PowerTransitionGenerator
+					.generateTransitions(minpower, idlepower, maxpower, diskDivider, netDivider);
+			defaultStorageTransitions = transitions.get(PowerTransitionGenerator.PowerStateKind.storage);
+			defaultNetworkTransitions = transitions.get(PowerTransitionGenerator.PowerStateKind.network);
+		} catch (Exception e) {
+			throw new IllegalStateException("Cannot initialize the default transitions");
+		}
+	}
 	/**
 	 * It contains the all important data of the station. A station osszes
 	 * fontos adatat tartalmazza.
@@ -394,9 +416,10 @@ public class Station extends Timed {
 	 * @param randommetering
 	 *            if true the Metering() method will be delayed - ha true, akkor
 	 *            a Metering() hivas keslelteve lesz
+	 * @throws NetworkException 
 	 */
 	public Station(long maxinbw, long maxoutbw, long diskbw, long reposize, final Stationdata sd,
-			boolean randommetering) {
+			boolean randommetering) throws NetworkException {
 		this.vm = null;
 		this.i = 0;
 		this.sd = sd;
@@ -407,8 +430,9 @@ public class Station extends Timed {
 		lmap.put(sd.name, lat);
 		lmap.put(sd.torepo, lat);
 		this.reposize = reposize;
-		repo = new Repository(this.reposize, sd.name, maxinbw, maxoutbw, diskbw, lmap);
+		repo = new Repository(this.reposize, sd.name, maxinbw, maxoutbw, diskbw, lmap, defaultStorageTransitions, defaultNetworkTransitions);
 		this.randommetering = randommetering;
+		this.repo.setState(NetworkNode.State.RUNNING);
 	}
 
 	/**
@@ -472,10 +496,15 @@ public class Station extends Timed {
 	 *            a cel repository
 	 */
 	private void startCommunicate(Repository r) throws NetworkException {
-		for (StorageObject so : repo.contents()) {
-			StorObjEvent soe = new StorObjEvent(so.id);
-			repo.requestContentDelivery(so.id, r, soe);
+		//System.out.println(repo + " "+Timed.getFireCount() + " "+r.getCurrState() +" "+ repo.getCurrState());
+		if(r.getCurrState().equals(Repository.State.RUNNING)){
+			
+			for (StorageObject so : repo.contents()) {
+				StorObjEvent soe = new StorObjEvent(so.id);
+				repo.requestContentDelivery(so.id, r, soe);
+			}
 		}
+		
 	}
 
 	/**

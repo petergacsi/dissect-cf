@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
+import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
 import providers.CloudsProvider;
@@ -80,7 +81,7 @@ public class Scenario {
 	}
 	
 	
-	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException{
+	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
 		long tasksize=-1; // TODO: ez miert kell?!
 
 		Station.setStationvalue(new long[cloudcount]); 

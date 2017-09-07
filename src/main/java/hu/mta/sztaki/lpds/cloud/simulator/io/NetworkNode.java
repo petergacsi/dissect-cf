@@ -129,6 +129,12 @@ public class NetworkNode {
 	};
 
 	State currState;
+	
+	
+	public State getCurrState() {
+		return currState;
+	}
+
 	/**
 	 * Models the incoming network connections of this network node
 	 */

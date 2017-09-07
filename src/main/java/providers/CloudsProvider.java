@@ -117,8 +117,7 @@ public class CloudsProvider extends Provider {
 				
 			}
 		}
-		System.out.println("DASLSDSDASDSA: "+cost1);
-		System.out.println("DASLSDSDASDSA: "+temp/1000);
+		System.out.println("cloudcostcounter");
 		
 		for(Application a : Application.getApp()){
 			for(VmCollector vmcl : a.vmlist){
