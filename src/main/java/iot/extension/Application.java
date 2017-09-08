@@ -11,7 +11,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeExcepti
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import providers.Provider;
+import iotprovider.Provider;
 
 /**
  * This class start virtual machines and run ComputeTasks on it depending on the generated data by the stations.
@@ -240,7 +240,7 @@ public class Application extends Timed {
 				}
 				boolean vanpm = false;
 				for(PhysicalMachine pm : this.cloud.getIaas().machines){
-					System.err.println(pm.availableCapacities);
+					//System.err.println(pm.availableCapacities);
 					
 					if(pm.availableCapacities.getRequiredCPUs()>=this.cloud.getArc().getRequiredCPUs()){
 						vanpm=true;
@@ -249,9 +249,7 @@ public class Application extends Timed {
 				if(vanpm){ // csak akkor kerjunk uj vm-et ha van fizikai eroforrasunkra.
 					this.vmlist.add(new VmCollector(
 							 this.cloud.getIaas().requestVM( this.cloud.getVa(),  this.cloud.getArc(),  this.cloud.getIaas().repositories.get(0), 1)[0]));	
-				}
-
-				
+				}	
 				
 			}
 		} catch (Exception e) {
@@ -321,6 +319,7 @@ public class Application extends Timed {
 		}
 		if (this.VmSearch() != null) {
 			this.startStation();
+			
 		}
 		 // ha erkezett be a kozponti repoba feldolgozatlan adat
 		this.localfilesize = (Station.getStationvalue()[this.stations.get(0).getCloudnumber()] - this.allgenerateddatasize); 

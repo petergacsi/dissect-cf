@@ -1,16 +1,12 @@
 <?xml version="1.0"?>
 <providers>
-
- 	<!-- 1core,2GB RAM -->
-	<!-- 2core,8GB RAM -->
-	<!-- 8core,32GB RAM -->
 	<amazon>		
-		<large> 
+		<small> 
 			<ram>2147483648</ram>
 			<cpucores>1</cpucores>
 			<instance-price>0</instance-price>
 			<hour-per-price>0.296</hour-per-price>
-		</large>
+		</small>
 		<medium> 
 			<ram>8589934592</ram>
 			<cpucores>2</cpucores>
@@ -24,10 +20,6 @@
 			<hour-per-price>0.376</hour-per-price>
 		</large>
 	</amazon> 
-	
-	<!-- 1core,1.75GB RAM -->
-	<!-- 2core,3.50GB RAM -->
-	<!-- 8core,14GB RAM -->
 	<azure>
 		<small> 
 			<ram>1879048192</ram>
@@ -48,10 +40,6 @@
 			<hour-per-price>0.297</hour-per-price>
 		</large>
 	</azure>
-	
-	 <!-- 1core,1GB RAM -->
-	 <!-- 4core,2GB RAM -->
-	 <!-- 8core,4GB RAM -->
 	<bluemix> 
 		<small>
 			<ram>1073741824</ram>
@@ -72,10 +60,6 @@
 			<hour-per-price>0.296</hour-per-price>
 		</large>
 	</bluemix> 
-
-	<!-- 1core,15GB RAM -->
-	<!-- 2core,15GB RAM -->
-	<!-- 4core,15GB RAM -->
 	<oracle> 
 		<small> 
 			<ram>16106127360</ram>
@@ -96,7 +80,4 @@
 			<hour-per-price>0</hour-per-price>
 		</large>
 	</oracle> 
-
-	
-	
 </providers>

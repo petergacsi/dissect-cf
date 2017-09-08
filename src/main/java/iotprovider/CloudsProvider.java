@@ -1,4 +1,4 @@
-package providers;
+package iotprovider;
 
 import java.io.File;
 import java.io.IOException;
@@ -103,7 +103,7 @@ public class CloudsProvider extends Provider {
 	}
 
 	
-
+	/*
 	@Override
 	protected void CloudCostCounter() {
 		double cost1=0,cost2,temp=0;
@@ -128,5 +128,5 @@ public class CloudsProvider extends Provider {
 		}
 		cost2 = j*this.getInstancePrice();
 		this.setUserCloudCost((cost1+cost2));
-	}
+	}*/
 }

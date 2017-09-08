@@ -13,6 +13,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import cloudprovider.MyProvider;
+
 import org.w3c.dom.Node;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -20,8 +23,8 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import iot.extension.Application.VmCollector;
 import iot.extension.Station.Stationdata;
-import providers.CloudsProvider;
-import providers.Provider;
+import iotprovider.CloudsProvider;
+import iotprovider.Provider;
 
 /**
   *  Main task of this class to run the whole simulation based on XML files.
@@ -53,13 +56,13 @@ public class Scenario {
 				}
 				
 				
-				PrintWriter writer = new PrintWriter("src/main/java/iot/extension/experiments/scenario3/task-5L4"+".csv", "UTF-8");	
+				/*PrintWriter writer = new PrintWriter("src/main/java/iot/extension/experiments/scenario3/task-5L4"+".csv", "UTF-8");	
 				for( Long s : a.tmap.keySet() )
 				{
 					writer.println(s + "," + a.tmap.get(s));
 
 				}
-				writer.close();
+				writer.close();*/
 			}
 			
 			System.out.println("~~~~~~~~~~~~");
@@ -197,10 +200,9 @@ public class Scenario {
 				CloudsProvider cp = new CloudsProvider(Scenario.simulatedTime);
 				Provider.readProviderXml(cp, providerfile,cproviderfile,filesize);
 				int maxstation = Station.getStations().size() / cloudcount;
-				AlterableResourceConstraints arc = new AlterableResourceConstraints(cp.getCpu(),0.001,cp.getMemory());
 				for(int i=0;i<cloudcount;i++){
 					Station.getStationvalue()[i]=0;
-					Cloud cloud = new Cloud(null,arc,cloudfile,null);
+					Cloud cloud = new Cloud(cloudfile,null,null,new MyProvider(cproviderfile,"large","amazon"));
 					Cloud.getClouds().add(cloud);
 					ArrayList<Station> stations = new ArrayList<Station>();
 					int stationcounter=Station.getStations().size()-1;
@@ -241,7 +243,7 @@ public class Scenario {
 		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/java/iot/extension/experiments/scenario4/WeatherStation487.xml";
+			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/java/iot/extension/WeatherStation.xml";
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			String cproviderfile=args[3];

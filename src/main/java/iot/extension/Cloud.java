@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+
+import cloudprovider.CloudProviderInterface;
+import cloudprovider.IaaSCloudProvider;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.*;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
@@ -16,6 +19,8 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
  * eroforrasigenyet is.
  */
 public class Cloud {
+	private IaaSCloudProvider icprovider;
+	
 	/**
 	 * The IaaS service which contains phisical machines and repositories. Az
 	 * IaaS szolgalatatas, ami fizikai gepeket es tarolokat tartalmaz.
@@ -71,6 +76,28 @@ public class Cloud {
 		return arc;
 	}
 
+	
+	
+	public IaaSCloudProvider getIcprovider() {
+		return icprovider;
+	}
+
+	public void setIcprovider(IaaSCloudProvider icprovider) {
+		this.icprovider = icprovider;
+	}
+
+	public void setIaas(IaaSService iaas) {
+		this.iaas = iaas;
+	}
+
+	public void setVa(VirtualAppliance va) {
+		this.va = va;
+	}
+
+	public void setArc(AlterableResourceConstraints arc) {
+		this.arc = arc;
+	}
+
 	/**
 	 * The constructor creates the cloud with default VirtualAppliance and
 	 * ResoirceConstraints if the value of those parameters are null. If we have
@@ -81,6 +108,7 @@ public class Cloud {
 	 * alapertelmezett ertekeket fog haszalni VM generalasakor. Default values /
 	 * Alapertelmezett ertekek: - VirtualAppliance("BaseVA", 100, 0, false,
 	 * 1000000); - AlterableResourceConstraints(8, 0.001, 4294967296l);
+	 * @param <P>
 	 * 
 	 * @param p_va
 	 *            the virtual appliance - a virtualis kepfajl
@@ -90,23 +118,22 @@ public class Cloud {
 	 *            the path of the XML file - az IaaS felhot tartalmazo XML
 	 *            eleresi utvonala
 	 */
-	public Cloud(VirtualAppliance p_va, AlterableResourceConstraints p_arc, String cloudfile, IaaSService iaas)
+	public <P extends CloudProviderInterface> Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,P p)
 			throws IOException, SAXException, ParserConfigurationException {
 		if (p_va == null) {
 			this.va = new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
 		} else {
 			this.va = p_va;
 		}
-		if (p_arc == null) {
-			this.arc = new AlterableResourceConstraints(8, 0.001, 4294967296l);
-		} else {
-			this.arc = p_arc;
-		}
+		
 		if (iaas == null) {
 			this.iaas = CloudLoader.loadNodes(cloudfile);
 		} else {
 			this.iaas = iaas;
 		}
 		this.iaas.repositories.get(0).registerObject(this.getVa());
+		p.setIaaSService(this.iaas);
+		this.arc = p.getArc();
 	}
+	
 }

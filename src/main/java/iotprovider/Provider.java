@@ -1,4 +1,4 @@
-package providers;
+package iotprovider;
 
 import java.io.File;
 import java.io.IOException;
@@ -283,12 +283,12 @@ public abstract class Provider extends Timed{
 	}
 
 	protected abstract void IotCostCounter(int filesize);
-	protected abstract void CloudCostCounter();
+	//protected abstract void CloudCostCounter();
 	
 	@Override
 	public void tick(long fires) {
 		this.IotCostCounter(this.filesize);
-		this.CloudCostCounter();
+		//this.CloudCostCounter();
 		/******************************************************************/
 		// shutdown test
 		boolean tmp = false;
@@ -302,7 +302,7 @@ public abstract class Provider extends Timed{
 		}
 	}
 	
-	private static <P extends Provider> void readCProviderXml(P p,String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException{
+	/*private static <P extends Provider> void readCProviderXml(P p,String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException{
 		File fXmlFile = new File(datafile);
 		NodeList nList,nList2;
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -310,16 +310,21 @@ public abstract class Provider extends Timed{
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
 		
+		System.out.println(datafile + " "+ size + " "+ target);
+		
 		nList = doc.getElementsByTagName(target);
 		for (int temp = 0; temp < nList.item(0).getChildNodes().getLength(); temp++){
+			
 			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals(size)){
 				p.setMemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
 				p.setCpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
 				p.setInstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
 				p.setHourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
+
 			}
 		}
-	}
+
+	}*/
 	
 	public static <P extends Provider> void readProviderXml(P p, String provider,String cprovider, int filesize)
 			throws ParserConfigurationException, SAXException, IOException {
@@ -388,9 +393,10 @@ public abstract class Provider extends Timed{
 				p.bmList.add(p.new Bluemix(mbto, mbfrom, price));
 			}
 		}
-		if(cprovider!=null){
+		/*if(cprovider!=null){
 			Provider.readCProviderXml(p,cprovider,size,target);
-		}
+		}*/
+		
 		//System.out.println(p);
 		Provider.providerList.add(p);
 	}
