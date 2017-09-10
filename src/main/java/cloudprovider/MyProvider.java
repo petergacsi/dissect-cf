@@ -222,8 +222,9 @@ public class MyProvider implements CloudProviderInterface {
 	public MyProvider(String datafile,String target, long memory,double cpu) throws ParserConfigurationException, SAXException, IOException {
 		this.readCloudProviderXml(datafile,target);
 		arc = new AlterableResourceConstraints(cpu, 0.001, memory);
-		//arc = new AlterableResourceConstraints(8, 0.001,15032385536L);
-		System.out.println(arc + "rossz?");
+		System.out.println(((IaaSCloudProvider) iaas));
+		System.out.println(this);
+		//((IaaSCloudProvider) iaas).setQuoteProvider(this);
+		//((IaaSCloudProvider) iaas).setVMListener(this);
 	}
-
 }
