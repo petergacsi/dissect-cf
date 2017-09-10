@@ -202,7 +202,7 @@ public class Scenario {
 				int maxstation = Station.getStations().size() / cloudcount;
 				for(int i=0;i<cloudcount;i++){
 					Station.getStationvalue()[i]=0;
-					Cloud cloud = new Cloud(cloudfile,null,null,new MyProvider(cproviderfile,"large","amazon"));
+					Cloud cloud = new Cloud(cloudfile,null,null,new MyProvider(cproviderfile,"amazon",8,4294967296L));
 					Cloud.getClouds().add(cloud);
 					ArrayList<Station> stations = new ArrayList<Station>();
 					int stationcounter=Station.getStations().size()-1;

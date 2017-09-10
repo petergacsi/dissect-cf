@@ -19,15 +19,26 @@ import iot.extension.Cloud;
 import iotprovider.Provider;
 
 public class MyProvider implements CloudProviderInterface {
+	
+	public static final long ticConstant = 60*60*1000;
 	private AlterableResourceConstraints arc;
 	IaaSService iaas;
 	// Cloud side variables
-	private double cpu;
-	private long memory; 
-	private double instancePrice;
-	private double hourPrice;
+	private double Scpu;
+	private long Smemory; 
+	private double SinstancePrice;
+	private double ShourPrice;
 	
 
+	private double Mcpu;
+	private long Mmemory; 
+	private double MinstancePrice;
+	private double MhourPrice;
+	
+	private double Lcpu;
+	private long Lmemory; 
+	private double LinstancePrice;
+	private double LhourPrice;
 	public AlterableResourceConstraints getArc() {
 		return arc;
 	}
@@ -44,41 +55,129 @@ public class MyProvider implements CloudProviderInterface {
 		this.iaas = iaas;
 	}
 
-	protected double getCpu() {
-		return cpu;
+	public double getScpu() {
+		return Scpu;
 	}
 
-	protected void setCpu(double cpu) {
-		this.cpu = cpu;
+	public void setScpu(double scpu) {
+		Scpu = scpu;
 	}
 
-	protected long getMemory() {
-		return memory;
+	public long getSmemory() {
+		return Smemory;
 	}
 
-	protected void setMemory(long memory) {
-		this.memory = memory;
+	public void setSmemory(long smemory) {
+		Smemory = smemory;
 	}
 
-	protected double getInstancePrice() {
-		return instancePrice;
+	public double getSinstancePrice() {
+		return SinstancePrice;
 	}
 
-	protected void setInstancePrice(double instancePrice) {
-		this.instancePrice = instancePrice;
+	public void setSinstancePrice(double sinstancePrice) {
+		SinstancePrice = sinstancePrice;
 	}
 
-	protected double getHourPrice() {
-		return hourPrice;
+	public double getShourPrice() {
+		return ShourPrice;
 	}
 
-	protected void setHourPrice(double hourPrice) {
-		this.hourPrice = hourPrice;
+	public void setShourPrice(double shourPrice) {
+		ShourPrice = shourPrice;
 	}
 
+	public double getMcpu() {
+		return Mcpu;
+	}
+
+	public void setMcpu(double mcpu) {
+		Mcpu = mcpu;
+	}
+
+	public long getMmemory() {
+		return Mmemory;
+	}
+
+	public void setMmemory(long mmemory) {
+		Mmemory = mmemory;
+	}
+
+	public double getMinstancePrice() {
+		return MinstancePrice;
+	}
+
+	public void setMinstancePrice(double minstancePrice) {
+		MinstancePrice = minstancePrice;
+	}
+
+	public double getMhourPrice() {
+		return MhourPrice;
+	}
+
+	public void setMhourPrice(double mhourPrice) {
+		MhourPrice = mhourPrice;
+	}
+
+	public double getLcpu() {
+		return Lcpu;
+	}
+
+	public void setLcpu(double lcpu) {
+		Lcpu = lcpu;
+	}
+
+	public long getLmemory() {
+		return Lmemory;
+	}
+
+	public void setLmemory(long lmemory) {
+		Lmemory = lmemory;
+	}
+
+	public double getLinstancePrice() {
+		return LinstancePrice;
+	}
+
+	public void setLinstancePrice(double linstancePrice) {
+		LinstancePrice = linstancePrice;
+	}
+
+	public double getLhourPrice() {
+		return LhourPrice;
+	}
+
+	public void setLhourPrice(double lhourPrice) {
+		LhourPrice = lhourPrice;
+	}
 
 	@Override
 	public double getPerTickQuote(ResourceConstraints rc) {
+		
+		
+		if(rc.getRequiredCPUs()<=this.Scpu && rc.getRequiredMemory()<=this.Smemory){
+			return this.ShourPrice/ticConstant;
+		}
+		if(rc.getRequiredCPUs()<=this.Mcpu && rc.getRequiredMemory()<=this.Mmemory){
+			return this.MhourPrice/ticConstant;
+		}
+		if(rc.getRequiredCPUs()<=this.Lcpu && rc.getRequiredMemory()<=this.Lmemory){
+			return this.LhourPrice/ticConstant;
+		}
+		
+		if(rc.getRequiredCPUs()<=this.Scpu && rc.getRequiredMemory()>this.Smemory){
+			return 1.5*this.ShourPrice/ticConstant;
+		}
+		if(rc.getRequiredCPUs()<=this.Mcpu && rc.getRequiredMemory()>this.Mmemory){
+			return 1.5*this.MhourPrice/ticConstant;
+		}
+		if(rc.getRequiredCPUs()<=this.Lcpu && rc.getRequiredMemory()>this.Lmemory){
+			return 1.5*this.LhourPrice/ticConstant;
+		}
+		if(rc.getRequiredCPUs()>this.Lcpu && rc.getRequiredMemory()>this.Lmemory){
+			return 2*this.LhourPrice/ticConstant;
+		}
+		
 		return 0;
 	}
 
@@ -88,32 +187,44 @@ public class MyProvider implements CloudProviderInterface {
 		this.iaas=iaas;	
 	}
 	
-	private void readCloudProviderXml(String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException{
+	private void readCloudProviderXml(String datafile,String target) throws ParserConfigurationException, SAXException, IOException{
 		File fXmlFile = new File(datafile);
-		NodeList nList,nList2;
+		NodeList nList;
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
-		
-		System.out.println(datafile + " "+ size + " "+ target);
-		
+				
 		nList = doc.getElementsByTagName(target);
 		for (int temp = 0; temp < nList.item(0).getChildNodes().getLength(); temp++){
 			
-			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals(size)){
+			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals("small")){
 				System.out.println("l444444");
-				this.setMemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
-				this.setCpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
-				this.setInstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
-				this.setHourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
+				this.setSmemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
+				this.setScpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
+				this.setSinstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
+				this.setShourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
+			}
+			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals("medium")){
+				System.out.println("l444444");
+				this.setMmemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
+				this.setMcpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
+				this.setMinstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
+				this.setMhourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
+			}
+			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals("large")){
+				System.out.println("l444444");
+				this.setLmemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
+				this.setLcpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
+				this.setLinstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
+				this.setLhourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
 			}
 		}
 	}
 	
-	public MyProvider(String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException {
-		this.readCloudProviderXml(datafile, size, target);
-		arc = new AlterableResourceConstraints(this.getCpu(), 0.001, this.getMemory());
+	public MyProvider(String datafile,String target, long memory,double cpu) throws ParserConfigurationException, SAXException, IOException {
+		this.readCloudProviderXml(datafile,target);
+		arc = new AlterableResourceConstraints(cpu, 0.001, memory);
 		//arc = new AlterableResourceConstraints(8, 0.001,15032385536L);
 		System.out.println(arc + "rossz?");
 	}
