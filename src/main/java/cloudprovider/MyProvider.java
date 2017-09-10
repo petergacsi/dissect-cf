@@ -199,21 +199,18 @@ public class MyProvider implements CloudProviderInterface {
 		for (int temp = 0; temp < nList.item(0).getChildNodes().getLength(); temp++){
 			
 			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals("small")){
-				System.out.println("l444444");
 				this.setSmemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
 				this.setScpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
 				this.setSinstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
 				this.setShourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
 			}
 			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals("medium")){
-				System.out.println("l444444");
 				this.setMmemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
 				this.setMcpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
 				this.setMinstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));
 				this.setMhourPrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(7).getTextContent()));
 			}
 			if(nList.item(0).getChildNodes().item(temp).getNodeName().equals("large")){
-				System.out.println("l444444");
 				this.setLmemory(Long.parseLong(nList.item(0).getChildNodes().item(temp).getChildNodes().item(1).getTextContent()));
 				this.setLcpu(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(3).getTextContent()));
 				this.setLinstancePrice(Double.parseDouble(nList.item(0).getChildNodes().item(temp).getChildNodes().item(5).getTextContent()));

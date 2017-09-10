@@ -1,6 +1,8 @@
 package iot.extension;
 
 import hu.mta.sztaki.lpds.cloud.simulator.util.*;
+import hu.unimiskolc.iit.distsys.forwarders.IaaSForwarder;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
