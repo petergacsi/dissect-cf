@@ -106,7 +106,6 @@ public class CostAnalyserandPricer extends Timed
 		new DeferredEvent(5 * 60 * 1000) {
 			@Override
 			protected void eventAction() {
-				// TODO Auto-generated method stub
 				CostAnalyserandPricer.this.subscribe(24 * Long.parseLong(System.getProperty("anHour")));
 			}
 		};
