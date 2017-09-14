@@ -649,7 +649,7 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 * Mapping between the various PM states and its representative CPU/memory power
 	 * behaviors.
 	 */
-	private final Map<String, PowerState> hostPowerBehavior;
+	public final Map<String, PowerState> hostPowerBehavior;
 	/**
 	 * the manager of the PM's state change notifications.
 	 */

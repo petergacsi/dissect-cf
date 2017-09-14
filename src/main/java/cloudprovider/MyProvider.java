@@ -12,16 +12,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.IaaSService;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.ResourceConstraints;
-import hu.mta.sztaki.lpds.cloud.simulator.util.CloudLoader;
-import iot.extension.Cloud;
-import iotprovider.Provider;
 
-public class MyProvider implements CloudProviderInterface {
+public class MyProvider extends CloudPricing {
 	
-	public static final long ticConstant = 60*60*1000;
-	private AlterableResourceConstraints arc;
+	public static final long ticUnit = 60*60*1000;
 	IaaSService iaas;
 	// Cloud side variables
 	private double Scpu;
@@ -39,13 +34,7 @@ public class MyProvider implements CloudProviderInterface {
 	private long Lmemory; 
 	private double LinstancePrice;
 	private double LhourPrice;
-	public AlterableResourceConstraints getArc() {
-		return arc;
-	}
 
-	public void setArc(AlterableResourceConstraints arc) {
-		this.arc = arc;
-	}
 
 	public IaaSService getIaas() {
 		return iaas;
@@ -154,38 +143,45 @@ public class MyProvider implements CloudProviderInterface {
 	@Override
 	public double getPerTickQuote(ResourceConstraints rc) {
 		
+		//System.out.println(this.ShourPrice/ticUnit);
+		//System.out.println(this.MhourPrice/ticUnit);
+		//System.out.println(this.LhourPrice/ticUnit);
 		
 		if(rc.getRequiredCPUs()<=this.Scpu && rc.getRequiredMemory()<=this.Smemory){
-			return this.ShourPrice/ticConstant;
+			
+			//System.out.println("a");
+			return this.ShourPrice/ticUnit;
 		}
 		if(rc.getRequiredCPUs()<=this.Mcpu && rc.getRequiredMemory()<=this.Mmemory){
-			return this.MhourPrice/ticConstant;
+			//System.out.println("b");
+			return this.MhourPrice/ticUnit;
 		}
 		if(rc.getRequiredCPUs()<=this.Lcpu && rc.getRequiredMemory()<=this.Lmemory){
-			return this.LhourPrice/ticConstant;
+			//System.out.println("c");
+			return this.LhourPrice/ticUnit;
+			
 		}
 		
 		if(rc.getRequiredCPUs()<=this.Scpu && rc.getRequiredMemory()>this.Smemory){
-			return 1.5*this.ShourPrice/ticConstant;
+			//System.out.println("d");
+			return 1.5*this.ShourPrice/ticUnit;
 		}
 		if(rc.getRequiredCPUs()<=this.Mcpu && rc.getRequiredMemory()>this.Mmemory){
-			return 1.5*this.MhourPrice/ticConstant;
+			//System.out.println("e");
+			return 1.5*this.MhourPrice/ticUnit;
 		}
 		if(rc.getRequiredCPUs()<=this.Lcpu && rc.getRequiredMemory()>this.Lmemory){
-			return 1.5*this.LhourPrice/ticConstant;
+			//System.out.println("f");
+			return 1.5*this.LhourPrice/ticUnit;
 		}
 		if(rc.getRequiredCPUs()>this.Lcpu && rc.getRequiredMemory()>this.Lmemory){
-			return 2*this.LhourPrice/ticConstant;
+			//System.out.println("g");
+			return 2*this.LhourPrice/ticUnit;
 		}
 		
 		return 0;
 	}
 
-	
-	@Override
-	public void setIaaSService(IaaSService iaas) {
-		this.iaas=iaas;	
-	}
 	
 	private void readCloudProviderXml(String datafile,String target) throws ParserConfigurationException, SAXException, IOException{
 		File fXmlFile = new File(datafile);
@@ -219,12 +215,7 @@ public class MyProvider implements CloudProviderInterface {
 		}
 	}
 	
-	public MyProvider(String datafile,String target, long memory,double cpu) throws ParserConfigurationException, SAXException, IOException {
-		this.readCloudProviderXml(datafile,target);
-		arc = new AlterableResourceConstraints(cpu, 0.001, memory);
-		System.out.println(((IaaSCloudProvider) iaas));
-		System.out.println(this);
-		//((IaaSCloudProvider) iaas).setQuoteProvider(this);
-		//((IaaSCloudProvider) iaas).setVMListener(this);
+	public MyProvider(String datafile, String provider) throws ParserConfigurationException, SAXException, IOException{
+		this.readCloudProviderXml(datafile,provider);
 	}
 }

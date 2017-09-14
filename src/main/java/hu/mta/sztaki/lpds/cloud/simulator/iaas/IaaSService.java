@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+import cloudprovider.CloudPricing;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocation;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.State;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
@@ -58,6 +59,10 @@ import hu.mta.sztaki.lpds.cloud.simulator.util.ArrayHandler;
  */
 public class IaaSService implements VMManager<IaaSService, PhysicalMachine>, PhysicalMachine.StateChangeListener {
 
+	public interface VMListener {
+		void newVMadded(VirtualMachine[] vms);
+	}
+	
 	/**
 	 * This class represents a generic error that occurred during the operation of
 	 * the IaaS service.
@@ -166,6 +171,34 @@ public class IaaSService implements VMManager<IaaSService, PhysicalMachine>, Phy
 	 * the PM scheduler applied by this IaaSService object
 	 */
 	public final PhysicalMachineController pmcontroller;
+	
+	
+	/**
+	 * pricing attribute of the IaaSService object
+	 */
+	public CloudPricing cloudpricing;
+	
+	
+	public CloudPricing getCloudpricing() {
+		return cloudpricing;
+	}
+
+	public void setCloudpricing(CloudPricing cloudpricing) {
+		this.cloudpricing = cloudpricing;
+	}
+	
+	
+	/**
+	 *  if you want to know there is a new VM
+	 */
+	public final StateDependentEventHandler<VMListener, VirtualMachine[]> vmListeners = new StateDependentEventHandler<VMListener, VirtualMachine[]>(
+			new SingleNotificationHandler<VMListener, VirtualMachine[]>() {
+				@Override
+				public void sendNotification(VMListener onObject, VirtualMachine[] payload) {
+					onObject.newVMadded(payload);
+				}
+			});
+
 
 	/**
 	 * Constructs an IaaS service object directly. The VM and PM schedulers for this
@@ -293,6 +326,7 @@ public class IaaSService implements VMManager<IaaSService, PhysicalMachine>, Phy
 			vms[i] = new VirtualMachine(va);
 		}
 		sched.scheduleVMrequest(vms, rc, vaSource, schedulingConstraints);
+		vmListeners.notifyListeners(vms);
 		return vms;
 	}
 

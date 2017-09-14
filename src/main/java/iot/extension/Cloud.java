@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-
-import cloudprovider.CloudProviderInterface;
-import cloudprovider.IaaSCloudProvider;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.*;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
@@ -20,7 +17,6 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
  * eroforrasigenyet is.
  */
 public class Cloud {
-	private IaaSCloudProvider icprovider;
 	
 	/**
 	 * The IaaS service which contains phisical machines and repositories. Az
@@ -77,15 +73,6 @@ public class Cloud {
 		return arc;
 	}
 
-	
-	
-	public IaaSCloudProvider getIcprovider() {
-		return icprovider;
-	}
-
-	public void setIcprovider(IaaSCloudProvider icprovider) {
-		this.icprovider = icprovider;
-	}
 
 	public void setIaas(IaaSService iaas) {
 		this.iaas = iaas;
@@ -119,7 +106,7 @@ public class Cloud {
 	 *            the path of the XML file - az IaaS felhot tartalmazo XML
 	 *            eleresi utvonala
 	 */
-	public <P extends CloudProviderInterface> Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,P p)
+	public Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,AlterableResourceConstraints p_arc)
 			throws IOException, SAXException, ParserConfigurationException {
 		if (p_va == null) {
 			this.va = new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
@@ -132,9 +119,12 @@ public class Cloud {
 		} else {
 			this.iaas = iaas;
 		}
+		if (p_arc == null) {
+			this.arc = new AlterableResourceConstraints(8, 0.001, 4294967296l);
+		} else {
+			this.arc = p_arc;
+}
 		this.iaas.repositories.get(0).registerObject(this.getVa());
-		p.setIaaSService(this.iaas);
-		this.arc = p.getArc();
 	}
 	
 }
