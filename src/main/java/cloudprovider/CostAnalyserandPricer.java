@@ -87,9 +87,9 @@ public class CostAnalyserandPricer extends Timed
 		}
 	}
 
-	public static final double PUE = 1.6;
+	public static final double PUE = Double.parseDouble(System.getProperty("pue"));
 	// 12pence/kwh, the divider is because we calculate in Wms.
-	public static final double electricityCost = 0.12 / 3600000000.0;
+	public static final double electricityCost = Double.parseDouble(System.getProperty("electricityCost"));
 	private final IaaSService service;
 	private final IaaSEnergyMeter meter;
 	private final ArrayList<PMPriceRecord> pmrecords = new ArrayList<PMPriceRecord>();
