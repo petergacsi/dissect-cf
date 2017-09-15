@@ -5,8 +5,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.ResourceConstraints;
 
 public abstract class CloudPricing {
 	protected IaaSService iaas;
-	
-	
+	protected CostAnalyserandPricer cap;
 	/**
 	 * 
 	 * @param rc
@@ -15,8 +14,9 @@ public abstract class CloudPricing {
 	 */
 	public abstract double getPerTickQuote(ResourceConstraints rc);
 	
-	public void setIaaSService(IaaSService iaas){
+	public void setIaaSService(IaaSService iaas,CostAnalyserandPricer cap){
 		this.iaas=iaas;
+		this.cap = cap;
 	}
 
 }
