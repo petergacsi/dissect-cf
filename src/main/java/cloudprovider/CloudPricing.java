@@ -6,6 +6,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.ResourceConstraints;
 public abstract class CloudPricing {
 	protected IaaSService iaas;
 	protected CostAnalyserandPricer cap;
+	protected long periodInTick;
 	/**
 	 * 
 	 * @param rc
@@ -21,6 +22,10 @@ public abstract class CloudPricing {
 	
 	public void setCostAnalyserandPricer(CostAnalyserandPricer cap){
 		this.cap = cap;
+	}
+	
+	public long getPeriodInTick(){
+		return 1;
 	}
 
 }

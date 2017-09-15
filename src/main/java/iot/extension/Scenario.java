@@ -14,7 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import cloudprovider.MyProvider;
+import cloudprovider.ResourceDependentProvider;
 
 import org.w3c.dom.Node;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;

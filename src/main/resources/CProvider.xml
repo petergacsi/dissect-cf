@@ -4,80 +4,80 @@
 		<small> 
 			<ram>2147483648</ram>
 			<cpucores>1</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.296</hour-per-price>
+			<price-per-tick>0.00000008222</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</small>
 		<medium> 
 			<ram>8589934592</ram>
 			<cpucores>2</cpucores>
-			<instance-price>18.15</instance-price>
-			<hour-per-price>0.094</hour-per-price>
+			<price-per-tick>0.0000000999</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</medium>
 		<large> 
 			<ram>34359738368</ram>
 			<cpucores>8</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.376</hour-per-price>
+			<price-per-tick>0.000000104</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</large>
 	</amazon> 
 	<azure>
 		<small> 
 			<ram>1879048192</ram>
 			<cpucores>1</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.02</hour-per-price>
+			<price-per-tick>0.000000006</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</small>
 		<medium> 
 			<ram>3758096384</ram>
 			<cpucores>2</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.058</hour-per-price>
+			<price-per-tick>0,000000016</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</medium>
 		<large> 
 			<ram>15032385536</ram>
 			<cpucores>8</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.297</hour-per-price>
+			<price-per-tick>0.00000008</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</large>
 	</azure>
 	<bluemix> 
 		<small>
 			<ram>1073741824</ram>
 			<cpucores>1</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.038</hour-per-price>
+			<price-per-tick>0.000000011</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>			
 		</small>
 		<medium>
 			<ram>2147483648</ram>
 			<cpucores>4</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.150</hour-per-price>
+			<price-per-tick>0.000000042</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</medium>
 		<large> 
 			<ram>4294967296</ram>
 			<cpucores>8</cpucores>
-			<instance-price>0</instance-price>
-			<hour-per-price>0.296</hour-per-price>
+			<price-per-tick>0.000000082</price-per-tick> 
+			<period-in-tick>3600000</period-in-tick>
 		</large>
 	</bluemix> 
 	<oracle> 
 		<small> 
 			<ram>16106127360</ram>
 			<cpucores>1</cpucores>
-			<instance-price>75</instance-price>
-			<hour-per-price>0</hour-per-price>
+			<price-per-tick>0.000000684</price-per-tick> 
+			<period-in-tick>109572000</period-in-tick>
 		</small>
 		<medium> 
 			<ram>16106127360</ram>
 			<cpucores>2</cpucores>
-			<instance-price>139</instance-price>
-			<hour-per-price>0</hour-per-price>
+			<price-per-tick>0.000001269</price-per-tick> 
+			<period-in-tick>109572000</period-in-tick>			
 		</medium>
 		<large>
 			<ram>16106127360</ram>
 			<cpucores>4</cpucores>
-			<instance-price>268</instance-price>
-			<hour-per-price>0</hour-per-price>
+			<price-per-tick>0.000002446</price-per-tick> 
+			<period-in-tick>109572000</period-in-tick>			
 		</large>
 	</oracle> 
 </providers>
