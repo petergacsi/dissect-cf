@@ -17,7 +17,6 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.ResourceConstraints;
 public class MyProvider extends CloudPricing {
 	
 	public static final long ticUnit = 60*60*1000;
-	IaaSService iaas;
 	// Cloud side variables
 	private double Scpu;
 	private long Smemory; 
@@ -34,15 +33,6 @@ public class MyProvider extends CloudPricing {
 	private long Lmemory; 
 	private double LinstancePrice;
 	private double LhourPrice;
-
-
-	public IaaSService getIaas() {
-		return iaas;
-	}
-
-	public void setIaas(IaaSService iaas) {
-		this.iaas = iaas;
-	}
 
 	public double getScpu() {
 		return Scpu;
