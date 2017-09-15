@@ -14,8 +14,12 @@ public abstract class CloudPricing {
 	 */
 	public abstract double getPerTickQuote(ResourceConstraints rc);
 	
-	public void setIaaSService(IaaSService iaas,CostAnalyserandPricer cap){
+	public void setIaaSService(IaaSService iaas){
 		this.iaas=iaas;
+		this.iaas.setCloudpricing(this);
+	}
+	
+	public void setCostAnalyserandPricer(CostAnalyserandPricer cap){
 		this.cap = cap;
 	}
 
