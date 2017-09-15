@@ -185,7 +185,6 @@ public class IaaSService implements VMManager<IaaSService, PhysicalMachine>, Phy
 
 	public void setCloudpricing(CloudPricing cloudpricing) {
 		this.cloudpricing = cloudpricing;
-		cloudpricing.setIaaSService(this);
 	}
 	
 	
