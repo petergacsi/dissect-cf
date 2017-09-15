@@ -30,7 +30,7 @@
 		<medium> 
 			<ram>3758096384</ram>
 			<cpucores>2</cpucores>
-			<price-per-tick>0,000000016</price-per-tick> 
+			<price-per-tick>0.000000016</price-per-tick> 
 			<period-in-tick>3600000</period-in-tick>
 		</medium>
 		<large> 
