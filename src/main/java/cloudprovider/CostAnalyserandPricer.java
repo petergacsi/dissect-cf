@@ -147,9 +147,15 @@ public class CostAnalyserandPricer extends Timed
 				}
 				vmu.pastPresenceMarker = true;
 			} else if (vmu.isComplete()) {
-				totalEarnings += service.getCloudpricing().getPerTickQuote(vmu.rc) * ( ((vmu.getCompleteUsage() % service.getCloudpricing().getPeriodInTick())+1)*service.getCloudpricing().periodInTick  );
-				//totalEarnings += service.getCloudpricing().getPerTickQuote(vmu.rc) * vmu.getCompleteUsage();
-				//totalEarnings += ((IaaSForwarder) service).getResourceQuote(vmu.rc) * vmu.getCompleteUsage();
+				
+				if(vmu.getCompleteUsage() % service.getCloudpricing().getPeriodInTick() == 0){
+					totalEarnings += service.getCloudpricing().getPerTickQuote(vmu.rc) * 
+							( (vmu.getCompleteUsage() / service.getCloudpricing().getPeriodInTick()) * service.getCloudpricing().getPeriodInTick()  );
+				}else{
+					totalEarnings += service.getCloudpricing().getPerTickQuote(vmu.rc) * 
+							( ((vmu.getCompleteUsage() / service.getCloudpricing().getPeriodInTick())+1)*service.getCloudpricing().getPeriodInTick()  );
+				}
+			
 				it.remove();
 			}
 		}
