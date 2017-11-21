@@ -17,6 +17,8 @@ import org.xml.sax.SAXException;
 import cloudprovider.ResourceDependentProvider;
 
 import org.w3c.dom.Node;
+
+import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
@@ -243,11 +245,60 @@ public class Scenario {
 		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/java/iot/extension/WeatherStation.xml";
+		/*	String datafile=args[0];
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			String cproviderfile=args[3];
 			int print=Integer.parseInt(args[4]);
-			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	
+			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	*/
+			
+			
+			Timed.simulateUntilLastEvent();
 		}
+		
+		
+		public static class Teszt2 extends DeferredEvent{
+
+	public Teszt2(long delay) {
+				super(delay);
+				// TODO Auto-generated constructor stub
+			}
+
+	@Override
+		protected void eventAction() {
+		System.out.println("Ez egy DE, az ido: "+Timed.getFireCount());
+		
+	}
+			
+		
+			
+		}
+		
+		
+		
+		
+		public static class Teszt extends Timed{
+			String name;
+
+			Teszt(String n,long freq){
+				this.name=n;
+				subscribe(freq);
+			}
+
+			@Override
+			public void tick(long fires) {
+				System.out.println("Hello" + this.name +" , az ido: "+Timed.getFireCount());
+				new Teszt2(50);
+				
+				
+				if(Timed.getFireCount()>2000) {
+					//unsubscribe();
+				}
+			}
+			
+		}
+		
+		
+		
+		
 }
