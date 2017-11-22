@@ -283,12 +283,12 @@ public abstract class Provider extends Timed{
 	}
 
 	protected abstract void IotCostCounter(int filesize);
-	//protected abstract void CloudCostCounter();
+	protected abstract void CloudCostCounter();
 	
 	@Override
 	public void tick(long fires) {
 		this.IotCostCounter(this.filesize);
-		//this.CloudCostCounter();
+		this.CloudCostCounter();
 		/******************************************************************/
 		// shutdown test
 		boolean tmp = false;
@@ -302,7 +302,7 @@ public abstract class Provider extends Timed{
 		}
 	}
 	
-	/*private static <P extends Provider> void readCProviderXml(P p,String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException{
+	private static <P extends Provider> void readCProviderXml(P p,String datafile,String size,String target) throws ParserConfigurationException, SAXException, IOException{
 		File fXmlFile = new File(datafile);
 		NodeList nList,nList2;
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -324,7 +324,7 @@ public abstract class Provider extends Timed{
 			}
 		}
 
-	}*/
+	}
 	
 	public static <P extends Provider> void readProviderXml(P p, String provider,String cprovider, int filesize)
 			throws ParserConfigurationException, SAXException, IOException {
@@ -393,9 +393,9 @@ public abstract class Provider extends Timed{
 				p.bmList.add(p.new Bluemix(mbto, mbfrom, price));
 			}
 		}
-		/*if(cprovider!=null){
+		if(cprovider!=null){
 			Provider.readCProviderXml(p,cprovider,size,target);
-		}*/
+		}
 		
 		//System.out.println(p);
 		Provider.providerList.add(p);

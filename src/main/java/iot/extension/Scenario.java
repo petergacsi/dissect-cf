@@ -201,14 +201,17 @@ public class Scenario {
 			if(tasksize!=-1){
 				CloudsProvider cp = new CloudsProvider(Scenario.simulatedTime);
 				Provider.readProviderXml(cp, providerfile,cproviderfile,filesize);
+				AlterableResourceConstraints arc = new AlterableResourceConstraints(cp.getCpu(),0.001,cp.getMemory());
 				int maxstation = Station.getStations().size() / cloudcount;
 				for(int i=0;i<cloudcount;i++){
 					Station.getStationvalue()[i]=0;
-					Cloud cloud = new Cloud(cloudfile,null,null,null);
+					Cloud cloud = new Cloud(cloudfile,null,null,arc,cproviderfile,"azure");
 					Cloud.getClouds().add(cloud);
 					ArrayList<Station> stations = new ArrayList<Station>();
 					int stationcounter=Station.getStations().size()-1;
+					System.out.println(stationcounter);
 					while(stationcounter>=0){
+						System.out.println(stations.size()+" LL");
 						Station.getStations().get(stationcounter).setCloud(cloud);
 						Station.getStations().get(stationcounter).setCloudnumber(i);
 						stations.add(Station.getStations().get(stationcounter));
@@ -218,6 +221,7 @@ public class Scenario {
 							break;
 						}
 					}
+					
 					Application.getApp().add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:",Provider.getProviderList().get(0)));
 				}
 			}
@@ -245,59 +249,19 @@ public class Scenario {
 		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-		/*	String datafile=args[0];
+			String datafile=args[0];
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			String cproviderfile=args[3];
 			int print=Integer.parseInt(args[4]);
-			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,1,5*60000);	*/
+			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,2,5*60000);	
 			
 			
 			Timed.simulateUntilLastEvent();
 		}
 		
 		
-		public static class Teszt2 extends DeferredEvent{
-
-	public Teszt2(long delay) {
-				super(delay);
-				// TODO Auto-generated constructor stub
-			}
-
-	@Override
-		protected void eventAction() {
-		System.out.println("Ez egy DE, az ido: "+Timed.getFireCount());
-		
-	}
-			
-		
-			
-		}
-		
-		
-		
-		
-		public static class Teszt extends Timed{
-			String name;
-
-			Teszt(String n,long freq){
-				this.name=n;
-				subscribe(freq);
-			}
-
-			@Override
-			public void tick(long fires) {
-				System.out.println("Hello" + this.name +" , az ido: "+Timed.getFireCount());
-				new Teszt2(50);
-				
-				
-				if(Timed.getFireCount()>2000) {
-					//unsubscribe();
-				}
-			}
-			
-		}
-		
+	
 		
 		
 		

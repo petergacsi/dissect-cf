@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<providers size="large" target="oracle">
+<providers size="large" target="azure">
 
 	<bluemix calculate="true"> 
-		<price-per-MB mbfrom="1" mbto="499999">0.00097</price-per-MB> 
+		<price-per-MB mbfrom="0" mbto="499999">0.00097</price-per-MB> 
 		<price-per-MB mbfrom="450000" mbto="6999999">0.00068</price-per-MB>
 		<price-per-MB mbfrom="7000000" mbto="-1">0.00014</price-per-MB>	
 	</bluemix> 

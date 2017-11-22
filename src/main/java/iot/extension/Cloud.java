@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
+
+import cloudprovider.CloudPricing;
+import cloudprovider.CostAnalyserandPricer;
+import cloudprovider.ResourceDependentProvider;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.*;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
@@ -106,7 +110,7 @@ public class Cloud {
 	 *            the path of the XML file - az IaaS felhot tartalmazo XML
 	 *            eleresi utvonala
 	 */
-	public Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,AlterableResourceConstraints p_arc)
+	public Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,AlterableResourceConstraints p_arc,String datafile,String provider)
 			throws IOException, SAXException, ParserConfigurationException {
 		if (p_va == null) {
 			this.va = new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
@@ -120,11 +124,21 @@ public class Cloud {
 			this.iaas = iaas;
 		}
 		if (p_arc == null) {
-			this.arc = new AlterableResourceConstraints(8, 0.001, 4294967296l);
+			this.arc = new AlterableResourceConstraints(7, 0.001, 4294967296l);
 		} else {
 			this.arc = p_arc;
 }
 		this.iaas.repositories.get(0).registerObject(this.getVa());
+		
+	/*	CloudPricing myProvider = new ResourceDependentProvider(datafile, provider);
+		CostAnalyserandPricer theCostAnalyser = new CostAnalyserandPricer(this.iaas);
+		myProvider.setIaaSService(this.iaas);
+		myProvider.setCostAnalyserandPricer(theCostAnalyser);*/
+		//TODO: 
+		//new CostAnalizerListener(3600000,iaasList,dispatcher,theCostAnalyser);
+		
+		
+		
 	}
 	
 }

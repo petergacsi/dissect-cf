@@ -56,13 +56,13 @@ class Metering extends DeferredEvent {
 	 * @param delay
 	 *            delay time for the event - kesleltetett ido az esemenyhez
 	 */
-	Metering(Station s, int sensorID, int filesize, long delay) {
+	Metering(Station s, int sensorID, int filesize, long delay,int cloudnumber) {
 		super(delay);
 		this.r = s.getRepo();
 		this.sensorID = sensorID;
 		this.filesize = filesize;
 		this.s = s;
-		this.cloudnumber = s.cloudnumber;
+		this.cloudnumber = cloudnumber;
 	}
 
 	/**

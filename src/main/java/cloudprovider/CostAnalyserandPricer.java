@@ -87,9 +87,9 @@ public class CostAnalyserandPricer extends Timed
 		}
 	}
 
-	public static final double PUE = Double.parseDouble(System.getProperty("pue"));
+	public static final double PUE = 1.0;
 	// 12pence/kwh, the divider is because we calculate in Wms.
-	public static final double electricityCost = Double.parseDouble(System.getProperty("electricityCost"));
+	public static final double electricityCost = 0.1;
 	private final IaaSService service;
 	private final IaaSEnergyMeter meter;
 	private final ArrayList<PMPriceRecord> pmrecords = new ArrayList<PMPriceRecord>();
@@ -102,11 +102,11 @@ public class CostAnalyserandPricer extends Timed
 	public CostAnalyserandPricer(IaaSService toAnalyse) {
 		service = toAnalyse;
 		meter = new IaaSEnergyMeter(service);
-		meter.startMeter(24 * Long.parseLong(System.getProperty("anHour")), true);//syspropertybol konfiguralni
+		meter.startMeter(24 * 3600000, true);//syspropertybol konfiguralni
 		new DeferredEvent(5 * 60 * 1000) {
 			@Override
 			protected void eventAction() {
-				CostAnalyserandPricer.this.subscribe(24 * Long.parseLong(System.getProperty("anHour")));
+				CostAnalyserandPricer.this.subscribe(24 * 3600000);
 			}
 		};
 		service.subscribeToCapacityChanges(this);

@@ -598,11 +598,11 @@ public class Station extends Timed {
 
 					Random randomGenerator = new Random();
 					int randomInt = randomGenerator.nextInt(60) + 1;
-					new Metering(this, i, sd.filesize, 1000 * randomInt);
+					new Metering(this, i, sd.filesize, 1000 * randomInt,this.cloudnumber);
 
 				} else {
 
-					new Metering(this, i, sd.filesize, 1);
+					new Metering(this, i, sd.filesize, 1,this.cloudnumber);
 				}
 
 			}

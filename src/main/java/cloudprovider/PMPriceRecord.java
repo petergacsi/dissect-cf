@@ -30,12 +30,12 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.ResourceConstraints;
 
 public class PMPriceRecord {
-	public static final double hourlyAmortisaiton = Double.parseDouble(System.getProperty("hourlyAmortisaiton"));
-	public static final double perMachineBaseCost = Double.parseDouble(System.getProperty("perMachineBaseCost")); // GBP
-	public static final int maxCoreCount=Integer.parseInt(System.getProperty("maxCoreCount")) ;
-	public static final double maxProcessingCap=Double.parseDouble(System.getProperty("maxProcessingCap"));
-	public static final long maxMem=Long.parseLong(System.getProperty("maxMem"));
-	public static final long maxDisk=Long.parseLong(System.getProperty("maxDisk"));
+	public static final double hourlyAmortisaiton = 1/(3 * 365 * 24) ;
+	public static final double perMachineBaseCost = 3000;
+	public static final int maxCoreCount=64;
+	public static final double maxProcessingCap=5000000;
+	public static final long maxMem=256l * 1024 * 1024 * 1024;
+	public static final long maxDisk=6l * 1024 * 1024 * 1024 * 1024;
 	public static final double maxResourceCombination = maxCoreCount *maxProcessingCap *maxMem *maxDisk;
 
 	public final PhysicalMachine pm;
