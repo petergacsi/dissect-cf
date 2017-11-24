@@ -1,13 +1,27 @@
 <?xml version="1.0"?>
 <application tasksize='250000'>
 <Station>
-<name number='6'>0</name>
+<name number='10'>teszt</name>
 <freq>60000</freq>
 <snumber size='50'>8</snumber>
 <time starttime='0' stoptime='28800000'>28800000</time>
 <maxinbw>1000</maxinbw>
 <maxoutbw>1000</maxoutbw>
 <diskbw>1000</diskbw>
+<strategy id=''>random</strategy>
+<torepo>ceph</torepo>
+<reposize>60000</reposize>
+<ratio>1</ratio>
+</Station>
+<Station>
+<name number='5'>teszt2</name>
+<freq>60000</freq>
+<snumber size='50'>8</snumber>
+<time starttime='0' stoptime='28800000'>28800000</time>
+<maxinbw>1000</maxinbw>
+<maxoutbw>1000</maxoutbw>
+<diskbw>1000</diskbw>
+<strategy id='1'>cloud</strategy>
 <torepo>ceph</torepo>
 <reposize>60000</reposize>
 <ratio>1</ratio>

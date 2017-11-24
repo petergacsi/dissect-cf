@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Random;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -121,6 +123,16 @@ public class Scenario {
 						System.out.println("rossz freq ertek! ");
 						System.exit(0);
 					}
+					
+					String id=null,strategy = eElement.getElementsByTagName("strategy").item(0).getTextContent();
+					if(strategy.equals("random")){
+						
+						id = "random";
+					}else if(strategy.equals("cloud")){
+						id  =eElement.getElementsByTagName("strategy").item(0).getAttributes().item(0).getNodeValue();
+					}
+					
+					
 					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent());
 					if (time < -1) {
 						System.out.println("rossz time ertek! ");
@@ -190,7 +202,7 @@ public class Scenario {
 						Stationdata sd = new Stationdata(time, starttime, stoptime, filesize, snumber, freq,
 								eElement.getElementsByTagName("name").item(0).getTextContent()+" "+i,
 								eElement.getElementsByTagName("torepo").item(0).getTextContent(), ratio);
-						Station.getStations().add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false));
+						Station.getStations().add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false,strategy,id));
 						
 					}
 					Scenario.simulatedTime=(Scenario.simulatedTime<time)?time:Scenario.simulatedTime;
@@ -210,35 +222,39 @@ public class Scenario {
 				AlterableResourceConstraints arc1 = new AlterableResourceConstraints(cp1.getCpu(),0.001,cp1.getMemory());
 				AlterableResourceConstraints arc2 = new AlterableResourceConstraints(cp2.getCpu(),0.001,cp2.getMemory());
 				
-				System.out.println(providerfile+ " "+arc1);
-				System.out.println(providerfile2+ " "+arc2);
-				
+
 				Cloud cloud = new Cloud(cloudfile,null,null,arc1);
 				Cloud.getClouds().add(cloud);
 				Cloud cloud2 = new Cloud(cloudfile,null,null,arc2);
 				Cloud.getClouds().add(cloud2);
+	
+				ArrayList<Station> stations1 = new ArrayList<Station>();
+				ArrayList<Station> stations2 = new ArrayList<Station>();
 				
-				System.out.println(cloud.getArc());
-				System.out.println(cloud2.getArc());
-				ArrayList<Station> stations = new ArrayList<Station>();
 				
-				int maxstation = Station.getStations().size() / cloudcount;
-				for(int i=0;i<cloudcount;i++){
-					Station.getStationvalue()[i]=0;
-					
-					int stationcounter=Station.getStations().size()-1;
-					while(stationcounter>=0){
-						Station.getStations().get(stationcounter).setCloud(cloud);
-						Station.getStations().get(stationcounter).setCloudnumber(i);
-						stations.add(Station.getStations().get(stationcounter));
-						Station.getStations().remove(stationcounter);
-						stationcounter--;
-						if(stations.size()>maxstation){
-							break;
-						}
+				for(Station s : Station.getStations()){
+					if(s.strategy.equals("random")){
+						Random randomGenerator = new Random();
+						int randomInt = randomGenerator.nextInt(2) + 1;
+						s.cloudid=Integer.toString(randomInt);
 					}
-					
-					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(i),stations,(i+1)+". app:",Provider.getProviderList().get(0)));
+					if(s.cloudid.equals("1")){
+						stations1.add(s);
+						s.setCloud(cloud);
+						s.setCloudnumber(0);
+						
+					}else{
+						stations2.add(s);
+						s.setCloud(cloud2);
+						s.setCloudnumber(1);
+					}
+				}
+				if(stations1.size()>0){
+					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(0),stations1,"1. app:",Provider.getProviderList().get(0)));
+				}
+				
+				if(stations2.size()>0){
+					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(1),stations2,"2. app:",Provider.getProviderList().get(0)));
 				}
 			}
 		
