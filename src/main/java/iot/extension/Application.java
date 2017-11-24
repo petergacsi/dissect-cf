@@ -322,7 +322,6 @@ public class Application extends Timed {
 			
 		}
 		 // ha erkezett be a kozponti repoba feldolgozatlan adat
-		System.out.println(this.stations.size()+" L");
 		this.localfilesize = (Station.getStationvalue()[this.stations.get(0).getCloudnumber()] - this.allgenerateddatasize); 
 		if (this.localfilesize > 0) { 
 			long processed = 0;

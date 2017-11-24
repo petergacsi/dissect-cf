@@ -118,7 +118,6 @@ public class CloudsProvider extends Provider {
 				
 			}
 		}
-		System.out.println("cloudcostcounter");
 		
 		for(Application a : Application.getApp()){
 			for(VmCollector vmcl : a.vmlist){

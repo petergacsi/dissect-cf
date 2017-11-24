@@ -110,7 +110,7 @@ public class Cloud {
 	 *            the path of the XML file - az IaaS felhot tartalmazo XML
 	 *            eleresi utvonala
 	 */
-	public Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,AlterableResourceConstraints p_arc,String datafile,String provider)
+	public Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,AlterableResourceConstraints p_arc)
 			throws IOException, SAXException, ParserConfigurationException {
 		if (p_va == null) {
 			this.va = new VirtualAppliance("BaseVA", 100, 0, false, 1000000);

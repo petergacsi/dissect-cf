@@ -86,7 +86,7 @@ public class Scenario {
 	}
 	
 	
-	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
+	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String providerfile2,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
 		long tasksize=-1; // TODO: ez miert kell?!
 
 		Station.setStationvalue(new long[cloudcount]); 
@@ -199,19 +199,35 @@ public class Scenario {
 			}
 			
 			if(tasksize!=-1){
-				CloudsProvider cp = new CloudsProvider(Scenario.simulatedTime);
-				Provider.readProviderXml(cp, providerfile,cproviderfile,filesize);
-				AlterableResourceConstraints arc = new AlterableResourceConstraints(cp.getCpu(),0.001,cp.getMemory());
+				CloudsProvider cp1 = new CloudsProvider(Scenario.simulatedTime);
+				CloudsProvider cp2 = new CloudsProvider(Scenario.simulatedTime);
+				
+				Provider.readProviderXml(cp1, providerfile,cproviderfile,filesize);
+				Provider.readProviderXml(cp2, providerfile2,cproviderfile,filesize);
+				
+
+				
+				AlterableResourceConstraints arc1 = new AlterableResourceConstraints(cp1.getCpu(),0.001,cp1.getMemory());
+				AlterableResourceConstraints arc2 = new AlterableResourceConstraints(cp2.getCpu(),0.001,cp2.getMemory());
+				
+				System.out.println(providerfile+ " "+arc1);
+				System.out.println(providerfile2+ " "+arc2);
+				
+				Cloud cloud = new Cloud(cloudfile,null,null,arc1);
+				Cloud.getClouds().add(cloud);
+				Cloud cloud2 = new Cloud(cloudfile,null,null,arc2);
+				Cloud.getClouds().add(cloud2);
+				
+				System.out.println(cloud.getArc());
+				System.out.println(cloud2.getArc());
+				ArrayList<Station> stations = new ArrayList<Station>();
+				
 				int maxstation = Station.getStations().size() / cloudcount;
 				for(int i=0;i<cloudcount;i++){
 					Station.getStationvalue()[i]=0;
-					Cloud cloud = new Cloud(cloudfile,null,null,arc,cproviderfile,"azure");
-					Cloud.getClouds().add(cloud);
-					ArrayList<Station> stations = new ArrayList<Station>();
+					
 					int stationcounter=Station.getStations().size()-1;
-					System.out.println(stationcounter);
 					while(stationcounter>=0){
-						System.out.println(stations.size()+" LL");
 						Station.getStations().get(stationcounter).setCloud(cloud);
 						Station.getStations().get(stationcounter).setCloudnumber(i);
 						stations.add(Station.getStations().get(stationcounter));
@@ -222,7 +238,7 @@ public class Scenario {
 						}
 					}
 					
-					Application.getApp().add(new Application(appfreq,tasksize,true,print,cloud,stations,(i+1)+". app:",Provider.getProviderList().get(0)));
+					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(i),stations,(i+1)+". app:",Provider.getProviderList().get(0)));
 				}
 			}
 		
@@ -236,8 +252,8 @@ public class Scenario {
 	 * @param cloudfile az IaaS felhot definialo XML fajl
 	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(String datafile,String cloudfile,String providerfile,String cproviderfile,int print,int cloudcount,long appfreq) throws Exception {
-			Scenario.readStationXml(datafile, cloudfile, providerfile, cproviderfile, cloudcount, print, appfreq);	
+	public Scenario(String datafile,String cloudfile,String providerfile,String providerfile2,String cproviderfile,int print,int cloudcount,long appfreq) throws Exception {
+			Scenario.readStationXml(datafile, cloudfile, providerfile,providerfile2, cproviderfile, cloudcount, print, appfreq);	
 			Timed.simulateUntilLastEvent();
 			if(print==1) this.loging();
 		}
@@ -252,9 +268,11 @@ public class Scenario {
 			String datafile=args[0];
 			String cloudfile=args[1];
 			String providerfile=args[2];
-			String cproviderfile=args[3];
-			int print=Integer.parseInt(args[4]);
-			new Scenario(datafile,cloudfile,providerfile,cproviderfile,1,2,5*60000);	
+			String providerfile2=args[3];
+			
+			String cproviderfile=args[4];
+			int print=Integer.parseInt(args[5]);
+			new Scenario(datafile,cloudfile,providerfile,providerfile2,cproviderfile,1,2,5*60000);	
 			
 			
 			Timed.simulateUntilLastEvent();
