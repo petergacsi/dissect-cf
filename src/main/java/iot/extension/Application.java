@@ -120,7 +120,7 @@ public class Application extends Timed {
 	public  TreeMap<Long, Integer> tmap = new TreeMap<Long, Integer>();
 	private static int feladatszam = 0;
 	private long tasksize;
-	private Cloud cloud;
+	public Cloud cloud;
 	public ArrayList<Station> stations;
 	private String name;
 	private Provider provider; //TODO: app = user, egyeni arazas
@@ -393,7 +393,7 @@ public class Application extends Timed {
 		this.turnoffVM();
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState()
-				&& (Station.getStationvalue()[this.stations.get(0).getCloudnumber()]) == this.allgenerateddatasize
+				
 				&& this.allgenerateddatasize != 0) {
 			unsubscribe();
 			System.out.println("~~~~~~~~~~~~");

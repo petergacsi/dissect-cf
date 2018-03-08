@@ -74,6 +74,7 @@ public class Cloud {
 	 * eroforrasigenyhez.
 	 */
 	AlterableResourceConstraints getArc() {
+
 		return arc;
 	}
 
@@ -129,7 +130,7 @@ public class Cloud {
 			this.arc = p_arc;
 }
 		this.iaas.repositories.get(0).registerObject(this.getVa());
-		
+		Cloud.clouds.add(this);
 	/*	CloudPricing myProvider = new ResourceDependentProvider(datafile, provider);
 		CostAnalyserandPricer theCostAnalyser = new CostAnalyserandPricer(this.iaas);
 		myProvider.setIaaSService(this.iaas);

@@ -88,11 +88,11 @@ public class Scenario {
 	}
 	
 	
-	private static void readStationXml(String stationfile,String cloudfile,String providerfile,String providerfile2,String cproviderfile, int cloudcount,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
+	private static void readStationXml(String stationfile,String cloudfile,ArrayList<String> arrayOfProviderfiles,String cproviderfile,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
 		long tasksize=-1; // TODO: ez miert kell?!
 
-		Station.setStationvalue(new long[cloudcount]); 
-		if(cloudcount<1){
+		Station.setStationvalue(new long[arrayOfProviderfiles.size()]); 
+		if(arrayOfProviderfiles.size()<1){
 			System.out.println("Cloudcount ertekenek legalabb 1-nek kell lennie!");
 			System.exit(0);
 		}
@@ -124,14 +124,8 @@ public class Scenario {
 						System.exit(0);
 					}
 					
-					String id=null,strategy = eElement.getElementsByTagName("strategy").item(0).getTextContent();
-					if(strategy.equals("random")){
-						
-						id = "random";
-					}else if(strategy.equals("cloud")){
-						id  =eElement.getElementsByTagName("strategy").item(0).getAttributes().item(0).getNodeValue();
-					}
-					
+					String strategy = eElement.getElementsByTagName("strategy").item(0).getTextContent();
+							
 					
 					final long time = Long.parseLong(eElement.getElementsByTagName("time").item(0).getTextContent());
 					if (time < -1) {
@@ -202,60 +196,70 @@ public class Scenario {
 						Stationdata sd = new Stationdata(time, starttime, stoptime, filesize, snumber, freq,
 								eElement.getElementsByTagName("name").item(0).getTextContent()+" "+i,
 								eElement.getElementsByTagName("torepo").item(0).getTextContent(), ratio);
-						Station.getStations().add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false,strategy,id));
+						Station.getStations().add(new Station(maxinbw, maxoutbw, diskbw, reposize, sd, false,strategy));
 						
 					}
 					Scenario.simulatedTime=(Scenario.simulatedTime<time)?time:Scenario.simulatedTime;
 					}
 				}
 			}
-			
-			if(tasksize!=-1){
-				CloudsProvider cp1 = new CloudsProvider(Scenario.simulatedTime);
-				CloudsProvider cp2 = new CloudsProvider(Scenario.simulatedTime);
+			// TODO: TIMED
+			if(tasksize!=-1 && Timed.getFireCount()==1){
 				
-				Provider.readProviderXml(cp1, providerfile,cproviderfile,filesize);
-				Provider.readProviderXml(cp2, providerfile2,cproviderfile,filesize);
-				
+				ArrayList<ArrayList<Station>> stationok = new ArrayList<ArrayList<Station>>();
+				/*
+				 *  letrehozzuk az xml fajlok alapjan az iot providereket es a felhoket a megfelelo vm eroforrasokkal
+				 */
+				for(int i=0;i<arrayOfProviderfiles.size();++i) {
+					CloudsProvider cp1 = new CloudsProvider(Scenario.simulatedTime);
+					Provider.readProviderXml(cp1, arrayOfProviderfiles.get(i),cproviderfile,filesize);
+					AlterableResourceConstraints arc1 = new AlterableResourceConstraints(cp1.getCpu(),0.001,cp1.getMemory());
+					new Cloud(cloudfile,null,null,arc1);
+					stationok.add(new ArrayList<Station>());
+				}
+					
+					
+				for(int i=0;i<arrayOfProviderfiles.size();++i) {
+					
+					
+					for(Station s : Station.getStations()){
+						if(s.strategy.equals("random") && s.founded==false){
+							s.founded=true;
+							Random randomGenerator = new Random();
+							int rnd = randomGenerator.nextInt(arrayOfProviderfiles.size());
+							stationok.get(rnd).add(s);
+							s.setCloud(Cloud.getClouds().get(rnd));
+							s.setCloudnumber(rnd);
 
-				
-				AlterableResourceConstraints arc1 = new AlterableResourceConstraints(cp1.getCpu(),0.001,cp1.getMemory());
-				AlterableResourceConstraints arc2 = new AlterableResourceConstraints(cp2.getCpu(),0.001,cp2.getMemory());
-				
-
-				Cloud cloud = new Cloud(cloudfile,null,null,arc1);
-				Cloud.getClouds().add(cloud);
-				Cloud cloud2 = new Cloud(cloudfile,null,null,arc2);
-				Cloud.getClouds().add(cloud2);
-	
-				ArrayList<Station> stations1 = new ArrayList<Station>();
-				ArrayList<Station> stations2 = new ArrayList<Station>();
-				
-				
-				for(Station s : Station.getStations()){
-					if(s.strategy.equals("random")){
-						Random randomGenerator = new Random();
-						int randomInt = randomGenerator.nextInt(2) + 1;
-						s.cloudid=Integer.toString(randomInt);
-					}
-					if(s.cloudid.equals("1")){
-						stations1.add(s);
-						s.setCloud(cloud);
-						s.setCloudnumber(0);
+						}/*else if(s.strategy.equals("cost")) {
+							if(cp1.instancePrice<cp2.instancePrice) {
+								stations1.add(s);
+								s.setCloud(cloud);
+								s.setCloudnumber(0);
+							}else if(cp1.hourPrice<cp2.hourPrice) {
+								stations1.add(s);
+								s.setCloud(cloud);
+								s.setCloudnumber(0);
+							}else {
+								stations2.add(s);
+								s.setCloud(cloud2);
+								s.setCloudnumber(1);
+							}
+							
+						}*/
 						
-					}else{
-						stations2.add(s);
-						s.setCloud(cloud2);
-						s.setCloudnumber(1);
+					}
+					
+
+				}
+				for(int i=0;i<arrayOfProviderfiles.size();++i) {
+					if(stationok.get(i).size()>0){
+						Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(i),stationok.get(i),(i+1)+". app:",Provider.getProviderList().get(i)));
 					}
 				}
-				if(stations1.size()>0){
-					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(0),stations1,"1. app:",Provider.getProviderList().get(0)));
-				}
 				
-				if(stations2.size()>0){
-					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(1),stations2,"2. app:",Provider.getProviderList().get(0)));
-				}
+	
+				
 			}
 		
 	}
@@ -268,8 +272,8 @@ public class Scenario {
 	 * @param cloudfile az IaaS felhot definialo XML fajl
 	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(String datafile,String cloudfile,String providerfile,String providerfile2,String cproviderfile,int print,int cloudcount,long appfreq) throws Exception {
-			Scenario.readStationXml(datafile, cloudfile, providerfile,providerfile2, cproviderfile, cloudcount, print, appfreq);	
+	public Scenario(String datafile,String cloudfile,ArrayList<String> arrayOfProviderfiles,String cproviderfile,int print,long appfreq) throws Exception {
+			Scenario.readStationXml(datafile, cloudfile, arrayOfProviderfiles, cproviderfile, print, appfreq);	
 			Timed.simulateUntilLastEvent();
 			if(print==1) this.loging();
 		}
@@ -281,14 +285,24 @@ public class Scenario {
 		 * 			negyedikkent egy szam, ami ha 1-es, akkor a logolasi funkcio be van kapcsolva
 		 */
 		public static void main(String[] args) throws Exception {
-			String datafile=args[0];
+			/*String datafile=args[0];
 			String cloudfile=args[1];
 			String providerfile=args[2];
 			String providerfile2=args[3];
-			
 			String cproviderfile=args[4];
-			int print=Integer.parseInt(args[5]);
-			new Scenario(datafile,cloudfile,providerfile,providerfile2,cproviderfile,1,2,5*60000);	
+			int print=Integer.parseInt(args[5]);*/
+			String datafile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//WeatherStation.xml";
+			String cloudfile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//LPDSCloud.xml";
+			String providerfile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//Provider.xml";
+			String providerfile2="//home//andras//Documents//projektek//dissect-cf//src//main//resources//Provider2.xml";
+			String providerfile3="//home//andras//Documents//projektek//dissect-cf//src//main//resources//Provider3.xml";
+			String cproviderfile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//CProvider.xml";
+			ArrayList<String> arrayOfProviderfiles = new ArrayList<String>();
+			arrayOfProviderfiles.add(providerfile);
+			arrayOfProviderfiles.add(providerfile2);
+			arrayOfProviderfiles.add(providerfile3);
+			
+			new Scenario(datafile,cloudfile,arrayOfProviderfiles,cproviderfile,1,5*60000);	
 			
 			
 			Timed.simulateUntilLastEvent();

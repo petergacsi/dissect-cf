@@ -1,29 +1,81 @@
-<?xml version="1.0"?>
-<application tasksize='250000'>
-<Station>
-<name number='10'>teszt</name>
-<freq>60000</freq>
-<snumber size='50'>8</snumber>
-<time starttime='0' stoptime='28800000'>28800000</time>
-<maxinbw>1000</maxinbw>
-<maxoutbw>1000</maxoutbw>
-<diskbw>1000</diskbw>
-<strategy id=''>random</strategy>
-<torepo>ceph</torepo>
-<reposize>60000</reposize>
-<ratio>1</ratio>
-</Station>
-<Station>
-<name number='5'>teszt2</name>
-<freq>60000</freq>
-<snumber size='50'>8</snumber>
-<time starttime='0' stoptime='28800000'>28800000</time>
-<maxinbw>1000</maxinbw>
-<maxoutbw>1000</maxoutbw>
-<diskbw>1000</diskbw>
-<strategy id='1'>cloud</strategy>
-<torepo>ceph</torepo>
-<reposize>60000</reposize>
-<ratio>1</ratio>
-</Station>
+<?xml version="1.0" encoding="UTF-8"?>
+<application tasksize="250000">
+   <Station>
+      <name number="200">0-5</name>
+      <freq>60000</freq>
+      <snumber size="50">8</snumber>
+      <time starttime="0" stoptime="18000000">18000000</time>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <torepo>ceph</torepo>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>cost</strategy>
+   </Station>
+   <Station>
+      <name number="700">5-8</name>
+      <freq>60000</freq>
+      <snumber size="50">8</snumber>
+      <time starttime="18000000" stoptime="28800000">28800000</time>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <torepo>ceph</torepo>
+      <reposize>60000</reposize>
+      <strategy>random</strategy>
+      <ratio>1</ratio>
+   </Station>
+   <Station>
+      <name number="1">asd</name>
+      <freq>60000</freq>
+      <snumber size="50">8</snumber>
+      <time starttime="18000000" stoptime="28800000">28800000</time>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <torepo>ceph</torepo>
+      <reposize>60000</reposize>
+      <strategy>random</strategy>
+      <ratio>1</ratio>
+   </Station>
+   <Station>
+      <name number="300">8-16</name>
+      <freq>60000</freq>
+      <snumber size="50">8</snumber>
+      <time starttime="28800000" stoptime="57600000">57600000</time>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <torepo>ceph</torepo>
+      <reposize>60000</reposize>
+      <strategy>cost</strategy>
+      <ratio>1</ratio>
+   </Station>
+   <Station>
+      <name number="500">16-20</name>
+      <freq>60000</freq>
+      <snumber size="50">8</snumber>
+      <time starttime="57600000" stoptime="72000000">72000000</time>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <torepo>ceph</torepo>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>cost</strategy>
+   </Station>
+   <Station>
+      <name number="200">20-24</name>
+      <freq>60000</freq>
+      <snumber size="50">8</snumber>
+      <time starttime="72000000" stoptime="86400000">86400000</time>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <torepo>ceph</torepo>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>cost</strategy>
+   </Station>
 </application>

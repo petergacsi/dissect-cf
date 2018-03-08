@@ -109,6 +109,8 @@ public class Station extends Timed {
 			return sensornumber;
 		}
 
+		
+		
 		/**
 		 * Constructor creates useful and necessary data for work of a station.
 		 * 
@@ -163,7 +165,7 @@ public class Station extends Timed {
 	}
 
 	
-	
+	public boolean founded;
 	public static final double minpower = 20;
 	public static final double idlepower = 200;
 	public static final double maxpower = 300;
@@ -396,8 +398,8 @@ public class Station extends Timed {
 		this.messagecount = messagecount;
 	}
 
-	
-	String cloudid,strategy;
+	 
+	String strategy;
 	/**
 	 * Constructor creates the local repository based on the parameters and
 	 * organize the local and the cloud repository to the same network. A
@@ -423,9 +425,8 @@ public class Station extends Timed {
 	 * @throws NetworkException 
 	 */
 	public Station(long maxinbw, long maxoutbw, long diskbw, long reposize, final Stationdata sd,
-			boolean randommetering,String strategy, String cloudid) throws NetworkException {
+			boolean randommetering,String strategy) throws NetworkException {
 		this.strategy=strategy;
-		this.cloudid=cloudid;
 		this.vm = null;
 		this.i = 0;
 		this.sd = sd;
@@ -439,6 +440,7 @@ public class Station extends Timed {
 		repo = new Repository(this.reposize, sd.name, maxinbw, maxoutbw, diskbw, lmap, defaultStorageTransitions, defaultNetworkTransitions);
 		this.randommetering = randommetering;
 		this.repo.setState(NetworkNode.State.RUNNING);
+		this.founded=false;
 	}
 
 	/**

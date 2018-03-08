@@ -42,8 +42,8 @@ public class CloudsProvider extends Provider {
 		}
 		//bluemix
 		if(this.bmList.size()!=0){
-			double tmp= (double) Station.allstationsize / (double)1048576;
-			for(Bluemix bm : this.bmList){
+			double tmp= (double) Station.allstationsize / (double)1048576; // TODO: miez a begetett ertek? 1 MB
+ 			for(Bluemix bm : this.bmList){
 				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {
 					this.setPricePerMB(bm.price);
 				}

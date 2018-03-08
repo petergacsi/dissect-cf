@@ -89,8 +89,8 @@ public abstract class Provider extends Timed{
 	// Cloud side variables
 	private double cpu;
 	private long memory; 
-	private double instancePrice;
-	private double hourPrice;
+	public double instancePrice;
+	public double hourPrice;
 
 	// IoT side variables
 	public static long lateStart;
@@ -395,7 +395,7 @@ public abstract class Provider extends Timed{
 		}
 		if(cprovider!=null){
 			Provider.readCProviderXml(p,cprovider,size,target);
-		}
+		} 
 		
 		//System.out.println(p);
 		Provider.providerList.add(p);
