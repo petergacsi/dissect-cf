@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -16,6 +17,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import at.ac.uibk.dps.cloud.simulator.test.simple.DeferredEventTest;
 import cloudprovider.ResourceDependentProvider;
 
 import org.w3c.dom.Node;
@@ -204,7 +206,7 @@ public class Scenario {
 				}
 			}
 			// TODO: TIMED
-			if(tasksize!=-1 && Timed.getFireCount()==1){
+			if(tasksize!=-1 ){
 				
 				ArrayList<ArrayList<Station>> stationok = new ArrayList<ArrayList<Station>>();
 				/*
@@ -218,44 +220,77 @@ public class Scenario {
 					stationok.add(new ArrayList<Station>());
 				}
 					
-					
-				for(int i=0;i<arrayOfProviderfiles.size();++i) {
-					
-					
 					for(Station s : Station.getStations()){
-						if(s.strategy.equals("random") && s.founded==false){
+						 if(s.strategy.equals("workload") && s.founded==false){
 							s.founded=true;
+							
+							class CloudChoose extends DeferredEvent {
+								Station s;ArrayList<ArrayList<Station>> stationok;
+								CloudChoose(ArrayList<ArrayList<Station>> stationok,Station s){
+									super(s.getSd().starttime+1);
+									this.s=s;
+									this.stationok=stationok;
+									
+								}
+								@Override
+								protected void eventAction() {
+									int min = Integer.MAX_VALUE-1;
+									int choosen = -1;
+									int[] tomb = new int[Cloud.getClouds().size()];
+									for(int i=0;i< Cloud.getClouds().size();i++ ){
+										tomb[i]=Cloud.getClouds().get(i).getIaas().listVMs().size();
+										if(Cloud.getClouds().get(i).getIaas().listVMs().size()<min){
+											min=Cloud.getClouds().get(i).getIaas().listVMs().size();
+											choosen = i;
+										}
+									}
+								//	System.out.println(Arrays.toString(tomb) + " : "+Timed.getFireCount());
+									stationok.get(choosen).add(this.s);
+									s.setCloud(Cloud.getClouds().get(choosen));
+									s.setCloudnumber(choosen);
+									//System.err.println(Timed.getFireCount() + " wt "+ s);
+									//System.out.println(Cloud.getClouds().get(choosen).getArc());
+									//System.exit(0);
+									
+								}
+								
+							}
+
+							new CloudChoose(stationok,s);
+							
+						
+
+						}else if(s.strategy.equals("random") && s.founded==false){
+
 							Random randomGenerator = new Random();
 							int rnd = randomGenerator.nextInt(arrayOfProviderfiles.size());
 							stationok.get(rnd).add(s);
 							s.setCloud(Cloud.getClouds().get(rnd));
 							s.setCloudnumber(rnd);
 
-						}/*else if(s.strategy.equals("cost")) {
-							if(cp1.instancePrice<cp2.instancePrice) {
-								stations1.add(s);
-								s.setCloud(cloud);
-								s.setCloudnumber(0);
-							}else if(cp1.hourPrice<cp2.hourPrice) {
-								stations1.add(s);
-								s.setCloud(cloud);
-								s.setCloudnumber(0);
-							}else {
-								stations2.add(s);
-								s.setCloud(cloud2);
-								s.setCloudnumber(1);
+						}else if(s.strategy.equals("cost")) {
+							 double min=Integer.MAX_VALUE-1.0;
+							 int choosen=-1;
+							for(int i=0;i<Provider.getProviderList().size();++i){
+								if(Provider.getProviderList().get(i).instancePrice>0 && Provider.getProviderList().get(i).instancePrice<min){
+									min = Provider.getProviderList().get(i).instancePrice;
+									choosen = i;
+								}else if(Provider.getProviderList().get(i).hourPrice>0 && Provider.getProviderList().get(i).hourPrice<min){
+									min = Provider.getProviderList().get(i).hourPrice;
+									choosen = i;
+								}
 							}
-							
-						}*/
-						
+
+							stationok.get(choosen).add(s);
+							s.setCloud(Cloud.getClouds().get(choosen));
+							s.setCloudnumber(choosen);
+						}
 					}
 					
 
-				}
+				
 				for(int i=0;i<arrayOfProviderfiles.size();++i) {
-					if(stationok.get(i).size()>0){
-						Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(i),stationok.get(i),(i+1)+". app:",Provider.getProviderList().get(i)));
-					}
+					Application.getApp().add(new Application(appfreq,tasksize,true,print,Cloud.getClouds().get(i),stationok.get(i),(i+1)+". app:",Provider.getProviderList().get(i)));
 				}
 				
 	
@@ -291,12 +326,12 @@ public class Scenario {
 			String providerfile2=args[3];
 			String cproviderfile=args[4];
 			int print=Integer.parseInt(args[5]);*/
-			String datafile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//WeatherStation.xml";
-			String cloudfile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//LPDSCloud.xml";
-			String providerfile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//Provider.xml";
-			String providerfile2="//home//andras//Documents//projektek//dissect-cf//src//main//resources//Provider2.xml";
-			String providerfile3="//home//andras//Documents//projektek//dissect-cf//src//main//resources//Provider3.xml";
-			String cproviderfile="//home//andras//Documents//projektek//dissect-cf//src//main//resources//CProvider.xml";
+			String datafile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\WeatherStation.xml";
+			String cloudfile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\LPDSCloud.xml";
+			String providerfile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\Provider.xml";
+			String providerfile2="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\Provider2.xml";
+			String providerfile3="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\Provider3.xml";
+			String cproviderfile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\CProvider.xml";
 			ArrayList<String> arrayOfProviderfiles = new ArrayList<String>();
 			arrayOfProviderfiles.add(providerfile);
 			arrayOfProviderfiles.add(providerfile2);
@@ -305,7 +340,7 @@ public class Scenario {
 			new Scenario(datafile,cloudfile,arrayOfProviderfiles,cproviderfile,1,5*60000);	
 			
 			
-			Timed.simulateUntilLastEvent();
+			
 		}
 		
 		

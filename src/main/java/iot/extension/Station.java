@@ -42,13 +42,13 @@ public class Station extends Timed {
 		 * The time when the station starts generating and sending data. Az az
 		 * ido, mikor a station elkezdi az adatgeneralast es az adatkuldest.
 		 */
-		private long starttime;
+		long starttime;
 
 		/**
 		 * The time when the station stops generating and sending data. Az az
 		 * ido, mikor a station befejezi az adatgeneralast es az adatkuldest.
 		 */
-		private long stoptime;
+		 long stoptime;
 
 		/**
 		 * Size of the generated data. A generalt adatmerete.

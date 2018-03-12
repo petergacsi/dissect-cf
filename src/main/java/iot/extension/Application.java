@@ -183,6 +183,7 @@ public class Application extends Timed {
 		if (this.i == 0) {
 			this.i++;
 			for (final Station s : this.stations) {
+
 				Random randomGenerator = new Random();
 				int randomInt = randomGenerator.nextInt(21);
 				if (delay) {
@@ -263,6 +264,7 @@ public class Application extends Timed {
 	private boolean checkStationState() { // TODO probably wrong, but lets see
 		boolean i = true;
 		for (Station s : this.stations) {
+			//System.out.println(s + " "+ Timed.getFireCount());
 			if (s.isSubscribed()) {
 				return false;
 			}
@@ -314,12 +316,14 @@ public class Application extends Timed {
 	 * es a virtualis gepek kezelese
 	 */
 	public void tick(long fires) {
+		if(this.stations.size()>0){
+			
 		if (this.vmlist.isEmpty()) {
 			this.generateAndAddVM(); //
 		}
 		if (this.VmSearch() != null) {
 			this.startStation();
-			
+
 		}
 		 // ha erkezett be a kozponti repoba feldolgozatlan adat
 		this.localfilesize = (Station.getStationvalue()[this.stations.get(0).getCloudnumber()] - this.allgenerateddatasize); 
@@ -391,23 +395,35 @@ public class Application extends Timed {
 		}
 		this.tmap.put(Timed.getFireCount(), task);
 		this.turnoffVM();
+		
+	}
 		// kilepesi feltetel az app szamara
-		if (Application.feladatszam == 0 && checkStationState()
-				
-				&& this.allgenerateddatasize != 0) {
-			unsubscribe();
-			System.out.println("~~~~~~~~~~~~");
-			Application.finishedTime=Timed.getFireCount();
-			
-			for (VmCollector vmcl : this.vmlist) {
-				try {
-					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
-						vmcl.vm.switchoff(true);
+		if (Application.feladatszam == 0 && checkStationState() 	
+				&&   Timed.getFireCount()>getLongestStoptime()) {
+					unsubscribe();
+					System.out.println("~~~~~~~~~~~~");
+					Application.finishedTime=Timed.getFireCount();
+					
+					for (VmCollector vmcl : this.vmlist) {
+						try {
+							if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
+								vmcl.vm.switchoff(true);
+							}
+						} catch (StateChangeException e) {
+							e.printStackTrace();
+						}
 					}
-				} catch (StateChangeException e) {
-					e.printStackTrace();
 				}
+	}
+	
+	long getLongestStoptime(){
+		long max = -1;
+		for(Station s :  this.stations){
+			if(s.getSd().stoptime>max){
+				max = s.getSd().stoptime;
 			}
-		}
+	}
+		//System.out.println(max);
+	return max;
 	}
 }

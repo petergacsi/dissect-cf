@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <application tasksize="250000">
-   <Station>
+ <Station>
       <name number="200">0-5</name>
       <freq>60000</freq>
       <snumber size="50">8</snumber>
@@ -11,7 +11,7 @@
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>cost</strategy>
+      <strategy>workload</strategy>
    </Station>
    <Station>
       <name number="700">5-8</name>
@@ -27,20 +27,7 @@
       <ratio>1</ratio>
    </Station>
    <Station>
-      <name number="1">asd</name>
-      <freq>60000</freq>
-      <snumber size="50">8</snumber>
-      <time starttime="18000000" stoptime="28800000">28800000</time>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <torepo>ceph</torepo>
-      <reposize>60000</reposize>
-      <strategy>random</strategy>
-      <ratio>1</ratio>
-   </Station>
-   <Station>
-      <name number="300">8-16</name>
+      <name number="500">8-16</name>
       <freq>60000</freq>
       <snumber size="50">8</snumber>
       <time starttime="28800000" stoptime="57600000">57600000</time>
@@ -49,7 +36,7 @@
       <diskbw>1000</diskbw>
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
-      <strategy>cost</strategy>
+      <strategy>workload</strategy>
       <ratio>1</ratio>
    </Station>
    <Station>
@@ -63,7 +50,7 @@
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>cost</strategy>
+      <strategy>workload</strategy>
    </Station>
    <Station>
       <name number="200">20-24</name>
@@ -76,6 +63,6 @@
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>cost</strategy>
-   </Station>
+      <strategy>workload</strategy>
+</Station>
 </application>
