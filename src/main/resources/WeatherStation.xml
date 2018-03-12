@@ -30,7 +30,7 @@
       <name number="500">8-16</name>
       <freq>60000</freq>
       <snumber size="50">8</snumber>
-      <time starttime="28800000" stoptime="57600000">57600000</time>
+      <time starttime="10800000" stoptime="57600000">57600000</time>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -43,7 +43,7 @@
       <name number="500">16-20</name>
       <freq>60000</freq>
       <snumber size="50">8</snumber>
-      <time starttime="57600000" stoptime="72000000">72000000</time>
+      <time starttime="37600000" stoptime="72000000">72000000</time>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -56,7 +56,7 @@
       <name number="200">20-24</name>
       <freq>60000</freq>
       <snumber size="50">8</snumber>
-      <time starttime="72000000" stoptime="86400000">86400000</time>
+      <time starttime="42000000" stoptime="86400000">86400000</time>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>

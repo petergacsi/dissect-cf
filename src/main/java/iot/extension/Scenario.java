@@ -236,11 +236,17 @@ public class Scenario {
 								protected void eventAction() {
 									int min = Integer.MAX_VALUE-1;
 									int choosen = -1;
-									int[] tomb = new int[Cloud.getClouds().size()];
+									
+								//	int[] tomb = new int[Cloud.getClouds().size()];
 									for(int i=0;i< Cloud.getClouds().size();i++ ){
-										tomb[i]=Cloud.getClouds().get(i).getIaas().listVMs().size();
-										if(Cloud.getClouds().get(i).getIaas().listVMs().size()<min){
-											min=Cloud.getClouds().get(i).getIaas().listVMs().size();
+										//tomb[i]=Cloud.getClouds().get(i).getIaas().listVMs().size();
+										int vmCount = 0;
+										for (int j = 0; j < Cloud.getClouds().get(i).getIaas().machines.size(); j++) {
+											vmCount +=  Cloud.getClouds().get(i).getIaas().machines.get(j).numofCurrentVMs();
+										}
+										
+										if(vmCount<min){
+											min=vmCount;
 											choosen = i;
 										}
 									}
