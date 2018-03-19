@@ -90,7 +90,7 @@ public class Scenario {
 	}
 	
 	
-	private static void readStationXml(String stationfile,String cloudfile,ArrayList<String> arrayOfProviderfiles,String cproviderfile,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
+	private static void readStationXml(String stationfile,ArrayList<String> arrayOfCloudfiles,ArrayList<String> arrayOfProviderfiles,String cproviderfile,int print,long appfreq) throws SAXException, IOException, ParserConfigurationException, NetworkException{
 		long tasksize=-1; // TODO: ez miert kell?!
 
 		Station.setStationvalue(new long[arrayOfProviderfiles.size()]); 
@@ -216,12 +216,12 @@ public class Scenario {
 					CloudsProvider cp1 = new CloudsProvider(Scenario.simulatedTime);
 					Provider.readProviderXml(cp1, arrayOfProviderfiles.get(i),cproviderfile,filesize);
 					AlterableResourceConstraints arc1 = new AlterableResourceConstraints(cp1.getCpu(),0.001,cp1.getMemory());
-					new Cloud(cloudfile,null,null,arc1);
+					new Cloud(arrayOfCloudfiles.get(i),null,null,arc1);
 					stationok.add(new ArrayList<Station>());
 				}
 					
 					for(Station s : Station.getStations()){
-						 if(s.strategy.equals("workload") && s.founded==false){
+						 if(s.strategy.equals("load") && s.founded==false){
 							s.founded=true;
 							
 							class CloudChoose extends DeferredEvent {
@@ -234,19 +234,16 @@ public class Scenario {
 								}
 								@Override
 								protected void eventAction() {
-									int min = Integer.MAX_VALUE-1;
+									double min = Double.MAX_VALUE-1.0;
 									int choosen = -1;
 									
 								//	int[] tomb = new int[Cloud.getClouds().size()];
 									for(int i=0;i< Cloud.getClouds().size();i++ ){
 										//tomb[i]=Cloud.getClouds().get(i).getIaas().listVMs().size();
-										int vmCount = 0;
-										for (int j = 0; j < Cloud.getClouds().get(i).getIaas().machines.size(); j++) {
-											vmCount +=  Cloud.getClouds().get(i).getIaas().machines.get(j).numofCurrentVMs();
-										}
-										
-										if(vmCount<min){
-											min=vmCount;
+										double loadRatio = (stationok.get(i).size())/(Cloud.getClouds().get(i).getIaas().machines.size());
+										//System.err.println(loadRatio);
+										if(loadRatio<min){
+											min=loadRatio;
 											choosen = i;
 										}
 									}
@@ -313,8 +310,8 @@ public class Scenario {
 	 * @param cloudfile az IaaS felhot definialo XML fajl
 	 * @param print logolasi funkcio, 1 - igen, 2 - nem
 	 */
-	public Scenario(String datafile,String cloudfile,ArrayList<String> arrayOfProviderfiles,String cproviderfile,int print,long appfreq) throws Exception {
-			Scenario.readStationXml(datafile, cloudfile, arrayOfProviderfiles, cproviderfile, print, appfreq);	
+	public Scenario(String datafile,ArrayList<String> arrayOfCloudfiles,ArrayList<String> arrayOfProviderfiles,String cproviderfile,int print,long appfreq) throws Exception {
+			Scenario.readStationXml(datafile, arrayOfCloudfiles, arrayOfProviderfiles, cproviderfile, print, appfreq);	
 			Timed.simulateUntilLastEvent();
 			if(print==1) this.loging();
 		}
@@ -332,19 +329,26 @@ public class Scenario {
 			String providerfile2=args[3];
 			String cproviderfile=args[4];
 			int print=Integer.parseInt(args[5]);*/
-			String datafile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\WeatherStation.xml";
-			String cloudfile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\LPDSCloud.xml";
-			String providerfile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\Provider.xml";
-			String providerfile2="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\Provider2.xml";
-			String providerfile3="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\Provider3.xml";
-			String cproviderfile="d:\\Dokumentumok\\SZTE\\gitteles\\dissect-cf\\src\\main\\resources\\CProvider.xml";
+			String datafile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/WeatherStation.xml";
+			String cloudfile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/LPDSCloud.xml";
+			String cloudfile2="/home/andras/Documents/projektek/dissect-cf/src/main/resources/LPDSCloud2.xml";
+			String cloudfile3="/home/andras/Documents/projektek/dissect-cf/src/main/resources/LPDSCloud3.xml";
+			String providerfile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/Provider.xml";
+			String providerfile2="/home/andras/Documents/projektek/dissect-cf/src/main/resources/Provider2.xml";
+			String providerfile3="/home/andras/Documents/projektek/dissect-cf/src/main/resources/Provider3.xml";
+			String cproviderfile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/CProvider.xml";
 			ArrayList<String> arrayOfProviderfiles = new ArrayList<String>();
 			arrayOfProviderfiles.add(providerfile);
 			arrayOfProviderfiles.add(providerfile2);
 			arrayOfProviderfiles.add(providerfile3);
+			ArrayList<String> arrayOfCloudfiles = new ArrayList<String>();
+			arrayOfCloudfiles.add(cloudfile);
+			arrayOfCloudfiles.add(cloudfile2);
+			arrayOfCloudfiles.add(cloudfile3);
 			
-			new Scenario(datafile,cloudfile,arrayOfProviderfiles,cproviderfile,1,5*60000);	
+			new Scenario(datafile,arrayOfCloudfiles,arrayOfProviderfiles,cproviderfile,1,5*60000);	
 			
+
 			
 			
 		}

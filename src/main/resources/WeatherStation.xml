@@ -11,7 +11,7 @@
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>workload</strategy>
+      <strategy>load</strategy>
    </Station>
    <Station>
       <name number="700">5-8</name>
@@ -36,7 +36,7 @@
       <diskbw>1000</diskbw>
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
-      <strategy>workload</strategy>
+      <strategy>load</strategy>
       <ratio>1</ratio>
    </Station>
    <Station>
@@ -50,7 +50,7 @@
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>workload</strategy>
+      <strategy>load</strategy>
    </Station>
    <Station>
       <name number="200">20-24</name>
@@ -63,6 +63,6 @@
       <torepo>ceph</torepo>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>workload</strategy>
+      <strategy>load</strategy>
 </Station>
 </application>
