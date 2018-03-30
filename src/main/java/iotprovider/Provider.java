@@ -52,7 +52,10 @@ public abstract class Provider extends Timed{
 		this.memory=0;
 		this.bmList=new ArrayList<Bluemix>();
 	}
-	
+	protected Application app;
+	public void setApp(Application app){
+		this.app=app;
+	}
 	public void startProvider(){
 		
 		subscribe(this.freq);

@@ -329,14 +329,14 @@ public class Scenario {
 			String providerfile2=args[3];
 			String cproviderfile=args[4];
 			int print=Integer.parseInt(args[5]);*/
-			String datafile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/WeatherStation.xml";
-			String cloudfile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/LPDSCloud.xml";
-			String cloudfile2="/home/andras/Documents/projektek/dissect-cf/src/main/resources/LPDSCloud2.xml";
-			String cloudfile3="/home/andras/Documents/projektek/dissect-cf/src/main/resources/LPDSCloud3.xml";
-			String providerfile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/Provider.xml";
-			String providerfile2="/home/andras/Documents/projektek/dissect-cf/src/main/resources/Provider2.xml";
-			String providerfile3="/home/andras/Documents/projektek/dissect-cf/src/main/resources/Provider3.xml";
-			String cproviderfile="/home/andras/Documents/projektek/dissect-cf/src/main/resources/CProvider.xml";
+			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/WeatherStationM.xml";
+			String cloudfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud.xml";
+			String cloudfile2="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud2.xml";
+			String cloudfile3="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud3.xml";
+			String providerfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/Provider.xml";
+			String providerfile2="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/Provider2.xml";
+			String providerfile3="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/Provider3.xml";
+			String cproviderfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/CProvider.xml";
 			ArrayList<String> arrayOfProviderfiles = new ArrayList<String>();
 			arrayOfProviderfiles.add(providerfile);
 			arrayOfProviderfiles.add(providerfile2);

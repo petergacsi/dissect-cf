@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<providers size="medium" target="azure">
+<providers size="large" target="azure">
 
 	<bluemix calculate="true"> 
 		<price-per-MB mbfrom="0" mbto="499999">0.00097</price-per-MB> 

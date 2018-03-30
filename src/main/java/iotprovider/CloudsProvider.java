@@ -109,23 +109,23 @@ public class CloudsProvider extends Provider {
 	protected void CloudCostCounter() {
 		double cost1=0,cost2,temp=0;
 		int j=0;
-		for(Application a : Application.getApp()){
-			for(VmCollector vmc : a.vmlist){
+		
+			for(VmCollector vmc : app.vmlist){
 				if(vmc.isWorked()){
 					cost1 += vmc.workingTime/60/1000/60*this.getHourPrice();
 					temp += vmc.workingTime;
 				}
 				
 			}
-		}
 		
-		for(Application a : Application.getApp()){
-			for(VmCollector vmcl : a.vmlist){
+		
+	
+			for(VmCollector vmcl : app.vmlist){
 				if(vmcl.isWorked()){
 					j++;
 				}
 			}
-		}
+		
 		cost2 = j*this.getInstancePrice();
 		this.setUserCloudCost((cost1+cost2));
 	}

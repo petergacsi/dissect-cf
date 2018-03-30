@@ -137,8 +137,7 @@ public class Cloud {
 		myProvider.setCostAnalyserandPricer(theCostAnalyser);*/
 		//TODO: 
 		//new CostAnalizerListener(3600000,iaasList,dispatcher,theCostAnalyser);
-		
-		
+
 		
 	}
 	

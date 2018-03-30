@@ -150,7 +150,7 @@ public class Application extends Timed {
 		this.cloud = cloud;
 		this.stations = stations;
 		this.name = name;
-		this.provider=p;
+		p.setApp(this);
 	}
 
 	/**

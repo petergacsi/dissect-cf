@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
-<providers size="large" target="bluemix">
+<providers size="medium" target="bluemix">
 
-	<bluemix calculate="false"> 
+	<bluemix calculate="true"> 
 		<price-per-MB mbfrom="0" mbto="499999">0.00097</price-per-MB> 
 		<price-per-MB mbfrom="450000" mbto="6999999">0.00068</price-per-MB>
 		<price-per-MB mbfrom="7000000" mbto="-1">0.00014</price-per-MB>	
@@ -17,7 +17,7 @@
 		<am-deviceprice-per-month>0.02344</am-deviceprice-per-month>
 	</oracle> 
 
-	<azure calculate="true" period="1">
+	<azure calculate="false" period="1">
 		<price-per-month>421.65</price-per-month>
 		<messages-per-day>6000000</messages-per-day>
 		<messagesize-per-KB>4</messagesize-per-KB>

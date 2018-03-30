@@ -5,12 +5,12 @@
 	<!-- 2core,8GB RAM -->
 	<!-- 8core,32GB RAM -->
 	<amazon>		
-		<large> 
+		<small> 
 			<ram>2147483648</ram>
 			<cpucores>1</cpucores>
 			<instance-price>0</instance-price>
-			<hour-per-price>0.296</hour-per-price>
-		</large>
+			<hour-per-price>0.039</hour-per-price>
+		</small>
 		<medium> 
 			<ram>8589934592</ram>
 			<cpucores>2</cpucores>
