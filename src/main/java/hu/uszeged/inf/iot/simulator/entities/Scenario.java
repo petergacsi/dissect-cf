@@ -1,4 +1,4 @@
-package iot.extension;
+package hu.uszeged.inf.iot.simulator.entities;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -27,10 +27,10 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import iot.extension.Application.VmCollector;
-import iot.extension.Station.Stationdata;
-import iotprovider.CloudsProvider;
-import iotprovider.Provider;
+import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
+import hu.uszeged.inf.iot.simulator.entities.Station.Stationdata;
+import hu.uszeged.inf.iot.simulator.providers.CloudsProvider;
+import hu.uszeged.inf.iot.simulator.providers.Provider;
 
 /**
   *  Main task of this class to run the whole simulation based on XML files.
@@ -329,14 +329,14 @@ public class Scenario {
 			String providerfile2=args[3];
 			String cproviderfile=args[4];
 			int print=Integer.parseInt(args[5]);*/
-			String datafile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/WeatherStationM.xml";
-			String cloudfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud.xml";
-			String cloudfile2="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud2.xml";
-			String cloudfile3="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud3.xml";
-			String providerfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/Provider.xml";
-			String providerfile2="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/Provider2.xml";
-			String providerfile3="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/Provider3.xml";
-			String cproviderfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/CProvider.xml";
+			String datafile="/home/student/Desktop/markus/dissect-cf/src/main/resources/WeatherStationM.xml";
+			String cloudfile="/home/student/Desktop/markus/dissect-cf/src/main/resources/LPDSCloud.xml";
+			String cloudfile2="/home/student/Desktop/markus/dissect-cf/src/main/resources/LPDSCloud2.xml";
+			String cloudfile3="/home/student/Desktop/markus/dissect-cf/src/main/resources/LPDSCloud3.xml";
+			String providerfile="/home/student/Desktop/markus/dissect-cf/src/main/resources/Provider.xml";
+			String providerfile2="/home/student/Desktop/markus/dissect-cf/src/main/resources/Provider2.xml";
+			String providerfile3="/home/student/Desktop/markus/dissect-cf/src/main/resources/Provider3.xml";
+			String cproviderfile="/home/student/Desktop/markus/dissect-cf/src/main/resources/CProvider.xml";
 			ArrayList<String> arrayOfProviderfiles = new ArrayList<String>();
 			arrayOfProviderfiles.add(providerfile);
 			arrayOfProviderfiles.add(providerfile2);

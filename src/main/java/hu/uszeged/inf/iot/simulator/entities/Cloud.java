@@ -1,4 +1,4 @@
-package iot.extension;
+package hu.uszeged.inf.iot.simulator.entities;
 
 import hu.mta.sztaki.lpds.cloud.simulator.util.*;
 

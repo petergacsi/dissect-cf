@@ -1,4 +1,4 @@
-package iotprovider;
+package hu.uszeged.inf.iot.simulator.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,10 +12,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import iot.extension.Application;
-import iot.extension.Scenario;
-import iot.extension.Station;
-import iot.extension.Application.VmCollector;
+import hu.uszeged.inf.iot.simulator.entities.Application;
+import hu.uszeged.inf.iot.simulator.entities.Scenario;
+import hu.uszeged.inf.iot.simulator.entities.Station;
+import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
 
 public class CloudsProvider extends Provider {
 

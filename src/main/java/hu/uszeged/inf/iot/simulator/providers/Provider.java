@@ -1,4 +1,4 @@
-package iotprovider;
+package hu.uszeged.inf.iot.simulator.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,9 +14,9 @@ import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import iot.extension.Application;
-import iot.extension.Scenario;
-import iot.extension.Station;
+import hu.uszeged.inf.iot.simulator.entities.Application;
+import hu.uszeged.inf.iot.simulator.entities.Scenario;
+import hu.uszeged.inf.iot.simulator.entities.Station;
 
 public abstract class Provider extends Timed{
 	protected  class Bluemix{

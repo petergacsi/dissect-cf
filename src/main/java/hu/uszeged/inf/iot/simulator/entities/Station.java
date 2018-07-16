@@ -1,4 +1,4 @@
-package iot.extension;
+package hu.uszeged.inf.iot.simulator.entities;
 
 import java.util.ArrayList;
 import java.util.EnumMap;

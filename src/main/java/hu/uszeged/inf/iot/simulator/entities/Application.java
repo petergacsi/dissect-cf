@@ -1,4 +1,4 @@
-package iot.extension;
+package hu.uszeged.inf.iot.simulator.entities;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,7 +11,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeExcepti
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import iotprovider.Provider;
+import hu.uszeged.inf.iot.simulator.providers.Provider;
 
 /**
  * This class start virtual machines and run ComputeTasks on it depending on the generated data by the stations.
