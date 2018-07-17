@@ -11,6 +11,11 @@
       <reposize>60000</reposize>
       <ratio>1</ratio>
       <strategy>random</strategy>
+      <shutdown>
+      	<number>5</number>
+      	<from>2</from>
+      	<to>8</to>
+      </shutdown>
    </device>
 
 	<device starttime="10" stoptime="86400000" number="200" filesize="50">
@@ -24,5 +29,10 @@
       <reposize>60000</reposize>
       <ratio>1</ratio>
       <strategy>cost</strategy>
+      <shutdown>
+      	<number>5</number>
+      	<from>1</from>
+      	<to>10</to>
+      </shutdown>
    </device>
 </devices>

@@ -28,22 +28,30 @@ public class DeviceModel {
 		long repofilesize;
 		double ratio;
 		String strategy;
-
+		int shutdown;
+		ShutdownModel sm;
+		
+		
 		
 		@Override
 		public String toString() {
 			return "DeviceModel [name=" + name + ", number=" + number + ", freq=" + freq + ", sensor=" + sensor
-					+ ", filesize=" + filesize + ", starttime=" + starttime + ", stoptime=" + stoptime + ", maxinbw=" + maxinbw
-					+ ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", repository=" + repository + ", repofilesize="
-					+ repofilesize + ", ratio=" + ratio + ", strategy=" + strategy + "]";
+					+ ", filesize=" + filesize + ", starttime=" + starttime + ", stoptime=" + stoptime + ", maxinbw="
+					+ maxinbw + ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", repository=" + repository
+					+ ", repofilesize=" + repofilesize + ", ratio=" + ratio + ", strategy=" + strategy + ", shutdown="
+					+ shutdown + ", sm=" + sm + "]";
 		}
-		
+
 		@XmlElement( name = "name" )
 		public void setName(String name) {
 			this.name = name;
 		}
 
-		
+		@XmlElement( name = "shutdown" )
+		public void setSm(ShutdownModel sm) {
+			this.sm = sm;
+		}
+
 		@XmlElement( name = "freq" )
 		public void setFreq(long freq) {
 			this.freq = freq;
@@ -53,8 +61,6 @@ public class DeviceModel {
 		public void setSensor(int sensor) {
 			this.sensor = sensor;
 		}
-		
-	
 		
 		@XmlElement( name = "maxinbw" )
 		public void setMaxinbw(long maxinbw) {
@@ -93,13 +99,12 @@ public class DeviceModel {
 
 		@XmlAttribute( name = "filesize", required = true )
 		public void setfilesize(long filesize) {
-			System.out.println("kurvaanyad");
 			this.filesize = filesize;
 		}
 
 		@XmlAttribute( name = "number" )
 		public void setNumber(int number) {
-			System.out.println("kurvaanyad");
+
 			this.number = number;
 		}
 		@XmlAttribute( name = "starttime", required = true )
@@ -114,7 +119,7 @@ public class DeviceModel {
 		
 
 		public static void main(String[] args) throws JAXBException {
-			  File file = new File( "/home/student/Desktop/dissect/dissect-cf/src/main/java/hu/uszeged/xml/model/WeatherStationM.xml" );
+			  File file = new File( "/home/student/Desktop/dissect/dissect-cf/src/main/java/hu/uszeged/xml/model/NEWWeatherStation.xml" );
 			  JAXBContext jaxbContext = JAXBContext.newInstance( DevicesModel.class );
 			  Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			  DevicesModel device = (DevicesModel)jaxbUnmarshaller.unmarshal( file );
