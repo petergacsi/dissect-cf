@@ -1,6 +1,8 @@
 package hu.uszeged.xml.model;
 
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -14,21 +16,21 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement( name = "device" )
 public class DeviceModel {
 
-		String name;
-		int number;
-		long freq;
-		int sensor;
-		long filesize;
-		long starttime;
-		long stoptime;
-		long maxinbw;
-		long maxoutbw;
-		long diskbw;
-		String repository;
-		long repofilesize;
-		double ratio;
-		String strategy;
-		ShutdownModel sm;
+	public String name;
+	public int number;
+	public long freq;
+	public int sensor;
+	public long filesize;
+	public long starttime;
+	public long stoptime;
+	public long maxinbw;
+	public long maxoutbw;
+	public long diskbw;
+	public String repository;
+	public long reposize;
+	public double ratio;
+	public String strategy;
+	public ShutdownModel sm;
 		
 		
 		
@@ -37,7 +39,7 @@ public class DeviceModel {
 			return "DeviceModel [name=" + name + ", number=" + number + ", freq=" + freq + ", sensor=" + sensor
 					+ ", filesize=" + filesize + ", starttime=" + starttime + ", stoptime=" + stoptime + ", maxinbw="
 					+ maxinbw + ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", repository=" + repository
-					+ ", repofilesize=" + repofilesize + ", ratio=" + ratio + ", strategy=" + strategy + ", sm=" + sm + "]";
+					+ ", reposize=" + reposize + ", ratio=" + ratio + ", strategy=" + strategy + ", sm=" + sm + "]";
 		}
 
 		@XmlElement( name = "name" )
@@ -81,8 +83,8 @@ public class DeviceModel {
 		}
 		
 		@XmlElement( name = "repofilesize" )
-		public void setRepofilesize(long repofilesize) {
-			this.repofilesize = repofilesize;
+		public void setReposize(long reposize) {
+			this.reposize = reposize;
 		}
 		
 		@XmlElement( name = "ratio" )
@@ -116,12 +118,12 @@ public class DeviceModel {
 		}
 		
 
-		public static void main(String[] args) throws JAXBException {
-			  File file = new File( "/home/student/Desktop/dissect/dissect-cf/src/main/java/hu/uszeged/xml/model/NEWWeatherStation.xml" );
+		public static ArrayList<DeviceModel>  loadDeviceXML(String stationfile) throws JAXBException {
+			  File file = new File( "stationfile" );
 			  JAXBContext jaxbContext = JAXBContext.newInstance( DevicesModel.class );
 			  Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			  DevicesModel device = (DevicesModel)jaxbUnmarshaller.unmarshal( file );
-			  System.out.println( device );
+			  return device.deviceList;
 
 		}
 }

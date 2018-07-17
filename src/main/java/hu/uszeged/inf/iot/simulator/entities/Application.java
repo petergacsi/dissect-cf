@@ -3,6 +3,9 @@ package hu.uszeged.inf.iot.simulator.entities;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.TreeMap;
+
+import javax.xml.bind.JAXBException;
+
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -13,7 +16,10 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAda
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
+import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
+import hu.uszeged.xml.model.ApplicationModel;
+import hu.uszeged.xml.model.InstanceModel;
 
 /**
  * This class start virtual machines and run ComputeTasks on it depending on the generated data by the stations.
@@ -22,6 +28,8 @@ import hu.uszeged.inf.iot.simulator.providers.Provider;
  */
 public class Application extends Timed {
 
+	
+	
 	/**
 	 * This class collects the important data about a working virtual machine (number of tasks, working time,etc.).
 	 * Osztalyba foglalja az adott virtualis gepet, a VM altal elvegzett osszes feladat 
@@ -141,19 +149,20 @@ public class Application extends Timed {
 		return name;
 	}
 
-	/**
-	 * Privat konstruktor, hogy csak osztalyon belulrol lehessen hivni
-	 */
-	public Application(final long freq,long tasksize, boolean delay, int print,Cloud cloud,ArrayList<Station> stations,String name,Provider p) {
-		subscribe(freq);
-		this.print = print;
+	public static void loadApplication(String appfile) throws JAXBException {
+		for(ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
+			Application app = new Application(am.freq,am.tasksize,am.cloud,am.instance,am.name);
+		}
+	}
+
+	private Application(final long freq,long tasksize,String cloud,String instance,String name) {
 		this.vmlist = new ArrayList<VmCollector>();
-		this.delay = delay;
 		this.tasksize=tasksize;
-		this.cloud = cloud;
-		this.stations = stations;
+		this.cloud = Cloud.addApplication(this,cloud);
 		this.name = name;
-		p.setApp(this);
+		if(cloud!=null) {
+			subscribe(freq);
+		}
 	}
 
 	/**

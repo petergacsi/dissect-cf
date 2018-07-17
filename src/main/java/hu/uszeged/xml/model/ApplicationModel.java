@@ -15,15 +15,21 @@ import hu.uszeged.inf.iot.simulator.entities.Application;
 @XmlRootElement( name = "application" )
 public class ApplicationModel {
 
-		long tasksize;
-		String cloud;
-		String instance;
-		String iotPricing;
-
+		public long tasksize;
+		public String cloud;
+		public String instance;
+		public String iotPricing;
+		public long freq;
+		public String name;
+		
 		@Override
 		public String toString() {
 			return "ApplicationModel [tasksize=" + tasksize + ", cloud=" + cloud + ", instance=" + instance
-					+ ", iotPricing=" + iotPricing + "]";
+					+ ", iotPricing=" + iotPricing + ", freq=" + freq + ", name=" + name + "]";
+		}
+		@XmlElement( name = "name" )
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		@XmlAttribute( name = "tasksize", required = true )
@@ -46,7 +52,12 @@ public class ApplicationModel {
 			this.iotPricing = iotPricing;
 		}
 		
-		public static ArrayList<Application> loadApplicationXML(String appfile)throws JAXBException{
+		@XmlElement( name = "freq" )
+		public void setFreq(long freq) {
+			this.freq = freq;
+		}
+
+		public static ArrayList<ApplicationModel> loadApplicationXML(String appfile)throws JAXBException{
 				 File file = new File( appfile);
 				 JAXBContext jaxbContext = JAXBContext.newInstance( ApplicationsModel.class );
 				 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

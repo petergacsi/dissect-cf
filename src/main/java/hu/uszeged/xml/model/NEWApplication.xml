@@ -2,18 +2,24 @@
 <applications>
 
 	<application tasksize="2500000">
+		<name>Idokep-1</name>
+		<freq>300000</freq>
 		<cloud>felho1</cloud>
 		<instance>azure-small</instance>
 		<iot-pricing>bluemix</iot-pricing>
 	</application>
 	
 	<application tasksize="2500000">
+		<name>Idokep-2</name>
+		<freq>300000</freq>
 		<cloud>felho1</cloud>
 		<instance>azure-small</instance>
 		<iot-pricing>bluemix</iot-pricing>
 	</application>
 	
-	<application tasksize="30000">
+	<application tasksize="3000000">
+		<name>Idokep-3</name>
+		<freq>300000</freq>
 		<cloud>felho2</cloud>
 		<instance>azure-small</instance>
 		<iot-pricing>oracle</iot-pricing>

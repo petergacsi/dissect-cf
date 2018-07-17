@@ -5,9 +5,14 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import javax.xml.bind.JAXBException;
+
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
+import hu.uszeged.xml.model.ApplicationModel;
+import hu.uszeged.xml.model.DeviceModel;
 import hu.mta.sztaki.lpds.cloud.simulator.*;
 import hu.mta.sztaki.lpds.cloud.simulator.energy.powermodelling.PowerState;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -53,7 +58,7 @@ public class Station extends Timed implements Device{
 		/**
 		 * Size of the generated data. A generalt adatmerete.
 		 */
-		private int filesize;
+		private long filesize;
 
 		/**
 		 * Number of the station's sensors. A station szenzorjainak a szama.
@@ -122,7 +127,7 @@ public class Station extends Timed implements Device{
 		 * @param stt
 		 *            time when the data sending and data generating stops - az
 		 *            az ido, mikor befejezodik az adatgeneralas es adatkuldes
-		 * @param fs
+		 * @param filesize2
 		 *            size of the generated data - a generalt adat merete
 		 * @param sn
 		 *            count of the sensors which generate the data - szenzorok
@@ -134,22 +139,21 @@ public class Station extends Timed implements Device{
 		 *            ID of the station - station azonosito
 		 * @param torepo
 		 *            ID of the repository (its name) - a cel repository neve
-		 * @param ratio
+		 * @param ratio2
 		 *            how much unit of data will be locally store before sending
 		 *            - lokalis adattarolasi aranyt mondja meg az adatkuldes
 		 *            elott
 		 */
-		public Stationdata(long lt, long st, long stt, int fs, int sn, long freq, String name, String torepo,
-				int ratio) {
-			this.lifetime = lt;
+		public Stationdata(long st, long stt, long filesize2, int sn, long freq, String name, String torepo,
+				double ratio2) {
 			this.starttime = st;
 			this.stoptime = stt;
-			this.filesize = fs;
+			this.filesize = filesize2;
 			this.sensornumber = sn;
 			this.freq = freq;
 			this.name = name;
 			this.torepo = torepo;
-			this.ratio = ratio;
+			this.ratio = ratio2;
 		}
 
 		/**
@@ -694,5 +698,17 @@ public class Station extends Timed implements Device{
 			
 		};
 		
+	}
+
+	@Override
+	public void shutdownProcess() {
+		// TODO Auto-generated method stub
+	}
+
+	public static void loadDevice(String stationfile) throws JAXBException, NetworkException {
+		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
+			Stationdata sd = new Stationdata(dm.starttime,dm.stoptime,dm.filesize,dm.sensor,dm.freq,dm.name,dm.repository,dm.ratio);
+			Station s = new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,false,dm.strategy);
+		}
 	}
 }

@@ -18,18 +18,18 @@ public class InstanceModel {
 		@Override
 	public String toString() {
 		return "Instances [ram=" + ram + ", cpuCores=" + cpuCores + ", pricePerTick=" + pricePerTick
-				+ ", corProcessingPower=" + corProcessingPower + ", startupProcess=" + startupProcess + ", networkLoad="
+				+ ", coreProcessingPower=" + coreProcessingPower + ", startupProcess=" + startupProcess + ", networkLoad="
 				+ networkLoad + ", reqDisk=" + reqDisk + ", name=" + name + "]";
 	}
 
-		long ram;
-		int cpuCores;
-		double pricePerTick;
-		double corProcessingPower;
-		long startupProcess;
-		long networkLoad;
-		long reqDisk;
-		String name;
+		public long ram;
+		public int cpuCores;
+		public double pricePerTick;
+		public double coreProcessingPower;
+		public long startupProcess;
+		public long networkLoad;
+		public long reqDisk;
+		public String name;
 
 		@XmlElement( name = "ram" )
 		public void setRam(long ram) {
@@ -47,8 +47,8 @@ public class InstanceModel {
 		}
 
 		@XmlElement( name = "core-processing-power" )
-		public void setCorProcessingPower(double corProcessingPower) {
-			this.corProcessingPower = corProcessingPower;
+		public void setCorProcessingPower(double coreProcessingPower) {
+			this.coreProcessingPower = coreProcessingPower;
 		}
 
 		@XmlElement( name = "startup-process" )
@@ -71,7 +71,7 @@ public class InstanceModel {
 		}
 
 
-		 public static ArrayList<InstanceModel> loadInstances(String datafile) throws JAXBException {
+		 public static ArrayList<InstanceModel> loadInstanceXML(String datafile) throws JAXBException {
 			  File file = new File( datafile );
 			  JAXBContext jaxbContext = JAXBContext.newInstance( InstancesModel.class );
 			  Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
