@@ -5,9 +5,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-
 import javax.xml.bind.JAXBException;
-
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
@@ -27,7 +25,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption
  * szimulalja egy IoT okos eszkoz mukodeset. A szimulacio soran idotol fuggo,
  * visszatero esemenykent mukodik.
  */
-public class Station extends Timed implements Device{
+public class Station extends Device{
 
 	/**
 	 * This class helps to handle the attributon of station because for
@@ -686,29 +684,23 @@ public class Station extends Timed implements Device{
 				+ ", messagecount=" + messagecount + ", generatedfilesize=" + generatedfilesize + "]";
 	}
 
+	
+	public static void loadDevice(String stationfile) throws Exception {
+		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
+			Stationdata sd = new Stationdata(dm.starttime,dm.stoptime,dm.filesize,dm.sensor,dm.freq,dm.name,dm.repository,dm.ratio);
+			Station s = new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,false,dm.strategy);
+		}
+	}
+
 	@Override
 	public void installionProcess() {
-		new DeferredEvent(this.sd.starttime) {
-
-			@Override
-			protected void eventAction() {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		};
+		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void shutdownProcess() {
 		// TODO Auto-generated method stub
-	}
-
-	public static void loadDevice(String stationfile) throws JAXBException, NetworkException {
-		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
-			Stationdata sd = new Stationdata(dm.starttime,dm.stoptime,dm.filesize,dm.sensor,dm.freq,dm.name,dm.repository,dm.ratio);
-			Station s = new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,false,dm.strategy);
-		}
+		
 	}
 }

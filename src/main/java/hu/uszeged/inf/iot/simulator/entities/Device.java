@@ -1,9 +1,15 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
-public interface Device {
+import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 
-	public void installionProcess();
+public abstract class Device extends Timed {
+
+	public abstract void installionProcess();
 	
-	public void shutdownProcess();
+	public abstract void shutdownProcess();
+	
+	public static void loadDevice(String stationfile) throws Exception {
+		// need to override
+	};
 
 }

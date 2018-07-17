@@ -17,7 +17,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
-import hu.uszeged.inf.iot.simulator.providers.Provider;
+//import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.xml.model.ApplicationModel;
 import hu.uszeged.xml.model.InstanceModel;
 
@@ -117,7 +117,7 @@ public class Application extends Timed {
 	//	return app;
 	//}
 
-	//private static ArrayList<Application> app = new ArrayList<Application>();
+	//public static ArrayList<Application> app = new ArrayList<Application>();
 	private static long finishedTime;
 	private static int starterVar = 0; 
 	private  int i = 0;
@@ -133,9 +133,8 @@ public class Application extends Timed {
 	public Cloud cloud;
 	public ArrayList<Station> stations;
 	private String name;
-	private Provider provider; //TODO: app = user, egyeni arazas
-	private VirtualAppliance va;
-	private AlterableResourceConstraints arc;
+	//private Provider provider; //TODO: app = user, egyeni arazas
+	Instance instance;
 	
 	public static long getFinishedTime() {
 		return finishedTime;
@@ -151,7 +150,7 @@ public class Application extends Timed {
 
 	public static void loadApplication(String appfile) throws JAXBException {
 		for(ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
-			Application app = new Application(am.freq,am.tasksize,am.cloud,am.instance,am.name);
+			new Application(am.freq,am.tasksize,am.cloud,am.instance,am.name);
 		}
 	}
 
@@ -163,6 +162,8 @@ public class Application extends Timed {
 		if(cloud!=null) {
 			subscribe(freq);
 		}
+		this.instance= Instance.instances.get(instance);
+		
 	}
 
 	/**
@@ -437,5 +438,8 @@ public class Application extends Timed {
 	}
 		//System.out.println(max);
 	return max;
+	}
+	public static void addStation(Station s,Application a) {
+		a.stations.add(s);
 	}
 }
