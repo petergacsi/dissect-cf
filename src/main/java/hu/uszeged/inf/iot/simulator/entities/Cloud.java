@@ -1,6 +1,7 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
 import hu.mta.sztaki.lpds.cloud.simulator.util.*;
+import hu.uszeged.xml.model.InstanceModel;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,18 +28,18 @@ public class Cloud {
 	 * IaaS szolgalatatas, ami fizikai gepeket es tarolokat tartalmaz.
 	 */
 	private IaaSService iaas;
-
+	String name;
 	/**
 	 * It contains a picture for the virtual machines. Ez a valtozo tartalmazza
 	 * a kepfajl a letrehozando virtualis gephez.
 	 */
-	private VirtualAppliance va;
+	//private VirtualAppliance va;
 
 	/**
 	 * It contains the need of a virtual machnine. A virtualis gep
 	 * eroforrasszukseglete.
 	 */
-	private AlterableResourceConstraints arc;
+	//private AlterableResourceConstraints arc;
 
 	/**
 	 * Static ArrayList to collect the created clouds which we use during the
@@ -46,6 +47,9 @@ public class Cloud {
 	 * felhoket.
 	 */
 	private static ArrayList<Cloud> clouds = new ArrayList<Cloud>();
+	public static ArrayList<Application> applications = new ArrayList<Application>();
+	public static ArrayList<InstanceModel> instances = new ArrayList<InstanceModel>(); 
+	
 
 	/**
 	 * Getter method for the list of clouds. Getter metodus a felho listahoz.
@@ -65,31 +69,31 @@ public class Cloud {
 	 * Getter method for the virtual appliance. Getter metodus a virtualis
 	 * kepfajlhoz.
 	 */
-	VirtualAppliance getVa() {
-		return va;
-	}
+//	VirtualAppliance getVa() {
+//		return va;
+//	}
 
 	/**
 	 * Getter method for the resource constraint of VM. Getter metodus a VM
 	 * eroforrasigenyhez.
 	 */
-	AlterableResourceConstraints getArc() {
+//	AlterableResourceConstraints getArc() {
 
-		return arc;
-	}
+//		return arc;
+//	}
 
 
 	public void setIaas(IaaSService iaas) {
 		this.iaas = iaas;
 	}
 
-	public void setVa(VirtualAppliance va) {
-		this.va = va;
-	}
+//	public void setVa(VirtualAppliance va) {
+//		this.va = va;
+//	}
 
-	public void setArc(AlterableResourceConstraints arc) {
-		this.arc = arc;
-	}
+//	public void setArc(AlterableResourceConstraints arc) {
+//		this.arc = arc;
+//	}
 
 	/**
 	 * The constructor creates the cloud with default VirtualAppliance and
@@ -111,26 +115,27 @@ public class Cloud {
 	 *            the path of the XML file - az IaaS felhot tartalmazo XML
 	 *            eleresi utvonala
 	 */
-	public Cloud(String cloudfile,VirtualAppliance p_va, IaaSService iaas,AlterableResourceConstraints p_arc)
-			throws IOException, SAXException, ParserConfigurationException {
-		if (p_va == null) {
-			this.va = new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
-		} else {
-			this.va = p_va;
-		}
-		
+	public Cloud(String cloudfile,String name)throws IOException, SAXException, ParserConfigurationException {
+	//	if (p_va == null) {
+		//	this.va = new VirtualAppliance("BaseVA", 100, 0, false, 1000000);
+		//} else {
+		//	this.va = p_va;
+		//}
+		this.name=name;
 		if (iaas == null) {
 			this.iaas = CloudLoader.loadNodes(cloudfile);
 		} else {
 			this.iaas = iaas;
 		}
-		if (p_arc == null) {
-			this.arc = new AlterableResourceConstraints(7, 0.001, 4294967296l);
-		} else {
-			this.arc = p_arc;
-}
-		this.iaas.repositories.get(0).registerObject(this.getVa());
+//		if (p_arc == null) {
+//			this.arc = new AlterableResourceConstraints(7, 0.001, 4294967296l);
+//		} else {
+//			this.arc = p_arc;
+//}
+		//this.iaas.repositories.get(0).registerObject(this.getVa());
 		Cloud.clouds.add(this);
+		
+		
 	/*	CloudPricing myProvider = new ResourceDependentProvider(datafile, provider);
 		CostAnalyserandPricer theCostAnalyser = new CostAnalyserandPricer(this.iaas);
 		myProvider.setIaaSService(this.iaas);

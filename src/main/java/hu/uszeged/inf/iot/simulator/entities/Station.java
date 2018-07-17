@@ -22,7 +22,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption
  * szimulalja egy IoT okos eszkoz mukodeset. A szimulacio soran idotol fuggo,
  * visszatero esemenykent mukodik.
  */
-public class Station extends Timed {
+public class Station extends Timed implements Device{
 
 	/**
 	 * This class helps to handle the attributon of station because for
@@ -680,5 +680,19 @@ public class Station extends Timed {
 				+ time + ", lmap=" + lmap + ", lat=" + lat + ", i=" + i + ", vm=" + vm + ", pm=" + pm + ", isWorking="
 				+ isWorking + ", randommetering=" + randommetering + ", cloud=" + cloud + ", cloudnumber=" + cloudnumber
 				+ ", messagecount=" + messagecount + ", generatedfilesize=" + generatedfilesize + "]";
+	}
+
+	@Override
+	public void installionProcess() {
+		new DeferredEvent(this.sd.starttime) {
+
+			@Override
+			protected void eventAction() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		};
+		
 	}
 }

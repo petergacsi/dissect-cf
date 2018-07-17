@@ -8,9 +8,11 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
+import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
 
 /**
@@ -103,11 +105,11 @@ public class Application extends Timed {
 		}
 	}
 	//TODO: here we go
-	public static ArrayList<Application> getApp() {
-		return app;
-	}
+	//public static ArrayList<Application> getApp() {
+	//	return app;
+	//}
 
-	private static ArrayList<Application> app = new ArrayList<Application>();
+	//private static ArrayList<Application> app = new ArrayList<Application>();
 	private static long finishedTime;
 	private static int starterVar = 0; 
 	private  int i = 0;
@@ -124,7 +126,8 @@ public class Application extends Timed {
 	public ArrayList<Station> stations;
 	private String name;
 	private Provider provider; //TODO: app = user, egyeni arazas
-	
+	private VirtualAppliance va;
+	private AlterableResourceConstraints arc;
 	
 	public static long getFinishedTime() {
 		return finishedTime;
@@ -218,7 +221,7 @@ public class Application extends Timed {
 						System.exit(0);
 					}
 					this.vmlist.get(i).vm.switchOn(
-							this.vmlist.get(i).pm.allocateResources( this.cloud.getArc(), false, PhysicalMachine.defaultAllocLen),
+							this.vmlist.get(i).pm.allocateResources( this.arc, false, PhysicalMachine.defaultAllocLen),
 							 this.cloud.getIaas().repositories.get(0));
 					
 				} catch (Exception e) {
@@ -243,13 +246,13 @@ public class Application extends Timed {
 				for(PhysicalMachine pm : this.cloud.getIaas().machines){
 					//System.err.println(pm.availableCapacities);
 					
-					if(pm.availableCapacities.getRequiredCPUs()>=this.cloud.getArc().getRequiredCPUs()){
+					if(pm.availableCapacities.getRequiredCPUs()>=this.arc.getRequiredCPUs()){
 						vanpm=true;
 					}
 				}
 				if(vanpm){ // csak akkor kerjunk uj vm-et ha van fizikai eroforrasunkra.
 					this.vmlist.add(new VmCollector(
-							 this.cloud.getIaas().requestVM( this.cloud.getVa(),  this.cloud.getArc(),  this.cloud.getIaas().repositories.get(0), 1)[0]));	
+							 this.cloud.getIaas().requestVM( this.va,  this.arc,  this.cloud.getIaas().repositories.get(0), 1)[0]));	
 				}	
 				
 			}

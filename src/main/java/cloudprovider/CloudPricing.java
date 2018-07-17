@@ -1,5 +1,8 @@
 package cloudprovider;
-
+/**
+ * currently this package /cloudprovider/ is under revision and not used.
+ * further information: markus.andras@stud.u-szeged.hu
+ */
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.IaaSService;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.ResourceConstraints;
 

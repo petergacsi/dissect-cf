@@ -1,5 +1,8 @@
 package cloudprovider;
-
+/**
+ * currently this package /cloudprovider/ is under revision and not used.
+ * further information: markus.andras@stud.u-szeged.hu
+ */
 import java.io.File;
 import java.io.IOException;
 

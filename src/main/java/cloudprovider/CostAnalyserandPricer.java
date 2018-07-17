@@ -21,7 +21,10 @@
  *  (C) Copyright 2015, Gabor Kecskemeti (kecskemeti@iit.uni-miskolc.hu)
  */
 package cloudprovider;
-
+/**
+ * currently this package /cloudprovider/ is under revision and not used.
+ * further information: markus.andras@stud.u-szeged.hu
+ */
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

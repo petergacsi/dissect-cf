@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.providers;
+	package hu.uszeged.inf.iot.simulator.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -312,7 +312,7 @@ public abstract class Provider extends Timed{
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(fXmlFile);
 		doc.getDocumentElement().normalize();
-		
+	
 		System.out.println(datafile + " "+ size + " "+ target);
 		
 		nList = doc.getElementsByTagName(target);

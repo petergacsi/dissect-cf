@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devices>
+	<device starttime="0" stoptime="86400000" number="200" filesize="50">
+      <name>0-24</name>
+      <freq>60000</freq>
+      <sensor>8</sensor>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <repository>ceph</repository>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>random</strategy>
+   </device>
+
+	<device starttime="10" stoptime="86400000" number="200" filesize="50">
+      <name >0-24</name>
+      <freq>60000</freq>
+      <sensor>8</sensor>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <repository>ceph</repository>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>cost</strategy>
+   </device>
+</devices>
