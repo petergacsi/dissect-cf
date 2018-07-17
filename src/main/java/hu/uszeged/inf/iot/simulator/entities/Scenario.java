@@ -37,7 +37,7 @@ import hu.uszeged.inf.iot.simulator.providers.Provider;
   *  Az osztaly fo feladata, hogy lefuttassa a teljes szimulaciot XML fajlok alapjan.
   */
 public class Scenario {
-	
+	/*
 	private static int filesize;
 	private static long simulatedTime;
 	
@@ -353,7 +353,7 @@ public class Scenario {
 			
 		}
 		
-		
+		*/
 	
 		
 		

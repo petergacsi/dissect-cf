@@ -1,4 +1,4 @@
-	package hu.uszeged.inf.iot.simulator.providers;
+/*	package hu.uszeged.inf.iot.simulator.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -294,7 +294,7 @@ public abstract class Provider extends Timed{
 		this.CloudCostCounter();
 		/******************************************************************/
 		// shutdown test
-		boolean tmp = false;
+	/*	boolean tmp = false;
 		for(Application a : Application.getApp()){
 			if(a.isSubscribed()){
 				tmp = true;
@@ -404,3 +404,4 @@ public abstract class Provider extends Timed{
 		Provider.providerList.add(p);
 	}
 }
+*/

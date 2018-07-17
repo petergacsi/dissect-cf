@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.providers;
+/*package hu.uszeged.inf.iot.simulator.providers;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class CloudsProvider extends Provider {
 						this.setUserIotCost(this.getUserIotCost()+this.getDevicepricePerMonth()*s.getSd().getSensornumber()*month);
 					}
 					/* additional cost*/
-					long device = s.getMessagecount()/s.getSd().getSensornumber();// 1 device hany uzenetet generalt
+/*					long device = s.getMessagecount()/s.getSd().getSensornumber();// 1 device hany uzenetet generalt
 					s.setMessagecount(0); 
 					if(device>this.getMessagesPerMonthPerDevice()){
 						device-=this.getMessagesPerMonthPerDevice();
@@ -130,3 +130,4 @@ public class CloudsProvider extends Provider {
 		this.setUserCloudCost((cost1+cost2));
 	}
 }
+*/

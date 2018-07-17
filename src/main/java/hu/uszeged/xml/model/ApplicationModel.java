@@ -1,13 +1,16 @@
 package hu.uszeged.xml.model;
 
 import java.io.File;
+import java.util.ArrayList;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
+
+import hu.uszeged.inf.iot.simulator.entities.Application;
 
 @XmlRootElement( name = "application" )
 public class ApplicationModel {
@@ -17,8 +20,6 @@ public class ApplicationModel {
 		String instance;
 		String iotPricing;
 
-		
-		
 		@Override
 		public String toString() {
 			return "ApplicationModel [tasksize=" + tasksize + ", cloud=" + cloud + ", instance=" + instance
@@ -44,13 +45,18 @@ public class ApplicationModel {
 		public void setIotPricing(String iotPricing) {
 			this.iotPricing = iotPricing;
 		}
-
-		public static void main(String[] args) throws JAXBException {
-			  File file = new File( "/home/student/Desktop/dissect/dissect-cf/src/main/java/hu/uszeged/xml/model/Application.xml" );
-			  JAXBContext jaxbContext = JAXBContext.newInstance( ApplicationsModel.class );
-			  Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			  ApplicationsModel app = (ApplicationsModel)jaxbUnmarshaller.unmarshal( file );
-			  System.out.println( app );
-
+		
+		public static ArrayList<Application> loadApplicationXML(String appfile)throws JAXBException{
+				 File file = new File( appfile);
+				 JAXBContext jaxbContext = JAXBContext.newInstance( ApplicationsModel.class );
+				 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+				 ApplicationsModel app = (ApplicationsModel)jaxbUnmarshaller.unmarshal( file );
+				 // System.out.println( app );
+				 
+				 return app.applicationList;
 		}
+			
+			 
+
+		
 }
