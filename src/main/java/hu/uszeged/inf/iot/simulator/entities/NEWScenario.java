@@ -1,5 +1,6 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
+import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 
 public class NEWScenario {
@@ -20,6 +21,8 @@ public class NEWScenario {
 		Station.loadDevice(stationfile);
 		
 		// Start the simulation
+		Timed.simulateUntilLastEvent();
 		
+		// Print some informations to the monitor / in file
 	}
 }

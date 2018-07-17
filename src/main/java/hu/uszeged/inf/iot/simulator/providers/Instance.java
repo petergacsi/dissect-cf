@@ -9,10 +9,10 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.uszeged.xml.model.InstanceModel;
 
 public class Instance {
-	VirtualAppliance va;
+	public VirtualAppliance va;
 	String name;
-	AlterableResourceConstraints arc;
-	double pricePerTick;
+	public AlterableResourceConstraints arc;
+	public double pricePerTick;
 	
 	public static HashMap<String,Instance> instances;
 	

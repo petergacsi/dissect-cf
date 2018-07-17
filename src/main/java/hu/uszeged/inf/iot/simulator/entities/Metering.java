@@ -20,7 +20,7 @@ class Metering extends DeferredEvent {
 	/**
 	 * It stores the size of the metered data. Tarolja a mert adat meretet.
 	 */
-	private int filesize;
+	private long filesize;
 
 	/**
 	 * This repository will store the data. Ez a repository fogja tarolni az
@@ -56,7 +56,7 @@ class Metering extends DeferredEvent {
 	 * @param delay
 	 *            delay time for the event - kesleltetett ido az esemenyhez
 	 */
-	Metering(Station s, int sensorID, int filesize, long delay,int cloudnumber) {
+	Metering(Station s, int sensorID, long filesize, long delay,int cloudnumber) {
 		super(delay);
 		this.r = s.getRepo();
 		this.sensorID = sensorID;

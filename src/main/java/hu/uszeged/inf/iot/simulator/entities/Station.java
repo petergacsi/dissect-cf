@@ -5,357 +5,93 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import javax.xml.bind.JAXBException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
-import hu.uszeged.xml.model.ApplicationModel;
 import hu.uszeged.xml.model.DeviceModel;
 import hu.mta.sztaki.lpds.cloud.simulator.*;
 import hu.mta.sztaki.lpds.cloud.simulator.energy.powermodelling.PowerState;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.State;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.*;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
 
-/**
- * This class simulates one of the IoT world's entity which is the smart device.
- * Behavior of the class depends on time (as recurring event). Az osztaly
- * szimulalja egy IoT okos eszkoz mukodeset. A szimulacio soran idotol fuggo,
- * visszatero esemenykent mukodik.
- */
 public class Station extends Device{
 
-	/**
-	 * This class helps to handle the attributon of station because for
-	 * transparency and instantiation. Kulon osztaly a Station fobb adatainak a
-	 * konnyebb attekinthetoseg es peldanyositas erdekeben.
-	 */
+	
 	public static class Stationdata {
 
-		/**
-		 *
-		 * The final time when the station send data. Az utolso ido, mikor a
-		 * station meg adatot fog kuldeni.
-		 */
-		private long lifetime;
-
-		/**
-		 * The time when the station starts generating and sending data. Az az
-		 * ido, mikor a station elkezdi az adatgeneralast es az adatkuldest.
-		 */
 		long starttime;
-
-		/**
-		 * The time when the station stops generating and sending data. Az az
-		 * ido, mikor a station befejezi az adatgeneralast es az adatkuldest.
-		 */
-		 long stoptime;
-
-		/**
-		 * Size of the generated data. A generalt adatmerete.
-		 */
+		long stoptime;
 		private long filesize;
-
-		/**
-		 * Number of the station's sensors. A station szenzorjainak a szama.
-		 */
 		private int sensornumber;
-
-		/**
-		 * The frequncy which tells the time between generating-sending data. A
-		 * frekvencia, amely megmondja mennyi ido teljen el 2 adatgeneralas es
-		 * adatkuldes kozott.
-		 */
 		private long freq;
-
-		/**
-		 * Name ID of the station. Station azonosito.
-		 */
 		private String name;
-
-		/**
-		 * Name ID of the repository which will receive the data A repository
-		 * ID, amelyik fogadja az adatot.
-		 */
 		private String torepo;
-
-		/**
-		 * It tells how much unit of data will be locally store before sending.
-		 * Arany, amely megmondja, hogy hany egysegnyi adat legyen lokalisan
-		 * eltarolva kuldes elott.
-		 */
-		private int ratio;
-
-		/**
-		 * Getter method for data sending-generating frequency of the station.
-		 * Getter metodus a station frekvenciajahoz.
-		 */
-		public long getFreq() {
-			return freq;
-		}
-
-		/**
-		 * Getter method for the final time when data sending can happen. Getter
-		 * metodus a vegso idohoz amikor tortenhet meg adatkuldes.
-		 */
-		public long getLifetime() {
-			return lifetime;
-		}
-
-		/**
-		 * Getter method for the number of station's sensors. Getter metodus a
-		 * station szenzorainak szamahoz.
-		 */
-		public int getSensornumber() {
-			return sensornumber;
-		}
+		private double ratio;
 
 		
-		
-		/**
-		 * Constructor creates useful and necessary data for work of a station.
-		 * 
-		 * @param lt
-		 *            final time to sending data - utolso ido adatkuldeshez
-		 * @param st
-		 *            time when the data sending and data generating starts - az
-		 *            az ido, mikor elkezdodik az adatgeneralas es adatkuldes
-		 * @param stt
-		 *            time when the data sending and data generating stops - az
-		 *            az ido, mikor befejezodik az adatgeneralas es adatkuldes
-		 * @param filesize2
-		 *            size of the generated data - a generalt adat merete
-		 * @param sn
-		 *            count of the sensors which generate the data - szenzorok
-		 *            szama,amelyek adatot generalnak
-		 * @param freq
-		 *            time frequency between generate-send data - frekvencia 2
-		 *            adatgeneralas-kuldes kozott
-		 * @param name
-		 *            ID of the station - station azonosito
-		 * @param torepo
-		 *            ID of the repository (its name) - a cel repository neve
-		 * @param ratio2
-		 *            how much unit of data will be locally store before sending
-		 *            - lokalis adattarolasi aranyt mondja meg az adatkuldes
-		 *            elott
-		 */
-		public Stationdata(long st, long stt, long filesize2, int sn, long freq, String name, String torepo,
-				double ratio2) {
+		public Stationdata(long st, long stt, long filesize, int sn, long freq, String name, String torepo,
+				double ratio) {
 			this.starttime = st;
 			this.stoptime = stt;
-			this.filesize = filesize2;
+			this.filesize = filesize;
 			this.sensornumber = sn;
 			this.freq = freq;
 			this.name = name;
 			this.torepo = torepo;
-			this.ratio = ratio2;
+			this.ratio = ratio;
 		}
 
-		/**
-		 * toString can be useful for debuging or loging. toString metodus
-		 * debugolashoz,logolashoz.
-		 */
-		@Override
-		public String toString() {
-			return "Stationdata [lifetime=" + lifetime + ", starttime=" + starttime + ", stoptime=" + stoptime
-					+ ", filesize=" + filesize + ", sensornumber=" + sensornumber + ", freq=" + freq + ", name=" + name
-					+ ", torepo=" + torepo + ", ratio=" + ratio + "]";
-		}
 	}
 
 	
-	public boolean founded;
-	public static final double minpower = 20;
-	public static final double idlepower = 200;
-	public static final double maxpower = 300;
-	public static final double diskDivider = 10;
-	public static final double netDivider = 20;
-	public final static Map<String, PowerState> defaultStorageTransitions;
-	public final static Map<String, PowerState> defaultNetworkTransitions;
-	
-	static {
-		try {
-			EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions = PowerTransitionGenerator
-					.generateTransitions(minpower, idlepower, maxpower, diskDivider, netDivider);
-			defaultStorageTransitions = transitions.get(PowerTransitionGenerator.PowerStateKind.storage);
-			defaultNetworkTransitions = transitions.get(PowerTransitionGenerator.PowerStateKind.network);
-		} catch (Exception e) {
-			throw new IllegalStateException("Cannot initialize the default transitions");
-		}
-	}
-	/**
-	 * It contains the all important data of the station. A station osszes
-	 * fontos adatat tartalmazza.
-	 */
 	private Stationdata sd;
-
-	/**
-	 * Local repository where the data are stored. Lokalis repository az
-	 * adattarolashoz.
-	 */
 	private Repository repo;
-
-	/**
-	 * Reference for the repository which will receive the data. Referencia a
-	 * cel repository-ra, ami fogadja az adatot.
-	 */
 	private Repository torepo;
-
-	/**
-	 * Size of the local repository. A lokalis repository merete.
-	 */
 	private long reposize;
-
-	/**
-	 * It contains the time when the station start to work. Tartalmazza a
-	 * szimulalt idot,amikor a station elkezd mukodni.
-	 */
 	private long time;
-
-	/**
-	 * Necessary to organize the station's repository and the cloud repository
-	 * in the same network. Szukseges a lokalis es a cel repository kozos
-	 * halozatba szervezeshez.
-	 */
 	private HashMap<String, Integer> lmap;
-
-	/**
-	 * ID of the the common network. A kozos halozat azonositoja.
-	 */
 	private int lat;
-
-	/**
-	 * Helper variable for the shared nothing cloud. Segedvaltozo a shared
-	 * nothing felhohoz.
-	 */
 	private int i;
-
-	/**
-	 * Reference for a virtual machine which is used when we send data directly
-	 * to repository of a physical machine. Referencia a virtualis gepre ha
-	 * kozvetlenul kuldunk adotot egy fizikai gep repository-nak
-	 */
 	private VirtualMachine vm;
-
-	/**
-	 * Reference for a phisical machine which is used when we send data directly
-	 * to repository of a physical machine. Referencia a fizikai gepre ha
-	 * kozvetlenul kuldunk adotot egy fizikai gep repository-nak
-	 */
 	private PhysicalMachine pm;
-
-	/**
-	 * True if the station is working,otherwise false. Erteke igaz,ha mukodik a
-	 * station, egyebkent hamis
-	 */
 	private boolean isWorking;
-
-	/**
-	 * If true the Metering() method will be randomly delayed. Ha igaz,akkor a
-	 * Metering() metodus random kesleltetve lesz.
-	 */
 	private boolean randommetering;
-
-	/**
-	 * Reference for an IaaS Service which is the same network with this
-	 * station. Referencia arra a felhore, amellyel a station kozos halozatban
-	 * van.
-	 */
 	public Cloud cloud;
-
-	/**
-	 * It's an ID which is important when we use more clouds. A tobb felhos
-	 * szimulacioknal ez alapjan kerulhet azonositasra a celfelho.
-	 */
 	int cloudnumber;
-
-	/**
-	 * Important when we check if all data has arrived. Fontos,amikor
-	 * ellenorizzuk, hogy az osszes adat el lett-e kuldve.
-	 */
 	private int messagecount;
-
-	/**
-	 * This ArrayList can contains all stations which we use during the
-	 * simulation. A szimulacio soran ebben az ArrayList-ben tudjuk eltarolni az
-	 * osszes station-unket.
-	 */
+	public Application app;
 	private static ArrayList<Station> stations = new ArrayList<Station>();
-
-	/**
-	 * It's an Array which is important when we use more clouds to check the
-	 * sent data. A tobb felhos szimulacioknal ez alapjan kerulhet ellenorzesre
-	 * az adatmennyisegek.
-	 */
 	private static long[] stationvalue;
-
-	/**
-	 * It cointains the all size of data which was generated by this station. Az
-	 * osszes generalt adat meretet tarolja, amit ez a station generalt.
-	 */
 	public long generatedfilesize;
-
-	/**
-	 * It cointains the all size of data which was generated by stations. Az
-	 * osszes generalt adat meretet tarolja, amit az osszes station generalt.
-	 */
 	public static long allstationsize = 0;
+	
 
-	/**
-	 * This getter method give the main data of the station. A station fobb
-	 * adatait tartalmazza.
-	 */
-	public Stationdata getSd() {
-		return sd;
-	}
-
-	/**
-	 * Static getter method to reach all stations from everywhere. Statikus
-	 * getter metodus, hogy az osszes station elerheto legyen.
-	 */
 	public static ArrayList<Station> getStations() {
 		return stations;
 	}
 
-	/**
-	 * Getter method for the Array which contains ID of the cloud. Getter a
-	 * felhoazonositokat tartalmazo tombhoz.
-	 */
+	
 	public static long[] getStationvalue() {
 		return stationvalue;
 	}
 
-	/**
-	 * Setter method for the Array which contains ID of the cloud. Setter a
-	 * felhoazonositokat tartalmazo tombhoz.
-	 */
 	public static void setStationvalue(long[] stationvalue) {
 		Station.stationvalue = stationvalue;
 	}
 
-	/**
-	 * Getter method for the number of messages which was generated by the
-	 * station. Getter a station altal aloallitott uzenetek szamahoz.
-	 */
+	
 	public int getMessagecount() {
 		return messagecount;
 	}
 
-	/**
-	 * Getter method for the ID of cloud which belongs to this station. Getter
-	 * metodus a felho azonositohoz, amelyhez ez a station tartozik.
-	 */
+	
 	public int getCloudnumber() {
 		return cloudnumber;
 	}
 
-	/**
-	 * Setter method for the ID of cloud which belongs to this station. Setter
-	 * metodus a felho azonositohoz, amelyhez ez a station tartozik.
-	 */
+	
 	public void setCloudnumber(int cloudnumber) {
 		this.cloudnumber = cloudnumber;
 	}
@@ -433,7 +169,7 @@ public class Station extends Device{
 		this.i = 0;
 		this.sd = sd;
 		this.messagecount = 0;
-		isWorking = sd.lifetime == -1 ? false : true;
+		isWorking = sd.stoptime == -1 ? false : true;
 		lmap = new HashMap<String, Integer>();
 		lat = 11;
 		lmap.put(sd.name, lat);
@@ -483,7 +219,7 @@ public class Station extends Device{
 		@Override
 		public void conComplete() {
 			repo.deregisterObject(this.so);
-			cloud.getIaas().repositories.get(0).deregisterObject(this.so);
+			cloud.iaas.repositories.get(0).deregisterObject(this.so);
 
 		}
 
@@ -556,11 +292,11 @@ public class Station extends Device{
 	 */
 	private Repository findRepo(String torepo) {
 		Repository r = null;
-		for (Repository tmp : this.cloud.getIaas().repositories) {
+		for (Repository tmp : this.cloud.iaas.repositories) {
 			if (tmp.getName().equals(torepo)) {
 				r = tmp;
 			} else {
-				for (PhysicalMachine pm : this.cloud.getIaas().machines) {
+				for (PhysicalMachine pm : this.cloud.iaas.machines) {
 					if (pm.localDisk.getName().equals(torepo)) {
 						r = pm.localDisk;
 					}
@@ -580,7 +316,7 @@ public class Station extends Device{
 	 */
 	private PhysicalMachine findPm(String torepo) {
 		PhysicalMachine p = null;
-		for (PhysicalMachine pm : this.cloud.getIaas().machines) {
+		for (PhysicalMachine pm : this.cloud.iaas.machines) {
 			if (pm.localDisk.getName().equals(torepo)) {
 				p = pm;
 			}
@@ -600,7 +336,7 @@ public class Station extends Device{
 	@Override
 	public void tick(long fires) {
 		// a meres a megadott ideig tart csak - metering takes the given time
-		if (Timed.getFireCount() < (sd.lifetime + this.time) && Timed.getFireCount() >= (sd.starttime + this.time)
+		if (Timed.getFireCount() < (sd.stoptime + this.time) && Timed.getFireCount() >= (sd.starttime + this.time)
 				&& Timed.getFireCount() <= (sd.stoptime + this.time)) {
 
 			for (int i = 0; i < sd.sensornumber; i++) {
@@ -619,12 +355,12 @@ public class Station extends Device{
 		}
 		// a station mukodese addig amig az osszes SO el nem lett kuldve -
 		// stations work while there are data unsent
-		if (this.repo.getFreeStorageCapacity() == reposize && Timed.getFireCount() > (sd.lifetime + this.time)) {
+		if (this.repo.getFreeStorageCapacity() == reposize && Timed.getFireCount() > (sd.stoptime + this.time)) {
 			this.stopMeter();
 		}
 
 		// kozponti tarolo a cel repo - target is a cloud
-		if (this.cloud.getIaas().repositories.contains(this.torepo)) {
+		if (this.cloud.iaas.repositories.contains(this.torepo)) {
 			// megkeresi a celrepo-t es elkuldeni annak - looking for the
 			// repository then sending the data
 			try {
@@ -642,12 +378,12 @@ public class Station extends Device{
 		}
 		// shared nothing cloud
 		else {
-			if (this.pm.getState().equals(State.RUNNING) && this.i == 0) {
+		/*	if (this.pm.getState().equals(State.RUNNING) && this.i == 0) {
 				i++;
 				try {
 					if (!this.pm.isHostingVMs()) {
 						this.vm = this.pm.requestVM(this.cloud.getVa(), this.cloud.getArc(),
-								this.cloud.getIaas().repositories.get(0), 1)[0];
+								this.cloud.iaas.repositories.get(0), 1)[0];
 					} else {
 						this.vm = this.pm.listVMs().iterator().next();
 					}
@@ -668,7 +404,7 @@ public class Station extends Device{
 				}
 			} catch (NetworkException e) {
 				e.printStackTrace();
-			}
+			}*/
 		}
 	}
 
@@ -688,19 +424,51 @@ public class Station extends Device{
 	public static void loadDevice(String stationfile) throws Exception {
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			Stationdata sd = new Stationdata(dm.starttime,dm.stoptime,dm.filesize,dm.sensor,dm.freq,dm.name,dm.repository,dm.ratio);
-			Station s = new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,false,dm.strategy);
+			new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,false,dm.strategy);
 		}
 	}
 
-	@Override
-	public void installionProcess() {
-		// TODO Auto-generated method stub
+
+	public  void installionProcess(final Station s) {
+		 if(this.strategy.equals("load")){				
+				new DeferredEvent(this.sd.starttime) {
+					
+					@Override
+					protected void eventAction() {
+						double min = Double.MAX_VALUE-1.0;
+						int choosen = -1;
+						for(int i=0;i< Application.applications.size();i++ ){
+							double loadRatio = (Application.applications.get(i).stations.size())/(Application.applications.get(i).cloud.iaas.machines.size());
+							if(loadRatio<min){
+								min=loadRatio;
+								choosen = i;
+							}
+						}
+						Application.addStation(s, Application.applications.get(choosen));	
+					}
+				};
+			}else if(this.strategy.equals("random")){
+
+				Random randomGenerator = new Random();
+				int rnd = randomGenerator.nextInt(Application.applications.size());
+				Application.addStation(this, Application.applications.get(rnd));
+
+			}else if(this.strategy.equals("cost")) {
+				 double min=Integer.MAX_VALUE-1.0;
+				 int choosen=-1;
+				for(int i=0;i<Application.applications.size();++i){
+					if(Application.applications.get(i).instance.pricePerTick<min){
+						min = Application.applications.get(i).instance.pricePerTick;
+						choosen = i;
+					}
+				}
+				Application.addStation(this, Application.applications.get(choosen));
+			}
+		
 		
 	}
 
 	@Override
-	public void shutdownProcess() {
-		// TODO Auto-generated method stub
-		
+	public void shutdownProcess() {		
 	}
 }

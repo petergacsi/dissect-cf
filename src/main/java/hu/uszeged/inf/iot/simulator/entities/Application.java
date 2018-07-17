@@ -117,7 +117,7 @@ public class Application extends Timed {
 	//	return app;
 	//}
 
-	//public static ArrayList<Application> app = new ArrayList<Application>();
+	public static ArrayList<Application> applications = new ArrayList<Application>();
 	private static long finishedTime;
 	private static int starterVar = 0; 
 	private  int i = 0;
@@ -163,7 +163,7 @@ public class Application extends Timed {
 			subscribe(freq);
 		}
 		this.instance= Instance.instances.get(instance);
-		
+		Application.applications.add(this);
 	}
 
 	/**
@@ -186,10 +186,10 @@ public class Application extends Timed {
 	 */
 	private void startStation() {
 		if(Application.starterVar==0){
-			for(Provider p : Provider.getProviderList()){
+			/*for(Provider p : Provider.getProviderList()){
 				p.startProvider();
 			}
-			Provider.lateStart = Timed.getFireCount();
+			Provider.lateStart = Timed.getFireCount();*/
 			System.out.println("Scenario started at: " + Timed.getFireCount());
 			Application.starterVar++;
 		}
@@ -231,8 +231,8 @@ public class Application extends Timed {
 						System.exit(0);
 					}
 					this.vmlist.get(i).vm.switchOn(
-							this.vmlist.get(i).pm.allocateResources( this.arc, false, PhysicalMachine.defaultAllocLen),
-							 this.cloud.getIaas().repositories.get(0));
+							this.vmlist.get(i).pm.allocateResources( this.instance.arc, false, PhysicalMachine.defaultAllocLen),
+							 this.cloud.iaas.repositories.get(0));
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -253,16 +253,16 @@ public class Application extends Timed {
 					System.err.println(this.vmlist.get(i).vm);
 				}
 				boolean vanpm = false;
-				for(PhysicalMachine pm : this.cloud.getIaas().machines){
+				for(PhysicalMachine pm : this.cloud.iaas.machines){
 					//System.err.println(pm.availableCapacities);
 					
-					if(pm.availableCapacities.getRequiredCPUs()>=this.arc.getRequiredCPUs()){
+					if(pm.availableCapacities.getRequiredCPUs()>=this.instance.arc.getRequiredCPUs()){
 						vanpm=true;
 					}
 				}
 				if(vanpm){ // csak akkor kerjunk uj vm-et ha van fizikai eroforrasunkra.
 					this.vmlist.add(new VmCollector(
-							 this.cloud.getIaas().requestVM( this.va,  this.arc,  this.cloud.getIaas().repositories.get(0), 1)[0]));	
+							 this.cloud.iaas.requestVM( this.instance.va,  this.instance.arc,  this.cloud.iaas.repositories.get(0), 1)[0]));	
 				}	
 				
 			}
@@ -441,5 +441,6 @@ public class Application extends Timed {
 	}
 	public static void addStation(Station s,Application a) {
 		a.stations.add(s);
+		s.app=a;
 	}
 }
