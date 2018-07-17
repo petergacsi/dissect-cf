@@ -28,7 +28,6 @@ public class DeviceModel {
 		long repofilesize;
 		double ratio;
 		String strategy;
-		int shutdown;
 		ShutdownModel sm;
 		
 		
@@ -38,8 +37,7 @@ public class DeviceModel {
 			return "DeviceModel [name=" + name + ", number=" + number + ", freq=" + freq + ", sensor=" + sensor
 					+ ", filesize=" + filesize + ", starttime=" + starttime + ", stoptime=" + stoptime + ", maxinbw="
 					+ maxinbw + ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", repository=" + repository
-					+ ", repofilesize=" + repofilesize + ", ratio=" + ratio + ", strategy=" + strategy + ", shutdown="
-					+ shutdown + ", sm=" + sm + "]";
+					+ ", repofilesize=" + repofilesize + ", ratio=" + ratio + ", strategy=" + strategy + ", sm=" + sm + "]";
 		}
 
 		@XmlElement( name = "name" )
