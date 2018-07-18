@@ -13,7 +13,7 @@ public class NEWScenario {
 		String stationfile="";
 		
 		// Set up the clouds
-		Cloud cloud1=new Cloud(cloudfile,"cloud1");
+		new Cloud(cloudfile,"cloud1");
 	
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
@@ -24,5 +24,10 @@ public class NEWScenario {
 		Timed.simulateUntilLastEvent();
 		
 		// Print some informations to the monitor / in file
+		printInformation();
+	}
+	
+	private static void printInformation() {
+		
 	}
 }

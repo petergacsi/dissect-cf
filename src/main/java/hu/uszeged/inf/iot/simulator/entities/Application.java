@@ -185,16 +185,6 @@ public class Application extends Timed {
 	 * A metodus elinditja az osszes Station mukodeset
 	 */
 	private void startStation() {
-		if(Application.starterVar==0){
-			/*for(Provider p : Provider.getProviderList()){
-				p.startProvider();
-			}
-			Provider.lateStart = Timed.getFireCount();*/
-			System.out.println("Scenario started at: " + Timed.getFireCount());
-			Application.starterVar++;
-		}
-		if (this.i == 0) {
-			this.i++;
 			for (final Station s : this.stations) {
 
 				Random randomGenerator = new Random();
@@ -204,15 +194,15 @@ public class Application extends Timed {
 
 						@Override
 						protected void eventAction() {
-							s.startMeter(s.getSd().getFreq());
+							s.startMeter();
 						}
 					};
 				} else {
-					s.startMeter(s.getSd().getFreq());
+					s.startMeter();
 				}
 			}
 		}
-	}
+	
 
 	/**
 	 * A metodus megkeresi es ujrainditja az elso SHUTDOWN allapotban levo virtualis gepet.
@@ -323,6 +313,14 @@ public class Application extends Timed {
 		}
 	}
 	
+	
+	private long sumOfData() {
+		long temp = 0;
+		for(Station s : this.stations) {
+			temp+=s.generatedfilesize;
+		}
+		return temp;
+	}
 	@Override
 	/**
 	 * Ez a metodus hivodik meg az applikacio frekvenciaja szerint. Feladata a virtualis gepeknek valo feladatosztas,
@@ -339,7 +337,7 @@ public class Application extends Timed {
 
 		}
 		 // ha erkezett be a kozponti repoba feldolgozatlan adat
-		this.localfilesize = (Station.getStationvalue()[this.stations.get(0).getCloudnumber()] - this.allgenerateddatasize); 
+		this.localfilesize =( this.sumOfData() - this.allgenerateddatasize); 
 		if (this.localfilesize > 0) { 
 			long processed = 0;
 			boolean havevm = true;
@@ -432,8 +430,8 @@ public class Application extends Timed {
 	long getLongestStoptime(){
 		long max = -1;
 		for(Station s :  this.stations){
-			if(s.getSd().stoptime>max){
-				max = s.getSd().stoptime;
+			if(s.sd.stoptime>max){
+				max = s.sd.stoptime;
 			}
 	}
 		//System.out.println(max);

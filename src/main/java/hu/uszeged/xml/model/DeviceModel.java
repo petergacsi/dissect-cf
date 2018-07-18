@@ -26,7 +26,6 @@ public class DeviceModel {
 	public long maxinbw;
 	public long maxoutbw;
 	public long diskbw;
-	public String repository;
 	public long reposize;
 	public double ratio;
 	public String strategy;
@@ -38,8 +37,7 @@ public class DeviceModel {
 		public String toString() {
 			return "DeviceModel [name=" + name + ", number=" + number + ", freq=" + freq + ", sensor=" + sensor
 					+ ", filesize=" + filesize + ", starttime=" + starttime + ", stoptime=" + stoptime + ", maxinbw="
-					+ maxinbw + ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", repository=" + repository
-					+ ", reposize=" + reposize + ", ratio=" + ratio + ", strategy=" + strategy + ", sm=" + sm + "]";
+					+ maxinbw + ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", reposize=" + reposize + ", ratio=" + ratio + ", strategy=" + strategy + ", sm=" + sm + "]";
 		}
 
 		@XmlElement( name = "name" )
@@ -77,10 +75,6 @@ public class DeviceModel {
 			this.diskbw = diskbw;
 		}
 		
-		@XmlElement( name = "repository" )
-		public void setRepository(String repository) {
-			this.repository = repository;
-		}
 		
 		@XmlElement( name = "repofilesize" )
 		public void setReposize(long reposize) {

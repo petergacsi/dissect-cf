@@ -7,7 +7,6 @@
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
-      <repository>ceph</repository>
       <reposize>60000</reposize>
       <ratio>1</ratio>
       <strategy>random</strategy>
@@ -25,7 +24,6 @@
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
-      <repository>ceph</repository>
       <reposize>60000</reposize>
       <ratio>1</ratio>
       <strategy>cost</strategy>
