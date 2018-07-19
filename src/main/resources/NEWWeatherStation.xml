@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <devices>
 	<device starttime="0" stoptime="86400000" number="200" filesize="50">
-      <name>0-24</name>
+      <name>test1</name>
       <freq>60000</freq>
       <sensor>8</sensor>
       <maxinbw>1000</maxinbw>
@@ -17,8 +17,8 @@
       </shutdown>
    </device>
 
-	<device starttime="10" stoptime="86400000" number="200" filesize="50">
-      <name >0-24</name>
+	<device starttime="0" stoptime="86400000" number="200" filesize="50">
+      <name >test2</name>
       <freq>60000</freq>
       <sensor>8</sensor>
       <maxinbw>1000</maxinbw>
@@ -27,6 +27,23 @@
       <reposize>60000</reposize>
       <ratio>1</ratio>
       <strategy>cost</strategy>
+      <shutdown>
+      	<number>5</number>
+      	<from>1</from>
+      	<to>10</to>
+      </shutdown>
+   </device>
+
+	<device starttime="43200000" stoptime="86400000" number="200" filesize="50">
+      <name >test3</name>
+      <freq>60000</freq>
+      <sensor>8</sensor>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>load</strategy>
       <shutdown>
       	<number>5</number>
       	<from>1</from>
