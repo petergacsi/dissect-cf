@@ -1,4 +1,4 @@
-package hu.uszeged.xml.model;
+package hu.uszeged.inf.xml.model;
 
 import java.util.ArrayList;
 

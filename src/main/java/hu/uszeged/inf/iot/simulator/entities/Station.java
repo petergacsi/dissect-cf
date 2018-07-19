@@ -1,20 +1,20 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import hu.mta.sztaki.lpds.cloud.simulator.io.*;
-import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
-import hu.uszeged.xml.model.DeviceModel;
-import hu.mta.sztaki.lpds.cloud.simulator.*;
+import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
+import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.energy.powermodelling.PowerState;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.*;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
+import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
+import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
+import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
+import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
+import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
+import hu.uszeged.inf.xml.model.DeviceModel;
 
 public class Station extends Device{
 
@@ -48,10 +48,8 @@ public class Station extends Device{
 		private long filesize;
 		private int sensornumber;
 		private long freq;
-		 String name;
-		private String torepo;
+		String name;
 		private double ratio;
-
 		
 		public Stationdata(long st, long stt, long filesize, int sn, long freq,String name,
 				double ratio) {
@@ -86,8 +84,8 @@ public class Station extends Device{
 		}
 	}
 	
-	 Stationdata sd;
-	 Repository localRepository;
+	Stationdata sd;
+	Repository localRepository;
 	private Repository cloudRepository;
 	private HashMap<String, Integer> lmap;
 	private static int latency=11;
@@ -95,7 +93,7 @@ public class Station extends Device{
 	public long generatedfilesize;
 	private String strategy;
 	public static long allstationsize = 0;
-	long realStartTime; 
+	//long realStartTime; 
 	
 	public Station(long maxinbw, long maxoutbw, long diskbw, long reposize, final Stationdata sd,String strategy) throws NetworkException {
 		this.strategy=strategy;
@@ -107,35 +105,29 @@ public class Station extends Device{
 		this.startMeter();
 	}
 
-	
-
-	/**
-	 * This method send all data from the local repository to the cloud
-	 * repository. Elkuldi a lokalis taroloban talalhato StorageObject-eket a
-	 * celrepository-ba.
-	 * 
-	 * @param r
-	 *            a cel repository
-	 */
 	private void startCommunicate() throws NetworkException {
 		if(this.cloudRepository.getCurrState().equals(Repository.State.RUNNING)){
-			
 			for (StorageObject so : localRepository.contents()) {
 				StorObjEvent soe = new StorObjEvent(so.id);
 				localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
 			}
 		}
-		
 	}
 
 	public void startMeter() {
 		if (this.isSubscribed()==false) {
-			subscribe(this.sd.freq);
-			this.cloudRepository = this.app.cloud.iaas.repositories.get(0);
-			this.realStartTime = Timed.getFireCount();
+			new DeferredEvent(this.sd.starttime) {
+				
+				@Override
+				protected void eventAction() {
+					subscribe(sd.freq);
+					cloudRepository = app.cloud.iaas.repositories.get(0);
+					//realStartTime = Timed.getFireCount();
+				}
+			};
+			
 		}
 	}
-
 
 	private void stopMeter() {
 		unsubscribe();
@@ -147,16 +139,14 @@ public class Station extends Device{
 	public void tick(long fires) {
 		
 		// a meres a megadott ideig tart csak - metering takes the given time
-		if (Timed.getFireCount() < (sd.stoptime + this.realStartTime) && Timed.getFireCount() >= (sd.starttime + this.realStartTime)
-				&& Timed.getFireCount() <= (sd.stoptime + this.realStartTime)) {
-
+		if (Timed.getFireCount() < (sd.stoptime ) && Timed.getFireCount() >= (sd.starttime )) {
 			for (int i = 0; i < sd.sensornumber; i++) {
 					new Metering(this, i, sd.filesize, 1);
 			}
 		}
 		// a station mukodese addig amig az osszes SO el nem lett kuldve -
 		// stations work while there are data unsent
-		if (this.localRepository.getFreeStorageCapacity() == this.localRepository.getMaxStorageCapacity() && Timed.getFireCount() > (sd.stoptime + this.realStartTime)) {
+		if (this.localRepository.getFreeStorageCapacity() == this.localRepository.getMaxStorageCapacity() && Timed.getFireCount() > sd.stoptime ) {
 			this.stopMeter();
 		}
 
@@ -188,7 +178,7 @@ public class Station extends Device{
 	}
 
 	public  void installionProcess(final Station s) {
-		 if(this.strategy.equals("load")){				
+		 if(this.strategy.equals("load")){		
 				new DeferredEvent(this.sd.starttime) {
 					
 					@Override
@@ -202,7 +192,9 @@ public class Station extends Device{
 								choosen = i;
 							}
 						}
-						Application.addStation(s, Application.applications.get(choosen));	
+						Application.addStation(s, Application.applications.get(choosen));
+						lmap.put(sd.name, Station.latency);
+						lmap.put(app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 					}
 				};
 			}else if(this.strategy.equals("random")){
@@ -210,6 +202,8 @@ public class Station extends Device{
 				Random randomGenerator = new Random();
 				int rnd = randomGenerator.nextInt(Application.applications.size());
 				Application.addStation(this, Application.applications.get(rnd));
+				this.lmap.put(sd.name, Station.latency);
+				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 
 			}else if(this.strategy.equals("cost")) {
 				 double min=Integer.MAX_VALUE-1.0;
@@ -221,9 +215,10 @@ public class Station extends Device{
 					}
 				}
 				Application.addStation(this, Application.applications.get(choosen));
+				this.lmap.put(sd.name, Station.latency);
+				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 			}
-		 	this.lmap.put(sd.name, Station.latency);
-			this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
+		 	
 		
 		
 	}

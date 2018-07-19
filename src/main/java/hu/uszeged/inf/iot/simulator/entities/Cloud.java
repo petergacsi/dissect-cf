@@ -13,7 +13,7 @@ public class Cloud {
 
 	public IaaSService iaas;
 	public static HashMap<String, Cloud> clouds = new HashMap<String, Cloud>();
-	public ArrayList<Application> applications ;
+	public ArrayList<Application> applications;
 	String name;
 	
 	public static Cloud addApplication(Application app,String cloud) {
