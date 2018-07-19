@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.TreeMap;
 
+
 import javax.xml.bind.JAXBException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
@@ -116,7 +117,7 @@ public class Application extends Timed {
 	//public static ArrayList<Application> getApp() {
 	//	return app;
 	//}
-
+	boolean stationStarter;
 	public static ArrayList<Application> applications = new ArrayList<Application>();
 	private static long finishedTime;
 	private static int starterVar = 0; 
@@ -125,6 +126,7 @@ public class Application extends Timed {
 	private int print;
 	private boolean delay;
 	private  long allgenerateddatasize = 0;
+	static long allprocessed =0;
 	private  long localfilesize = 0;
 	private  long temp;
 	public  TreeMap<Long, Integer> tmap = new TreeMap<Long, Integer>();
@@ -156,6 +158,7 @@ public class Application extends Timed {
 
 	private Application(final long freq,long tasksize,String cloud,String instance,String name) {
 		this.vmlist = new ArrayList<VmCollector>();
+		this.stations = new ArrayList<Station>();
 		this.tasksize=tasksize;
 		this.cloud = Cloud.addApplication(this,cloud);
 		this.name = name;
@@ -164,6 +167,7 @@ public class Application extends Timed {
 		}
 		this.instance= Instance.instances.get(instance);
 		Application.applications.add(this);
+		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
 	}
 
 	/**
@@ -171,7 +175,9 @@ public class Application extends Timed {
 	 */
 	private VmCollector VmSearch() {
 		VmCollector vmc = null;
+		
 		for (int i = 0; i < this.vmlist.size(); i++) {
+		//	System.out.println(this.vmlist.get(i).vm.getState()+" "+Timed.getFireCount()+ " + " + this.instance.arc +" + "+ this.name);
 			if ((this.vmlist.get(i).isworking == false
 					&& this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.RUNNING))) {
 				vmc = this.vmlist.get(i);
@@ -181,27 +187,36 @@ public class Application extends Timed {
 		return vmc;
 	}
 
-	/**
-	 * A metodus elinditja az osszes Station mukodeset
-	 */
-	private void startStation() {
-			for (final Station s : this.stations) {
-
-				Random randomGenerator = new Random();
-				int randomInt = randomGenerator.nextInt(21);
-				if (delay) {
-					new DeferredEvent((long) randomInt * 60 * 1000) {
-
-						@Override
-						protected void eventAction() {
-							s.startMeter();
-						}
-					};
-				} else {
-					s.startMeter();
+	private void generateAndAddVM() {
+		try {
+			if(this.turnonVM()==false){
+				
+				//TODO: ide kene 1 feltetel h ne kezdjen el random vm-eket fölöslegesen létrehozni
+				//for (int i = 0; i < this.vmlist.size(); i++) {
+				//	System.err.println(this.vmlist.get(i).vm);
+				//}
+				boolean vanpm = false;
+				for(PhysicalMachine pm : this.cloud.iaas.machines){
+					//System.err.println(pm.availableCapacities);
+					
+					if(pm.availableCapacities.getRequiredCPUs()>=this.instance.arc.getRequiredCPUs()){
+						vanpm=true;
+						
+					}
 				}
+				if(vanpm){ // csak akkor kerjunk uj vm-et ha van fizikai eroforrasunkra.
+					//System.out.println(this.cloud.iaas.repositories.get(0).toString());
+									
+					this.vmlist.add(new VmCollector(
+							 this.cloud.iaas.requestVM( this.instance.va,  this.instance.arc,  this.cloud.iaas.repositories.get(0), 1)[0]));	
+				}	
+				
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
+
 	
 
 	/**
@@ -235,44 +250,19 @@ public class Application extends Timed {
 	/**
 	 * A metodus - ha nincs olyan  VM amit ujra lehet inditani - letrehoz egyet.
 	 */
-	private void generateAndAddVM() {
-		try {
-			if(this.turnonVM()==false){
-				//TODO: ide kene 1 feltetel h ne kezdjen el random vm-eket fölöslegesen létrehozni
-				for (int i = 0; i < this.vmlist.size(); i++) {
-					System.err.println(this.vmlist.get(i).vm);
-				}
-				boolean vanpm = false;
-				for(PhysicalMachine pm : this.cloud.iaas.machines){
-					//System.err.println(pm.availableCapacities);
-					
-					if(pm.availableCapacities.getRequiredCPUs()>=this.instance.arc.getRequiredCPUs()){
-						vanpm=true;
-					}
-				}
-				if(vanpm){ // csak akkor kerjunk uj vm-et ha van fizikai eroforrasunkra.
-					this.vmlist.add(new VmCollector(
-							 this.cloud.iaas.requestVM( this.instance.va,  this.instance.arc,  this.cloud.iaas.repositories.get(0), 1)[0]));	
-				}	
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 
 	/**
 	 * A metodus megvizsgalja, hogy van-e olyan Station, amelyik meg uzemel.
 	 */
 	private boolean checkStationState() { // TODO probably wrong, but lets see
-		boolean i = true;
 		for (Station s : this.stations) {
 			//System.out.println(s + " "+ Timed.getFireCount());
 			if (s.isSubscribed()) {
 				return false;
 			}
 		}
-		return i;
+		return true;
 	}
 
 	/**
@@ -327,18 +317,11 @@ public class Application extends Timed {
 	 * es a virtualis gepek kezelese
 	 */
 	public void tick(long fires) {
-		if(this.stations.size()>0){
-			
-		if (this.vmlist.isEmpty()) {
-			this.generateAndAddVM(); //
-		}
-		if (this.VmSearch() != null) {
-			this.startStation();
-
-		}
 		 // ha erkezett be a kozponti repoba feldolgozatlan adat
 		this.localfilesize =( this.sumOfData() - this.allgenerateddatasize); 
+		//System.out.println(this.sumOfData());
 		if (this.localfilesize > 0) { 
+			
 			long processed = 0;
 			boolean havevm = true;
 			while (this.localfilesize != processed && havevm) { // akkor addig inditsunk feladatokat a VM-en, amig fel nem lett dolgozva az osszes
@@ -355,6 +338,7 @@ public class Application extends Timed {
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					this.generateAndAddVM();
+					
 					havevm=false;
 				} else {
 					try {
@@ -376,17 +360,17 @@ public class Application extends Timed {
 										vml.worked = true;
 										vml.tasknumber++;
 										Application.feladatszam--;
-										if (print == 1) {
+										if(print==1)
 											System.out.println(name+" "+printtart + " finished at " + Timed.getFireCount()
 													+ " with " + ii + " bytes,lasted " + (Timed.getFireCount() - i)
 													+ " ,noi: " + iii);
-										}
+										
 
 									}
 								});
 						this.allgenerateddatasize += this.temp; // kilepesi
 						// feltetelhez
-
+						Application.allprocessed+=this.temp;
 					} catch (NetworkException e) {
 						e.printStackTrace();
 					}
@@ -394,25 +378,25 @@ public class Application extends Timed {
 			}
 			//System.out.println("osszes: "+Station.allstationsize +" feldolgozott: " +Application.allgenerateddatasize+ " ido: "+Timed.getFireCount());
 		}
-		this.countVmRunningTime();	
+		//this.countVmRunningTime();	
 
 		/* ------------------------------------ */
-		int task = 0;
+		/* int task = 0;
 		for (VmCollector vmcl : this.vmlist) {
-			if (vmcl.tasknumber >= 0  /*&& vmcl.isworking*/
+			if (vmcl.tasknumber >= 0  && vmcl.isworking
 					&& vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				task++;
 			}
-		}
-		this.tmap.put(Timed.getFireCount(), task);
-		this.turnoffVM();
+		}*/
+		//this.tmap.put(Timed.getFireCount(), task);
+	//	this.turnoffVM();
 		
-	}
+	
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState() 	
 				&&   Timed.getFireCount()>getLongestStoptime()) {
 					unsubscribe();
-					System.out.println("~~~~~~~~~~~~");
+					System.out.println("Application "+this.name+" has stopped @"+Timed.getFireCount());
 					Application.finishedTime=Timed.getFireCount();
 					
 					for (VmCollector vmcl : this.vmlist) {

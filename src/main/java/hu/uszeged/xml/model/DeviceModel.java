@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,6 +16,7 @@ import javax.xml.bind.annotation.XmlType;
 
 //@XmlType( propOrder = { "name", "freq", "sensor" ,"time" ,"maxinbw", "maxoutbw", "diskbw", "repository" , "repofilesize","ratio", "strategy"} )
 @XmlRootElement( name = "device" )
+@XmlAccessorType(XmlAccessType.PROPERTY) 
 public class DeviceModel {
 
 	public String name;
@@ -76,7 +79,7 @@ public class DeviceModel {
 		}
 		
 		
-		@XmlElement( name = "repofilesize" )
+		@XmlElement( name = "reposize" )
 		public void setReposize(long reposize) {
 			this.reposize = reposize;
 		}
@@ -113,7 +116,7 @@ public class DeviceModel {
 		
 
 		public static ArrayList<DeviceModel>  loadDeviceXML(String stationfile) throws JAXBException {
-			  File file = new File( "stationfile" );
+			  File file = new File( stationfile );
 			  JAXBContext jaxbContext = JAXBContext.newInstance( DevicesModel.class );
 			  Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			  DevicesModel device = (DevicesModel)jaxbUnmarshaller.unmarshal( file );

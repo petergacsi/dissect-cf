@@ -14,7 +14,7 @@ public class Instance {
 	public AlterableResourceConstraints arc;
 	public double pricePerTick;
 	
-	public static HashMap<String,Instance> instances;
+	public static HashMap<String,Instance> instances = new HashMap<String,Instance>();
 	
 	public static void loadInstance(String instancefile) throws JAXBException {
 		for(InstanceModel im : InstanceModel.loadInstanceXML(instancefile)) {

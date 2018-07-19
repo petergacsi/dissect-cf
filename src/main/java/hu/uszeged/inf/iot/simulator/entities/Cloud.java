@@ -12,9 +12,9 @@ import hu.mta.sztaki.lpds.cloud.simulator.util.CloudLoader;
 public class Cloud {
 
 	public IaaSService iaas;
-
-	public static HashMap<String, Cloud> clouds = new HashMap<String, Cloud>(); // IaaSService iaas = clouds.get("cloud1");
-	public ArrayList<Application> applications;
+	public static HashMap<String, Cloud> clouds = new HashMap<String, Cloud>();
+	public ArrayList<Application> applications ;
+	String name;
 	
 	public static Cloud addApplication(Application app,String cloud) {
 		Cloud c = clouds.get(cloud);
@@ -24,7 +24,9 @@ public class Cloud {
 	
 	public Cloud(String cloudfile,String name)throws IOException, SAXException, ParserConfigurationException {
 		if (iaas == null) this.iaas = CloudLoader.loadNodes(cloudfile);
+		applications = new ArrayList<Application>();
 		Cloud.clouds.put(name,this);
+		this.name=name;
 	}
 	
 }

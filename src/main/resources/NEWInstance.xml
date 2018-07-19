@@ -2,20 +2,20 @@
 <instances>
 
 	<instance name="amazon-small">		
-			<ram>2147483648</ram>
+			<ram>21474848</ram>
 			<cpu-cores>1</cpu-cores>
 			<price-per-tick>0.01</price-per-tick>
-			<core-processing-power>0.01</core-processing-power>
+			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
 			<req-disk>1000000</req-disk>
 	</instance>
 	
 	<instance name="amazon-medium">		
-			<ram>3147483648</ram>
-			<cpu-cores>2</cpu-cores>
+			<ram>31474838</ram>
+			<cpu-cores>3</cpu-cores>
 			<price-per-tick>0.01</price-per-tick>
-			<core-processing-power>0.01</core-processing-power>
+			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
 			<req-disk>1000000</req-disk>
@@ -25,7 +25,7 @@
 			<ram>4147483648</ram>
 			<cpu-cores>4</cpu-cores>
 			<price-per-tick>0.01</price-per-tick>
-			<core-processing-power>0.01</core-processing-power>
+			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
 			<req-disk>1000000</req-disk>
@@ -35,7 +35,7 @@
 			<ram>2147483648</ram>
 			<cpu-cores>2</cpu-cores>
 			<price-per-tick>0.01</price-per-tick>
-			<core-processing-power>0.01</core-processing-power>
+			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
 			<req-disk>1000000</req-disk>

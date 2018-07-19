@@ -45,8 +45,10 @@ class Metering extends DeferredEvent {
 		StorageObject so = new StorageObject(
 				this.s.sd.name + " " + this.filesize + " " + this.sensorID + " " + Timed.getFireCount(),
 				this.filesize, false);
+		//System.out.println(this.s.localRepository.getFreeStorageCapacity());
 		if (this.s.localRepository.registerObject(so)) {
 			this.s.generatedfilesize += this.filesize;
+			//System.out.println("hi fucker");
 			Station.allstationsize += this.filesize;
 		}
 		;

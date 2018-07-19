@@ -1,16 +1,19 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
+import java.util.ArrayList;
+
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 
 public class NEWScenario {
 
 	public static void main(String[] args) throws Exception {
 		// XML config files
-		String cloudfile="/home/student/Desktop/markus/dissect-cf/src/main/resources/LPDSCloud.xml";
-		String appfile="/home/student/Desktop/dissect/dissect-cf/src/main/java/hu/uszeged/xml/model/Application.xml";
-		String instancefile="";
-		String stationfile="";
+		String cloudfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud.xml";
+		String appfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/NEWApplication.xml	";
+		String instancefile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/NEWInstance.xml";
+		String stationfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/NEWWeatherStation.xml";
 		
 		// Set up the clouds
 		new Cloud(cloudfile,"cloud1");
@@ -28,6 +31,15 @@ public class NEWScenario {
 	}
 	
 	private static void printInformation() {
+		System.out.println("~~Informations about the simulation:~~");
 		
+		for(Cloud c : Cloud.clouds.values()){
+			System.out.println("cloud: "+c.name);
+			for(PhysicalMachine pm : c.iaas.machines){
+				System.out.println(pm);
+			}
+		}
+		System.out.println("\n");
+		System.out.println("Generated/processed data: "+Station.allstationsize +"/"+Application.allprocessed);
 	}
 }

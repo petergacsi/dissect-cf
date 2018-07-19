@@ -90,7 +90,7 @@ public class Station extends Device{
 	 Repository localRepository;
 	private Repository cloudRepository;
 	private HashMap<String, Integer> lmap;
-	private int lat;
+	private static int latency=11;
 	public Application app;
 	public long generatedfilesize;
 	private String strategy;
@@ -101,11 +101,10 @@ public class Station extends Device{
 		this.strategy=strategy;
 		this.sd = sd;
 		this.lmap = new HashMap<String, Integer>();
-		this.lat = 11;
-		this.lmap.put(sd.name, lat);
-		this.lmap.put(sd.torepo, lat);
 		this.localRepository = new Repository(reposize, sd.name, maxinbw, maxoutbw, diskbw, lmap, defaultStorageTransitions, defaultNetworkTransitions);
 		this.localRepository.setState(NetworkNode.State.RUNNING);	
+		installionProcess(this);
+		this.startMeter();
 	}
 
 	
@@ -131,7 +130,6 @@ public class Station extends Device{
 
 	public void startMeter() {
 		if (this.isSubscribed()==false) {
-			installionProcess(this);
 			subscribe(this.sd.freq);
 			this.cloudRepository = this.app.cloud.iaas.repositories.get(0);
 			this.realStartTime = Timed.getFireCount();
@@ -147,6 +145,7 @@ public class Station extends Device{
 
 	@Override
 	public void tick(long fires) {
+		
 		// a meres a megadott ideig tart csak - metering takes the given time
 		if (Timed.getFireCount() < (sd.stoptime + this.realStartTime) && Timed.getFireCount() >= (sd.starttime + this.realStartTime)
 				&& Timed.getFireCount() <= (sd.stoptime + this.realStartTime)) {
@@ -181,7 +180,10 @@ public class Station extends Device{
 	public static void loadDevice(String stationfile) throws Exception {
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			Stationdata sd = new Stationdata(dm.starttime,dm.stoptime,dm.filesize,dm.sensor,dm.freq,dm.name,dm.ratio);
-			new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,dm.strategy);
+			for(int i=0;i<dm.number;i++){
+				new Station(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,sd,dm.strategy);
+			}
+			
 		}
 	}
 
@@ -220,6 +222,8 @@ public class Station extends Device{
 				}
 				Application.addStation(this, Application.applications.get(choosen));
 			}
+		 	this.lmap.put(sd.name, Station.latency);
+			this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 		
 		
 	}
