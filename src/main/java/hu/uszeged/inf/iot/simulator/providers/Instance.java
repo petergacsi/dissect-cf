@@ -6,7 +6,6 @@ import javax.xml.bind.JAXBException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
-import hu.uszeged.inf.iot.simulator.entities.Application;
 import hu.uszeged.inf.xml.model.InstanceModel;
 
 public class Instance {

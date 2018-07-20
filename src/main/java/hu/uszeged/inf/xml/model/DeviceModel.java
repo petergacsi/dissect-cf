@@ -11,10 +11,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 
-
-//@XmlType( propOrder = { "name", "freq", "sensor" ,"time" ,"maxinbw", "maxoutbw", "diskbw", "repository" , "repofilesize","ratio", "strategy"} )
 @XmlRootElement( name = "device" )
 @XmlAccessorType(XmlAccessType.PROPERTY) 
 public class DeviceModel {

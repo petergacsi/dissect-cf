@@ -1,7 +1,5 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
-import java.util.ArrayList;
-
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
@@ -11,11 +9,12 @@ public class Scenario {
 
 	public static void main(String[] args) throws Exception {
 		// XML config files
-		String cloudfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud.xml";
-		String cloudfile2="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/LPDSCloud2.xml";
-		String appfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/NEWApplication.xml";
-		String instancefile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/NEWInstance.xml";
-		String stationfile="/home/andris/Dokumentumok/szte/projektek/dissect-cf/src/main/resources/NEWWeatherStation.xml";
+		String resource = "/home/student/Desktop/dissect/dissect-cf/src/main/resources/";
+		String cloudfile=resource+"LPDSCloud.xml";
+		String cloudfile2=resource+"LPDSCloud2.xml";
+		String appfile=resource+"NEWApplication.xml";
+		String instancefile=resource+"NEWInstance.xml";
+		String stationfile=resource+"NEWWeatherStation.xml";
 		
 		// Set up the clouds
 		new Cloud(cloudfile,"cloud1");
@@ -43,12 +42,12 @@ public class Scenario {
 				int usedVM = 0;
 				int tasks = 0;
 				for (VmCollector vmcl : a.vmlist) {
-					if (vmcl.worked) {
+					
 						usedVM++;
 						tasks += vmcl.tasknumber;
 						System.out.println(vmcl.vm + " tasks: " + vmcl.tasknumber + " worktime: " + vmcl.workingTime + " installed at: "
-								+ vmcl.letehozva + " PM: " + vmcl.pm);
-					}
+								+ vmcl.installed);
+					
 
 				}
 				System.out.println(	a.name + " VMs " + usedVM + " tasks: " + tasks + " stations: " + a.stations.size());
