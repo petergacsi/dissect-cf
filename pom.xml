@@ -28,6 +28,16 @@
     		<artifactId>jaxb-api</artifactId>
     		<version>2.1</version>
 		</dependency>
+		<dependency>
+	        <groupId>com.sun.xml.bind</groupId>
+	        <artifactId>jaxb-impl</artifactId>
+	        <version>2.2.11</version>
+    	</dependency>
+    	<dependency>
+    		<groupId>com.sun.xml.bind</groupId>
+    		<artifactId>jaxb-core</artifactId>
+    		<version>2.2.11</version>
+		</dependency>
 	</dependencies>
 	<inceptionYear>2012</inceptionYear>
 	<organization>
@@ -50,14 +60,14 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-                        <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-javadoc-plugin</artifactId>
-                                <version>2.10.1</version>
-                                <configuration>
-                                        <show>private</show>
-                                </configuration>
-                        </plugin>
+            <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.1</version>
+                    <configuration>
+                            <show>private</show>
+                    </configuration>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -72,6 +82,30 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/target/resources</outputDirectory>   <!-- output directory -->
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/resources</directory>         <!-- source directory -->
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+			</plugin>
+			
 		</plugins>
 		<resources>
 			<resource>

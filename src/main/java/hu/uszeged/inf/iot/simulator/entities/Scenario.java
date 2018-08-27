@@ -1,5 +1,7 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
+import java.io.File;
+
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
@@ -9,12 +11,18 @@ public class Scenario {
 
 	public static void main(String[] args) throws Exception {
 		// XML config files
-		String resource = "/home/student/Desktop/dissect/dissect-cf/src/main/resources/";
-		String cloudfile=resource+"LPDSCloud.xml";
-		String cloudfile2=resource+"LPDSCloud2.xml";
-		String appfile=resource+"NEWApplication.xml";
-		String instancefile=resource+"NEWInstance.xml";
-		String stationfile=resource+"NEWWeatherStation.xml";
+		String resourcePath = new StringBuilder(System.getProperty("user.dir")).
+										append(File.separator).
+										append("target").
+										append(File.separator).
+										append("resources").
+										append(File.separator).
+										toString();
+		String cloudfile=resourcePath+"LPDSCloud.xml";
+		String cloudfile2=resourcePath+"LPDSCloud2.xml";
+		String appfile=resourcePath+"NEWApplication.xml";
+		String instancefile=resourcePath+"NEWInstance.xml";
+		String stationfile=resourcePath+"NEWWeatherStation.xml";
 		
 		// Set up the clouds
 		new Cloud(cloudfile,"cloud1");
