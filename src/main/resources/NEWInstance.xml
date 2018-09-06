@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<instances>
+
+	<instance name="amazon-small">		
+			<ram>21474848</ram>
+			<cpu-cores>1</cpu-cores>
+			<price-per-tick>0.02</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+	<instance name="amazon-medium">		
+			<ram>31474838</ram>
+			<cpu-cores>3</cpu-cores>
+			<price-per-tick>0.01</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+	<instance name="amazon-large">		
+			<ram>4147483648</ram>
+			<cpu-cores>4</cpu-cores>
+			<price-per-tick>0.015</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+	<instance name="azure-small">		
+			<ram>2147483648</ram>
+			<cpu-cores>2</cpu-cores>
+			<price-per-tick>0.01</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+
+</instances>
