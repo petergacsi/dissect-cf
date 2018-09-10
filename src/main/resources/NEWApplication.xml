@@ -9,20 +9,11 @@
 		<iot-pricing>bluemix</iot-pricing>
 	</application>
 	
-	<application tasksize="2500000">
-		<name>Idokep-2</name>
-		<freq>300000</freq>
-		<cloud>cloud1</cloud>
-		<instance>amazon-medium</instance>
-		<iot-pricing>bluemix</iot-pricing>
-	</application>
-	
-		<application tasksize="2500000">
+<application tasksize="2500000">
 		<name>Idokep-3</name>
-		<freq>300000</freq>
+		<freq>400000</freq>
 		<cloud>cloud2</cloud>
-		<instance>amazon-medium</instance>
+		<instance>amazon-large</instance>
 		<iot-pricing>bluemix</iot-pricing>
 	</application>
-
 </applications>

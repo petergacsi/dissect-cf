@@ -594,7 +594,7 @@ public class VirtualMachine extends MaxMinConsumer {
 			// the VM will get through its boot procedure
 			if (allocation.getHost().localDisk != vatarget) {
 				// TODO: maybe we can switch back to destroyed
-				throw new VMManagementException("VM was not prepared for this PM");
+				throw new VMManagementException("VM was not prepared for this PM "+ Timed.getFireCount());
 			}
 			setResourceAllocation(allocation);
 			switchonEvent.changeEvents(this);

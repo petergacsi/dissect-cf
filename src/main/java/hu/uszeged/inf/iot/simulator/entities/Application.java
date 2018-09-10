@@ -17,7 +17,7 @@ import hu.uszeged.inf.xml.model.ApplicationModel;
 public class Application extends Timed {
 
 	public class VmCollector {
-	
+		PhysicalMachine pm;
 		VirtualMachine vm;
 		boolean isworking;
 		int tasknumber;
@@ -25,12 +25,20 @@ public class Application extends Timed {
 		long lastWorked;
 		public long workingTime;
 		int interationCounter;
+		String id;
 		
 		public boolean isWorked() {
 			return worked;
 		}
 
 		public long installed;
+
+		@Override
+		public String toString() {
+			return "VmCollector [pm=" + pm + ", vm=" + vm + ", isworking=" + isworking + ", tasknumber=" + tasknumber
+					+ ", worked=" + worked + ", lastWorked=" + lastWorked + ", workingTime=" + workingTime
+					+ ", interationCounter=" + interationCounter + ", id=" + id + ", installed=" + installed + "]";
+		}
 
 		VmCollector(VirtualMachine vm) {
 			this.vm = vm;
@@ -40,6 +48,7 @@ public class Application extends Timed {
 			this.workingTime = 0;
 			this.lastWorked = Timed.getFireCount();
 			this.installed = Timed.getFireCount();
+			this.id=Integer.toString(vmlist.size());
 		}
 	}
 
@@ -58,7 +67,6 @@ public class Application extends Timed {
 	public ArrayList<Station> stations;
 	String name;
 	Instance instance;
-
 
 
 
@@ -81,13 +89,25 @@ public class Application extends Timed {
 		this.instance = Instance.instances.get(instance);
 		Application.applications.add(this);
 		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
+		this.startBroker();
 	}
 
+	private void startBroker() {
+
+		try {
+			VmCollector vmc = new VmCollector(this.cloud.iaas.requestVM(this.instance.va, this.instance.arc,
+					this.cloud.iaas.repositories.get(0), 1)[0]);
+			vmc.id="broker";
+			this.vmlist.add(vmc);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	private VmCollector VmSearch() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
 			if ((this.vmlist.get(i).isworking == false
-					&& this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.RUNNING))) {
+					&& this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.RUNNING) && !this.vmlist.get(i).id.equals("broker"))) {
 				return this.vmlist.get(i);
 
 			}
@@ -100,8 +120,10 @@ public class Application extends Timed {
 			if (this.turnonVM() == false) {
 				for (PhysicalMachine pm : this.cloud.iaas.machines) {
 					if (pm.isHostableRequest(this.instance.arc)) {
-						this.vmlist.add(new VmCollector(this.cloud.iaas.requestVM(this.instance.va, this.instance.arc,
-								this.cloud.iaas.repositories.get(0), 1)[0]));
+						VmCollector vmc = new VmCollector(pm.requestVM(this.instance.va, this.instance.arc,
+								this.cloud.iaas.repositories.get(0), 1)[0]);
+						vmc.pm=pm;
+						this.vmlist.add(vmc);
 						return;
 				
 					}
@@ -117,13 +139,8 @@ public class Application extends Timed {
 		for (int i = 0; i < this.vmlist.size(); i++) {
 			if ((this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN))){
 				try {
-					for(PhysicalMachine pm : this.cloud.iaas.machines) {
-						if(pm.isHostableRequest(this.instance.arc)) {
-							this.vmlist.get(i).vm.switchOn(pm.allocateResources(this.instance.arc, false,
-									PhysicalMachine.defaultAllocLen), this.cloud.iaas.repositories.get(0));
-									return true;
-						}
-					}				
+					this.vmlist.get(i).vm.switchOn(this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
+							PhysicalMachine.defaultAllocLen), this.cloud.iaas.repositories.get(0));			
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -135,12 +152,13 @@ public class Application extends Timed {
 
 
 	private void turnoffVM() {
-
+		
 		for (VmCollector vmcl : this.vmlist) {
-			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && vmcl.isworking == false && vmcl.installed<=(Timed.getFireCount()-2*this.getFrequency())) {
+			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isworking == false && vmcl.installed<=(Timed.getFireCount()-4*this.getFrequency())) {
 				try {
 					vmcl.lastWorked = Timed.getFireCount();
 					vmcl.vm.switchoff(false);
+					
 					
 				} catch (StateChangeException e) {
 					e.printStackTrace();
@@ -177,8 +195,6 @@ public class Application extends Timed {
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					this.generateAndAddVM();
-			
-					
 					havevm = false;
 				} else {
 					try {
@@ -213,6 +229,8 @@ public class Application extends Timed {
 				}
 			}
 		}
+		
+
 		this.countVmRunningTime();
 		this.turnoffVM();
 
@@ -236,6 +254,7 @@ public class Application extends Timed {
 
 	private void countVmRunningTime() {
 		for (VmCollector vmc : this.vmlist) {
+
 			if (vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				vmc.workingTime += (Timed.getFireCount() - vmc.lastWorked);
 				allWorkTime+=(Timed.getFireCount() - vmc.lastWorked);

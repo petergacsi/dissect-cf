@@ -53,7 +53,7 @@ public class Scenario {
 					
 						usedVM++;
 						tasks += vmcl.tasknumber;
-						System.out.println(vmcl.vm + " tasks: " + vmcl.tasknumber + " worktime: " + vmcl.workingTime + " installed at: "
+						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.tasknumber + " worktime: " + vmcl.workingTime + " installed at: "
 								+ vmcl.installed);
 					
 
@@ -66,7 +66,6 @@ public class Scenario {
 			}
 			System.out.println("\n");
 		}
-		System.out.println("\n");
 		System.out.println("Generated/processed data: " + Station.allstationsize + "/" + Application.allprocessed);
 	}
 }
