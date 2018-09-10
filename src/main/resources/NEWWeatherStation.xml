@@ -17,7 +17,7 @@
       </shutdown>
    </device>
 
-	<device starttime="0" stoptime="86400000" number="400" filesize="50">
+	<device starttime="5000000" stoptime="86400000" number="400" filesize="50">
       <name >test2</name>
       <freq>60000</freq>
       <sensor>8</sensor>
