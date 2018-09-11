@@ -20,14 +20,14 @@ public class ApplicationModel {
 		public long tasksize;
 		public String cloud;
 		public String instance;
-		public String iotPricing;
+		public String provider;
 		public long freq;
 		public String name;
 		
 		@Override
 		public String toString() {
 			return "ApplicationModel [tasksize=" + tasksize + ", cloud=" + cloud + ", instance=" + instance
-					+ ", iotPricing=" + iotPricing + ", freq=" + freq + ", name=" + name + "]";
+					+ ", iotPricing=" + provider + ", freq=" + freq + ", name=" + name + "]";
 		}
 		@XmlElement( name = "name" )
 		public void setName(String name) {
@@ -49,9 +49,9 @@ public class ApplicationModel {
 			this.instance = instance;
 		}
 
-		@XmlElement( name = "iot-pricing" )
-		public void setIotPricing(String iotPricing) {
-			this.iotPricing = iotPricing;
+		@XmlElement( name = "provider" )
+		public void setIotPricing(String provider) {
+			this.provider = provider;
 		}
 		
 		@XmlElement( name = "freq" )

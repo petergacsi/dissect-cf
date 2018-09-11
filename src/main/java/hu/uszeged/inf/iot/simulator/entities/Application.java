@@ -12,6 +12,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAda
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
+import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.inf.xml.model.ApplicationModel;
 
 public class Application extends Timed {
@@ -67,7 +68,7 @@ public class Application extends Timed {
 	public ArrayList<Station> stations;
 	String name;
 	Instance instance;
-
+	Provider provider;
 
 
 	public static void loadApplication(String appfile) throws JAXBException {
@@ -87,6 +88,7 @@ public class Application extends Timed {
 			subscribe(freq);
 		}
 		this.instance = Instance.instances.get(instance);
+		this.provider = Provider.getInstance();
 		Application.applications.add(this);
 		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
 		this.startBroker();
@@ -237,9 +239,8 @@ public class Application extends Timed {
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState() && Timed.getFireCount() > getLongestStoptime()) {
 			unsubscribe();
-			
 			System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime));
-
+			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {

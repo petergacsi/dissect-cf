@@ -6,7 +6,7 @@
 		<freq>300000</freq>
 		<cloud>cloud1</cloud>
 		<instance>azure-small</instance>
-		<iot-pricing>bluemix</iot-pricing>
+		<provider>bluemix</provider>
 	</application>
 	
 <application tasksize="2500000">
@@ -14,6 +14,6 @@
 		<freq>400000</freq>
 		<cloud>cloud2</cloud>
 		<instance>amazon-large</instance>
-		<iot-pricing>bluemix</iot-pricing>
+		<provider>bluemix</provider>
 	</application>
 </applications>

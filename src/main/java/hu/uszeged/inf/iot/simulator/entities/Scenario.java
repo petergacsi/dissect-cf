@@ -6,6 +6,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
+import hu.uszeged.inf.iot.simulator.providers.Provider;
 
 public class Scenario {
 
@@ -23,6 +24,7 @@ public class Scenario {
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";
 		String stationfile=resourcePath+"NEWWeatherStation.xml";
+		String providerfile=resourcePath+"Pricing.xml";
 		
 		// Set up the clouds
 		new Cloud(cloudfile,"cloud1");
@@ -30,8 +32,10 @@ public class Scenario {
 		
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
+		Provider.loadProvider(providerfile);
 		Application.loadApplication(appfile);
 		Station.loadDevice(stationfile);
+		
 		
 		// Start the simulation
 		Timed.simulateUntilLastEvent();
