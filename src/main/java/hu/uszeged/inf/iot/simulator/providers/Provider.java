@@ -2,21 +2,23 @@ package hu.uszeged.inf.iot.simulator.providers;
 
 import java.util.ArrayList;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import hu.uszeged.inf.iot.simulator.entities.Application;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
 public class Provider extends Timed{
 
+	
 	@Override
 	public String toString() {
-		return "Provider [bmList=" + bmList + ", blockSize=" + blockSize + ", messageCount=" + messageCount + ", price="
-				+ price + ", devicepricePerMonth=" + devicepricePerMonth + ", messagesPerMonthPerDevice="
-				+ messagesPerMonthPerDevice + ", amDevicepricePerMonth=" + amDevicepricePerMonth
-				+ ", amMessagesPerMonthPerDevice=" + amMessagesPerMonthPerDevice + ", oracleFreq=" + oracleFreq
-				+ ", azureFreq=" + azureFreq + ", pricePerMonth=" + pricePerMonth + ", messagesPerDay=" + messagesPerDay
-				+ ", messagesizePerKB=" + messagesizePerKB + "]";
+		return "Provider [BLUEMIX=" + BLUEMIX + ", AMAZON=" + AMAZON + ", AZURE=" + AZURE + ", ORACLE=" + ORACLE + "]";
 	}
 	public ArrayList<Bluemix> bmList;
 
+	public double BLUEMIX;
+	public double AMAZON;
+	public double AZURE;
+	public double ORACLE;
+	
 	public long blockSize;
 	public long messageCount;
 	public double price;
@@ -34,9 +36,6 @@ public class Provider extends Timed{
 	
 	private static Provider p=null;
 	
-	public static Provider getInstance() {
-		return Provider.p;
-	}
 	public static class Bluemix{
 		double mbto;
 		double mbfrom;
@@ -56,23 +55,17 @@ public class Provider extends Timed{
 	
 	public static void loadProvider(String providerfile){
 		try {
-			Provider p =new Provider();
-			ProvidersModel.loadProviderXML(providerfile,p);
-		//	System.out.println(p);
+			for(Application app: Application.applications) {
+				ProvidersModel.loadProviderXML(providerfile,new Provider(app));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 	}
 
-	private Provider(){
-		if(Provider.p==null) {
-			bmList = new ArrayList<Bluemix>();
-			Provider.p=this;
-		}else {
-			System.err.println("You can create only one IoT provider!");
-			System.exit(0);
-		}
-		
+	private Provider(Application app){
+		bmList = new ArrayList<Bluemix>();
+		app.provider=this;
 	}
 	@Override
 	public void tick(long fires) {

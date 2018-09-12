@@ -32,10 +32,9 @@ public class Scenario {
 		
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
-		Provider.loadProvider(providerfile);
 		Application.loadApplication(appfile);
 		Station.loadDevice(stationfile);
-		
+		Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
 		Timed.simulateUntilLastEvent();

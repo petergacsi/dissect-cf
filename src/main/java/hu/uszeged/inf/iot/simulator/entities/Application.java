@@ -68,7 +68,7 @@ public class Application extends Timed {
 	public ArrayList<Station> stations;
 	String name;
 	Instance instance;
-	Provider provider;
+	public Provider provider;
 
 
 	public static void loadApplication(String appfile) throws JAXBException {
@@ -88,7 +88,6 @@ public class Application extends Timed {
 			subscribe(freq);
 		}
 		this.instance = Instance.instances.get(instance);
-		this.provider = Provider.getInstance();
 		Application.applications.add(this);
 		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
 		this.startBroker();
@@ -239,7 +238,7 @@ public class Application extends Timed {
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState() && Timed.getFireCount() > getLongestStoptime()) {
 			unsubscribe();
-			System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime));
+			System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime)+" IoT costs: "+this.provider);
 			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
