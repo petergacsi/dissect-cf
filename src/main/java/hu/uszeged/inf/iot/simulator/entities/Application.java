@@ -5,7 +5,6 @@ import java.util.TreeMap;
 import javax.xml.bind.JAXBException;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
@@ -55,6 +54,7 @@ public class Application extends Timed {
 
 	boolean stationStarter;
 	public static ArrayList<Application> applications = new ArrayList<Application>();
+	public ArrayList<Provider> providers;
 	public long allWorkTime;
 	public ArrayList<VmCollector> vmlist;
 	private long allgenerateddatasize = 0;
@@ -68,8 +68,6 @@ public class Application extends Timed {
 	public ArrayList<Station> stations;
 	String name;
 	Instance instance;
-	public Provider provider;
-
 
 	public static void loadApplication(String appfile) throws JAXBException {
 		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
@@ -91,6 +89,7 @@ public class Application extends Timed {
 		Application.applications.add(this);
 		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
 		this.startBroker();
+		providers = new ArrayList<Provider>();
 	}
 
 	private void startBroker() {
@@ -238,7 +237,7 @@ public class Application extends Timed {
 		// kilepesi feltetel az app szamara
 		if (Application.feladatszam == 0 && checkStationState() && Timed.getFireCount() > getLongestStoptime()) {
 			unsubscribe();
-			System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime)+" IoT costs: "+this.provider);
+			System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime)+" IoT costs: "+providers);
 			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
@@ -274,7 +273,7 @@ public class Application extends Timed {
 		return true;
 	}
 
-	private long sumOfData() {
+	public long sumOfData() {
 		long temp = 0;
 		for (Station s : this.stations) {
 			temp += s.generatedfilesize;

@@ -24,7 +24,7 @@ public class ProvidersModel{
 
 		//amazon
 		nList = doc.getElementsByTagName("price");
-		p.price=(Long.parseLong(nList.item(0).getTextContent()));
+		p.blockPrice=(Long.parseLong(nList.item(0).getTextContent()));
 		nList = doc.getElementsByTagName("message-count");
 		p.messageCount=(Long.parseLong(nList.item(0).getTextContent()));
 		nList = doc.getElementsByTagName("block-size");

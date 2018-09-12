@@ -3,25 +3,17 @@ package hu.uszeged.inf.iot.simulator.providers;
 import java.util.ArrayList;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Application;
-import hu.uszeged.inf.xml.model.ProvidersModel;
+
 
 public class Provider extends Timed{
 
-	
-	@Override
-	public String toString() {
-		return "Provider [BLUEMIX=" + BLUEMIX + ", AMAZON=" + AMAZON + ", AZURE=" + AZURE + ", ORACLE=" + ORACLE + "]";
-	}
 	public ArrayList<Bluemix> bmList;
+	Application app;
 
-	public double BLUEMIX;
-	public double AMAZON;
-	public double AZURE;
-	public double ORACLE;
 	
 	public long blockSize;
 	public long messageCount;
-	public double price;
+	public double blockPrice;
 
 	public double devicepricePerMonth;
 	public long messagesPerMonthPerDevice;
@@ -33,9 +25,7 @@ public class Provider extends Timed{
 	public double pricePerMonth;
 	public long messagesPerDay;
 	public long messagesizePerKB;
-	
-	private static Provider p=null;
-	
+		
 	public static class Bluemix{
 		double mbto;
 		double mbfrom;
@@ -56,20 +46,24 @@ public class Provider extends Timed{
 	public static void loadProvider(String providerfile){
 		try {
 			for(Application app: Application.applications) {
-				ProvidersModel.loadProviderXML(providerfile,new Provider(app));
+				app.providers.add(new BluemixProvider(app,providerfile));
+				app.providers.add(new AmazonProvider(app,providerfile));
+				app.providers.add(new OracleProvider(app));
+				app.providers.add(new AzureProvider(app));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
 	}
 
-	private Provider(Application app){
+	Provider(){
 		bmList = new ArrayList<Bluemix>();
-		app.provider=this;
 	}
+
 	@Override
 	public void tick(long fires) {
 		// TODO Auto-generated method stub
 		
 	}
+
 }

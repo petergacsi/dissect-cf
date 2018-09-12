@@ -41,11 +41,11 @@ public class Station extends Device{
 		}
 	}
 	
-	static class Stationdata {
+	public static class Stationdata {
 
 		long starttime;
 		long stoptime;
-		private long filesize;
+		public long filesize;
 		private int sensornumber;
 		private long freq;
 		String name;
@@ -84,7 +84,7 @@ public class Station extends Device{
 		}
 	}
 	
-	Stationdata sd;
+	public Stationdata sd;
 	Repository localRepository;
 	private Repository cloudRepository;
 	private HashMap<String, Integer> lmap;
