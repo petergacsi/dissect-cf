@@ -117,8 +117,11 @@ public class Station extends Device{
 	}
 
 	public void startMeter() {
+		Random rand = new Random();
+		int  delay = rand.nextInt(20)*1000*60;
+		
 		if (this.isSubscribed()==false) {
-			new DeferredEvent(this.sd.starttime) {
+			new DeferredEvent(this.sd.starttime+delay) {
 				
 				@Override
 				protected void eventAction() {
