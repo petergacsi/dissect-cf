@@ -66,7 +66,7 @@ public class Application extends Timed {
 	private long tasksize;
 	public Cloud cloud;
 	public ArrayList<Station> stations;
-	String name;
+	public String name;
 	Instance instance;
 
 	public static void loadApplication(String appfile) throws JAXBException {

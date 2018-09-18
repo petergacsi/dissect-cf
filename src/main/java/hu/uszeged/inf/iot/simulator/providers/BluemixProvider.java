@@ -8,7 +8,7 @@ public class BluemixProvider extends Provider{
 	
 	@Override
 	public String toString() {
-		return  "[BLUEMIX=" + BLUEMIX + "]";
+		return  "[BLUEMIX=" + BLUEMIX +" "+this.getFrequency()+"]";
 	}
 
 
@@ -21,7 +21,7 @@ public class BluemixProvider extends Provider{
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
-		subscribe(86400000L);
+		subscribe(this.getHighestStopTime(Long.MAX_VALUE));
 	}
 	
 	

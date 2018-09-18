@@ -3,9 +3,10 @@ package hu.uszeged.inf.iot.simulator.providers;
 import java.util.ArrayList;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Application;
+import hu.uszeged.inf.iot.simulator.entities.Station;
 
 
-public class Provider extends Timed{
+public abstract class Provider extends Timed{
 
 	public ArrayList<Bluemix> bmList;
 	Application app;
@@ -48,8 +49,8 @@ public class Provider extends Timed{
 			for(Application app: Application.applications) {
 				app.providers.add(new BluemixProvider(app,providerfile));
 				app.providers.add(new AmazonProvider(app,providerfile));
-				app.providers.add(new OracleProvider(app));
-				app.providers.add(new AzureProvider(app));
+				app.providers.add(new OracleProvider(app,providerfile));
+				app.providers.add(new AzureProvider(app,providerfile));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,6 +61,21 @@ public class Provider extends Timed{
 		bmList = new ArrayList<Bluemix>();
 	}
 
+	public long getHighestStopTime(long given) {
+		long max = Long.MIN_VALUE+1;
+		for(Station s : this.app.stations) {
+			if(s.sd.stoptime>max) {
+				max=s.sd.stoptime;
+			}
+		}
+		if(max<given) {
+			return max;
+		}else {
+			return given;
+		}
+	}
+
+	
 	@Override
 	public void tick(long fires) {
 		// TODO Auto-generated method stub

@@ -44,9 +44,9 @@ public class Station extends Device{
 	public static class Stationdata {
 
 		long starttime;
-		long stoptime;
+		public long stoptime;
 		public long filesize;
-		private int sensornumber;
+		public int sensornumber;
 		private long freq;
 		String name;
 		private double ratio;
@@ -93,6 +93,7 @@ public class Station extends Device{
 	public long generatedfilesize;
 	private String strategy;
 	public static long allstationsize = 0;
+	public int messageCount;
 	//long realStartTime; 
 	
 	public Station(long maxinbw, long maxoutbw, long diskbw, long reposize, final Stationdata sd,String strategy) throws NetworkException {
@@ -103,6 +104,7 @@ public class Station extends Device{
 		this.localRepository.setState(NetworkNode.State.RUNNING);	
 		installionProcess(this);
 		this.startMeter();
+		this.messageCount=0;
 	}
 
 	private void startCommunicate() throws NetworkException {

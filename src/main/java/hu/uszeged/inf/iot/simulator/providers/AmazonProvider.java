@@ -8,18 +8,18 @@ public class AmazonProvider extends Provider{
 	
 	@Override
 	public String toString() {
-		return "[AMAZON=" + AMAZON + "]";
+		return "[AMAZON=" + AMAZON +" "+this.getFrequency()+"]";
 	}
 
 
 	public AmazonProvider(Application app,String providerfile) {
 		this.app=app;
-		subscribe(86400000L);
 		try {
 			ProvidersModel.loadProviderXML(providerfile,this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		subscribe(this.getHighestStopTime(Long.MAX_VALUE));
 	}
 	
 	
