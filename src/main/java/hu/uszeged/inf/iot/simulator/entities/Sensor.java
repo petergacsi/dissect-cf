@@ -10,7 +10,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.*;
  * osztaly idotol fuggo, de vissza nem tero esemenykent modellezi le egy meres
  * folyamatat.
  */
-class Metering extends DeferredEvent {
+class Sensor extends DeferredEvent {
 	/**
 	 * It identifies which sensor generated the data. Azonositja, melyik szenzor
 	 * generalta az adatot.
@@ -27,7 +27,7 @@ class Metering extends DeferredEvent {
 
 	
 
-	Metering(Station s, int sensorID, long filesize, long delay) {
+	Sensor(Station s, int sensorID, long filesize, long delay) {
 		super(delay);
 		this.sensorID = sensorID;
 		this.filesize = filesize;

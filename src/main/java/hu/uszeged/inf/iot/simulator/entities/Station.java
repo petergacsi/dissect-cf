@@ -146,7 +146,7 @@ public class Station extends Device{
 		// a meres a megadott ideig tart csak - metering takes the given time
 		if (Timed.getFireCount() < (sd.stoptime ) && Timed.getFireCount() >= (sd.starttime )) {
 			for (int i = 0; i < sd.sensornumber; i++) {
-					new Metering(this, i, sd.filesize, 1);
+					new Sensor(this, i, sd.filesize, 1);
 			}
 		}
 		// a station mukodese addig amig az osszes SO el nem lett kuldve -

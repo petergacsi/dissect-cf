@@ -26,6 +26,7 @@ public class Application extends Timed {
 		public long workingTime;
 		int interationCounter;
 		String id;
+		double restarted;
 		
 		public boolean isWorked() {
 			return worked;
@@ -41,6 +42,7 @@ public class Application extends Timed {
 		}
 
 		VmCollector(VirtualMachine vm) {
+
 			this.vm = vm;
 			this.isworking = false;
 			this.tasknumber = 0;
@@ -49,6 +51,7 @@ public class Application extends Timed {
 			this.lastWorked = Timed.getFireCount();
 			this.installed = Timed.getFireCount();
 			this.id=Integer.toString(vmlist.size());
+			this.restarted=0;
 		}
 	}
 
@@ -141,7 +144,7 @@ public class Application extends Timed {
 				try {
 					this.vmlist.get(i).vm.switchOn(this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
 							PhysicalMachine.defaultAllocLen), this.cloud.iaas.repositories.get(0));			
-					
+					return true;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -154,8 +157,9 @@ public class Application extends Timed {
 	private void turnoffVM() {
 		
 		for (VmCollector vmcl : this.vmlist) {
-			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isworking == false && vmcl.installed<=(Timed.getFireCount()-4*this.getFrequency())) {
+			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isworking == false && vmcl.installed<(Timed.getFireCount()-this.getFrequency())) {
 				try {
+					vmcl.restarted++;
 					vmcl.lastWorked = Timed.getFireCount();
 					vmcl.vm.switchoff(false);
 					
@@ -253,7 +257,6 @@ public class Application extends Timed {
 
 	private void countVmRunningTime() {
 		for (VmCollector vmc : this.vmlist) {
-
 			if (vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				vmc.workingTime += (Timed.getFireCount() - vmc.lastWorked);
 				allWorkTime+=(Timed.getFireCount() - vmc.lastWorked);
