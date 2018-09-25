@@ -21,15 +21,16 @@ public class Scenario {
 										toString();
 		String cloudfile=resourcePath+"LPDSCloud.xml";
 		String cloudfile2=resourcePath+"LPDSCloud2.xml";
+		String cloudfile3=resourcePath+"LPDSCloud3.xml";
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";
-		String stationfile=resourcePath+"NEWWeatherStation.xml";
+		String stationfile=resourcePath+"wsR.xml";
 		String providerfile=resourcePath+"Pricing.xml";
 		
 		// Set up the clouds
 		new Cloud(cloudfile,"cloud1");
 		new Cloud(cloudfile2,"cloud2");
-		
+		new Cloud(cloudfile3,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);

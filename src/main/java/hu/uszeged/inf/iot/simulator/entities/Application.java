@@ -143,7 +143,7 @@ public class Application extends Timed {
 
 	private boolean turnonVM() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
-			if ((this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN))){
+			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isHostableRequest(this.instance.arc)){
 				try {
 					this.vmlist.get(i).vm.switchOn(this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
 							PhysicalMachine.defaultAllocLen), this.cloud.iaas.repositories.get(0));			
