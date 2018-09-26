@@ -31,13 +31,14 @@ public class Scenario {
 		String CScloudfile=resourcePath+"\\resources_cscs\\LPDSCloud.xml";
 		String CScloudfile2=resourcePath+"\\resources_cscs\\LPDSCloud2.xml";
 		String CScloudfile3=resourcePath+"\\resources_cscs\\LPDSCloud3.xml";
+		String CScloudfile4=resourcePath+"\\bigger.xml";
 		String CSappfile=resourcePath+"\\resources_cscs\\NEWApplication.xml";
 		String CSstationfile=resourcePath+"\\resources_cscs\\WeatherStationL.xml";
 		
 		// Set up the clouds
-		new Cloud(CScloudfile,"cloud1");
-		new Cloud(CScloudfile2,"cloud2");
-		new Cloud(CScloudfile3,"cloud3");
+		new Cloud(CScloudfile4,"cloud1");
+		new Cloud(CScloudfile4,"cloud2");
+		new Cloud(CScloudfile4,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(CSappfile);
