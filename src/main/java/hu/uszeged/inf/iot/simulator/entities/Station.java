@@ -1,9 +1,12 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.Vector;
+
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.energy.powermodelling.PowerState;
@@ -14,6 +17,8 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
+import hu.uszeged.inf.iot.simulator.pliant.FuzzyIndicators;
+import hu.uszeged.inf.iot.simulator.pliant.Sigmoid;
 import hu.uszeged.inf.xml.model.DeviceModel;
 
 public class Station extends Device{
@@ -223,7 +228,101 @@ public class Station extends Device{
 				this.lmap.put(sd.name, Station.latency);
 				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 			}
-		 	
+			else if(this.strategy.equals("fuzzy")){
+				//System.out.println("test");
+				Sigmoid sig = new Sigmoid(new Double(-4), new Double(0.00000004));
+				Vector<Double> price = new Vector<Double>();
+				for(int i=0;i<Application.applications.size();++i){
+					
+					price.add(sig.getat(Application.applications.get(i).instance.pricePerTick));
+				}
+				//System.out.println(price);
+				
+				Vector<Double> numberofvm = new Vector<Double>();
+				sig = new Sigmoid(new Double(-0.25),new Double(5));
+				for(int i=0;i<Application.applications.size();++i){
+					numberofvm.add(sig.getat(new Double(Application.applications.get(i).vmlist.size())));
+				}
+				//System.out.println(numberofvm);
+				
+				Vector<Double> numberofstation = new Vector<Double>();
+				sig = new Sigmoid(new Double(-0.125),new Double(350));
+				for(int i=0;i<Application.applications.size();++i){					
+					numberofstation.add(sig.getat(new Double(Application.applications.get(i).stations.size())));
+				}
+				//System.out.println(numberofstation);
+				
+				Vector<Double> preferVM = new Vector<Double>();
+				sig = new Sigmoid(new Double(4),new Double(8));
+				for(int i=0;i<Application.applications.size();++i){					
+					preferVM.add(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredCPUs())));
+				}
+				//System.out.println(preferVM);
+				
+				Vector<Double> preferVMMem = new Vector<Double>();
+				sig = new Sigmoid(new Double(4),new Double(2147483648.0));
+				for(int i=0;i<Application.applications.size();++i){					
+					preferVMMem.add(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredMemory())));
+				}
+				//System.out.println(preferVMMem);
+				
+				
+				
+				Vector<Double> score = new Vector<Double>();
+				for(int i=0;i<price.size();++i){
+					Vector<Double> temp = new Vector<Double>();
+					temp.add(price.get(i));
+					temp.add(numberofvm.get(i));
+					temp.add(numberofstation.get(i));
+					temp.add(preferVM.get(i));
+					temp.add(preferVMMem.get(i));
+					score.add(FuzzyIndicators.getAggregation(temp)*100);
+				}
+				Vector<Integer> finaldecision = new Vector<Integer>();
+				for(int i=0;i<Application.applications.size();++i){
+					finaldecision.add(i);	
+				}
+				for(int i=0;i<score.size();++i){
+					for(int j = 0; j< score.get(i); j++) {
+						finaldecision.add(i);
+					}
+				}
+				Random rnd = new Random();
+				Collections.shuffle(finaldecision);			
+				int temp = rnd.nextInt(finaldecision.size());
+				int rsIdx = finaldecision.elementAt(temp);
+				
+				Application.addStation(this, Application.applications.get(rsIdx));
+				this.lmap.put(sd.name, Station.latency);
+				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
+					
+				
+				// 
+				// Application.applications.get(i).instance.pricePerTick // ar
+				// Application.applications.get(i).vmlist.size()() hany van most
+				// Station.sd. (start stop time) -> ekkor kuld jeleket
+				// Station.sd. freq -> adatgyujtes gyakorisága
+				// Cloud.
+				
+				// Application.applications.get(i).stations
+				// Application.applications.get(i).tasksize
+				// Application.applications.get(i).vmsize
+			
+				//cloud info
+				// Cloud.clouds.get(1)
+				// Cloud.clouds.get(1).iaas.machines fizikai gepek
+				// Application.applications.get(0).cloud - application cloud kapcsolat
+				
+				// Application.applications.get(0).allprocessed mennyit hajtott vegre
+				//gyenge vm tovabb
+				
+				//vm gep tipusa
+				// Application.applications.get(0).instance.arc.getRequiredCPUs()
+				//
+				//fel van-e iratkozva, ha felvan akkor fut
+				// s.isSubscribed() 
+				
+			}
 		
 		
 	}
