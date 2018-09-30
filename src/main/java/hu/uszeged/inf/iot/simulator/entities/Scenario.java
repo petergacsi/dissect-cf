@@ -34,7 +34,7 @@ public class Scenario {
 		String CScloudfile2=resourcePath+"\\resources_cscs\\LPDSCloud2.xml";
 		String CScloudfile3=resourcePath+"\\resources_cscs\\LPDSCloud3.xml";
 		
-		String CSappfile=resourcePath+"\\resources_cscs\\NEWApplication.xml";
+		String CSappfile=resourcePath+"NEWApplication.xml";
 		String CSstationfile=resourcePath+"\\resources_cscs\\WeatherStationL.xml";
 		
 		// Set up the clouds
