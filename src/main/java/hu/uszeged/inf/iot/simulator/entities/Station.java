@@ -229,69 +229,18 @@ public class Station extends Device{
 				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 			}
 			else if(this.strategy.equals("fuzzy")){
-				//System.out.println("test");
-				Sigmoid sig = new Sigmoid(new Double(-4), new Double(0.00000004));
-				Vector<Double> price = new Vector<Double>();
-				for(int i=0;i<Application.applications.size();++i){
+				new DeferredEvent(this.sd.starttime) {
 					
-					price.add(sig.getat(Application.applications.get(i).instance.pricePerTick));
-				}
-				//System.out.println(price);
-				
-				Vector<Double> numberofvm = new Vector<Double>();
-				sig = new Sigmoid(new Double(-0.25),new Double(5));
-				for(int i=0;i<Application.applications.size();++i){
-					numberofvm.add(sig.getat(new Double(Application.applications.get(i).vmlist.size())));
-				}
-				//System.out.println(numberofvm);
-				
-				Vector<Double> numberofstation = new Vector<Double>();
-				sig = new Sigmoid(new Double(-0.125),new Double(350));
-				for(int i=0;i<Application.applications.size();++i){					
-					numberofstation.add(sig.getat(new Double(Application.applications.get(i).stations.size())));
-				}
-				//System.out.println(numberofstation);
-				
-				Vector<Double> preferVM = new Vector<Double>();
-				sig = new Sigmoid(new Double(4),new Double(8));
-				for(int i=0;i<Application.applications.size();++i){					
-					preferVM.add(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredCPUs())));
-				}
-				//System.out.println(preferVM);
-				
-				Vector<Double> preferVMMem = new Vector<Double>();
-				sig = new Sigmoid(new Double(4),new Double(2147483648.0));
-				for(int i=0;i<Application.applications.size();++i){					
-					preferVMMem.add(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredMemory())));
-				}
-				//System.out.println(preferVMMem);
-				
-				
-				
-				Vector<Double> score = new Vector<Double>();
-				for(int i=0;i<price.size();++i){
-					Vector<Double> temp = new Vector<Double>();
-					temp.add(price.get(i));
-					temp.add(numberofvm.get(i));
-					temp.add(numberofstation.get(i));
-					temp.add(preferVM.get(i));
-					temp.add(preferVMMem.get(i));
-					score.add(FuzzyIndicators.getAggregation(temp)*100);
-				}
-				Vector<Integer> finaldecision = new Vector<Integer>();
-				for(int i=0;i<Application.applications.size();++i){
-					finaldecision.add(i);	
-				}
-				for(int i=0;i<score.size();++i){
-					for(int j = 0; j< score.get(i); j++) {
-						finaldecision.add(i);
+					@Override
+					protected void eventAction() {
+						int rsIdx = fuzzyDecision(s);
+						Application.addStation(s, Application.applications.get(rsIdx));
+						lmap.put(sd.name, Station.latency);
+						lmap.put(app.cloud.iaas.repositories.get(0).getName(), Station.latency);
 					}
-				}
-				Random rnd = new Random();
-				Collections.shuffle(finaldecision);			
-				int temp = rnd.nextInt(finaldecision.size());
-				int rsIdx = finaldecision.elementAt(temp);
+				};
 				
+				int rsIdx = fuzzyDecision(s);
 				Application.addStation(this, Application.applications.get(rsIdx));
 				this.lmap.put(sd.name, Station.latency);
 				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
@@ -327,6 +276,73 @@ public class Station extends Device{
 		
 	}
 
+	private int fuzzyDecision(Station s) {
+		//System.out.println("test");
+		Sigmoid sig = new Sigmoid(new Double(-4), new Double(0.00000004));
+		Vector<Double> price = new Vector<Double>();
+		for(int i=0;i<Application.applications.size();++i){
+			
+			price.add(sig.getat(Application.applications.get(i).instance.pricePerTick));
+		}
+		//System.out.println(price);
+		
+		Vector<Double> numberofvm = new Vector<Double>();
+		sig = new Sigmoid(new Double(-0.25),new Double(5));
+		for(int i=0;i<Application.applications.size();++i){
+			numberofvm.add(sig.getat(new Double(Application.applications.get(i).vmlist.size())));
+		}
+		//System.out.println(numberofvm);
+		
+		Vector<Double> numberofstation = new Vector<Double>();
+		sig = new Sigmoid(new Double(-0.125),new Double(350));
+		for(int i=0;i<Application.applications.size();++i){					
+			numberofstation.add(sig.getat(new Double(Application.applications.get(i).stations.size())));
+		}
+		//System.out.println(numberofstation);
+		
+		Vector<Double> preferVM = new Vector<Double>();
+		sig = new Sigmoid(new Double(4),new Double(8));
+		for(int i=0;i<Application.applications.size();++i){					
+			preferVM.add(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredCPUs())));
+		}
+		//System.out.println(preferVM);
+		
+		Vector<Double> preferVMMem = new Vector<Double>();
+		sig = new Sigmoid(new Double(4),new Double(2147483648.0));
+		for(int i=0;i<Application.applications.size();++i){					
+			preferVMMem.add(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredMemory())));
+		}
+		//System.out.println(preferVMMem);
+		
+		
+		
+		Vector<Double> score = new Vector<Double>();
+		for(int i=0;i<price.size();++i){
+			Vector<Double> temp = new Vector<Double>();
+			temp.add(price.get(i));
+			temp.add(numberofvm.get(i));
+			temp.add(numberofstation.get(i));
+			temp.add(preferVM.get(i));
+			temp.add(preferVMMem.get(i));
+			score.add(FuzzyIndicators.getAggregation(temp)*100);
+		}
+		Vector<Integer> finaldecision = new Vector<Integer>();
+		for(int i=0;i<Application.applications.size();++i){
+			finaldecision.add(i);	
+		}
+		for(int i=0;i<score.size();++i){
+			for(int j = 0; j< score.get(i); j++) {
+				finaldecision.add(i);
+			}
+		}
+		Random rnd = new Random();
+		Collections.shuffle(finaldecision);			
+		int temp = rnd.nextInt(finaldecision.size());
+		return finaldecision.elementAt(temp);		
+		
+		
+	}
+	
 	@Override
 	public void shutdownProcess() {	
 		// TODO: this method will handle the 'shutdown for a while' process
