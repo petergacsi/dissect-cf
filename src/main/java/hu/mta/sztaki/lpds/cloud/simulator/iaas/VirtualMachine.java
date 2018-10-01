@@ -248,7 +248,7 @@ public class VirtualMachine extends MaxMinConsumer {
 	 * where should the VM's disk storage be placed during the VM's initiation
 	 * procedure.
 	 */
-	private Repository vatarget = null;
+	public Repository vatarget = null;
 
 	/**
 	 * the possible states of a virtual machine in DISSECT-CF.

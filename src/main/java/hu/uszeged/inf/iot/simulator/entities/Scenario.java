@@ -30,21 +30,20 @@ public class Scenario {
 		String providerfile=resourcePath+"Pricing.xml";
 		
 		//CSCS strings
-		String CScloudfile=resourcePath+"\\resources_cscs\\LPDSCloud.xml";
-		String CScloudfile2=resourcePath+"\\resources_cscs\\LPDSCloud2.xml";
-		String CScloudfile3=resourcePath+"\\resources_cscs\\LPDSCloud3.xml";
+		String CScloudfile=resourcePath+"/resources_cscs/LPDSCloud.xml";
+
 		
-		String CSstationfile=resourcePath+"\\resources_cscs\\WeatherStationL.xml";
+		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml";
 		
 		// Set up the clouds
 		new Cloud(CScloudfile,"cloud1");
-		new Cloud(CScloudfile3,"cloud2");
-		new Cloud(CScloudfile2,"cloud3");
+		new Cloud(CScloudfile,"cloud2");
+		new Cloud(CScloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
 		Station.loadDevice(CSstationfile);
-		Provider.loadProvider(providerfile); 
+		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
 		Timed.simulateUntilLastEvent();
@@ -55,11 +54,12 @@ public class Scenario {
 	
 	private static void printInformation() {
 		System.out.println("~~Informations about the simulation:~~");
-
+		double totalCost=0.0;
 		for (Cloud c : Cloud.clouds.values()) {
 			System.out.println("cloud: " + c.name);
 
 			for (Application a : c.applications) {
+				totalCost+=a.instance.cost;
 				int usedVM = 0;
 				int tasks = 0;
 				for (VmCollector vmcl : a.vmlist) {
@@ -79,6 +79,7 @@ public class Scenario {
 			}
 			System.out.println("\n");
 		}
+		System.out.println(totalCost);
 		System.out.println("Generated/processed data: " + Station.allstationsize + "/" + Application.allprocessed);
 	}
 }

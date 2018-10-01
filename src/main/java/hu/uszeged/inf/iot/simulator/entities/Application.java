@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import javax.xml.bind.JAXBException;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocation;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
@@ -140,13 +141,11 @@ public class Application extends Timed {
 		}
 	}
 
-
-	private boolean turnonVM() {
+	/*private boolean turnonVM() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
-			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isHostableRequest(this.instance.arc)){
+			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).vm.getResourceAllocation()!=null){
 				try {
-					this.vmlist.get(i).vm.switchOn(this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
-							PhysicalMachine.defaultAllocLen), this.cloud.iaas.repositories.get(0));			
+					this.vmlist.get(i).vm.switchOn(this.vmlist.get(i).vm.getResourceAllocation(), this.cloud.iaas.repositories.get(0));			
 					return true;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -154,9 +153,35 @@ public class Application extends Timed {
 			}
 		}
 		return false;
+	} */
+
+	private PhysicalMachine findRA() {
+		for(PhysicalMachine pm : this.cloud.iaas.machines) {
+			if(pm.isHostableRequest(this.instance.arc)) {
+				return pm;
+			}
+		}
+		return null;
 	}
-
-
+	
+	private boolean turnonVM() {
+		for (int i = 0; i < this.vmlist.size(); i++) {
+			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isReHostableRequest(this.instance.arc)){
+				try {
+					
+					ResourceAllocation ra = this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
+							PhysicalMachine.defaultAllocLen);
+							
+					this.vmlist.get(i).vm.switchOn(ra, null);			
+					return true;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return false;
+}
+	
 	private void turnoffVM() {
 		
 		for (VmCollector vmcl : this.vmlist) {
@@ -242,9 +267,15 @@ public class Application extends Timed {
 		this.turnoffVM();
 
 		// kilepesi feltetel az app szamara
-		if (Application.feladatszam == 0 && checkStationState() && Timed.getFireCount() > getLongestStoptime()) {
+		if (Application.feladatszam == 0 && checkStationState()) {
 			unsubscribe();
-			System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime)+" IoT costs: "+providers);
+			if(this.stations.size()==0) {
+				System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(0)+" IoT costs: "+providers);
+			}else {
+				System.out.println("Application " + this.name + " has stopped @" + Timed.getFireCount()+" price: "+this.instance.calculateCloudCost(allWorkTime)+" IoT costs: "+providers);
+			}
+			
+			
 			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
@@ -260,7 +291,7 @@ public class Application extends Timed {
 
 	private void countVmRunningTime() {
 		for (VmCollector vmc : this.vmlist) {
-			if ( /* vmc.vm!=null &&*/ vmc.vm.getState().equals(VirtualMachine.State.RUNNING) ) {
+			if ( /* vmc.vm!=null &&*/ vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				vmc.workingTime += (Timed.getFireCount() - vmc.lastWorked);
 				allWorkTime+=(Timed.getFireCount() - vmc.lastWorked);
 				vmc.lastWorked = Timed.getFireCount();
@@ -270,10 +301,12 @@ public class Application extends Timed {
 	}
 
 	private boolean checkStationState() { // TODO probably wrong, but lets see
-		for (Station s : this.stations) {
-			// System.out.println(s + " "+ Timed.getFireCount());
-			if (s.isSubscribed()) {
-				return false;
+		for(Application app : Application.applications) {
+			for (Station s : app.stations) {
+				// System.out.println(s + " "+ Timed.getFireCount());
+				if (s.isSubscribed()) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -285,15 +318,6 @@ public class Application extends Timed {
 			temp += s.generatedfilesize;
 		}
 		return temp;
-	}
-	long getLongestStoptime() {
-		long max = -1;
-		for (Station s : this.stations) {
-			if (s.sd.stoptime > max) {
-				max = s.sd.stoptime;
-			}
-		}
-		return max;
 	}
 
 	public static void addStation(Station s, Application a) {

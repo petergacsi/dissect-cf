@@ -13,6 +13,7 @@ public class Instance {
 	String name;
 	public AlterableResourceConstraints arc;
 	public double pricePerTick;
+	public double cost;
 	
 	public static HashMap<String,Instance> instances = new HashMap<String,Instance>();
 	
@@ -28,6 +29,7 @@ public class Instance {
 	}
 	
 	public double calculateCloudCost(long time){
+		cost=time*pricePerTick;
 		return time*pricePerTick;
 	}
 }

@@ -240,6 +240,7 @@ public class Station extends Device{
 					}
 				};
 				
+
 				// 
 				// Application.applications.get(i).instance.pricePerTick // ar
 				// Application.applications.get(i).vmlist.size()() hany van most

@@ -1156,6 +1156,10 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	public boolean isHostableRequest(final ResourceConstraints requested) {
 		return requested.compareTo(totalCapacities) <= 0;
 	}
+	
+	public boolean isReHostableRequest(final ResourceConstraints requested) {
+		return requested.compareTo(freeCapacities) <= 0;
+	}
 
 	/**
 	 * Bounds a VM to a particular PM on a previously agreed allocation

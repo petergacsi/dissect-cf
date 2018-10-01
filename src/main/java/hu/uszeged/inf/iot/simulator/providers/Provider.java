@@ -62,7 +62,7 @@ public abstract class Provider extends Timed{
 	}
 
 	public long getHighestStopTime(long given) {
-		long max = Long.MIN_VALUE+1;
+		long max = -1;
 		for(Station s : this.app.stations) {
 			if(s.sd.stoptime>max) {
 				max=s.sd.stoptime;
