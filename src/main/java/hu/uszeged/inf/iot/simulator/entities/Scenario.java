@@ -34,7 +34,6 @@ public class Scenario {
 		String CScloudfile2=resourcePath+"\\resources_cscs\\LPDSCloud2.xml";
 		String CScloudfile3=resourcePath+"\\resources_cscs\\LPDSCloud3.xml";
 		
-		String CSappfile=resourcePath+"NEWApplication.xml";
 		String CSstationfile=resourcePath+"\\resources_cscs\\WeatherStationL.xml";
 		
 		// Set up the clouds
@@ -43,7 +42,7 @@ public class Scenario {
 		new Cloud(CScloudfile2,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
-		Application.loadApplication(CSappfile);
+		Application.loadApplication(appfile);
 		Station.loadDevice(CSstationfile);
 		Provider.loadProvider(providerfile); 
 		

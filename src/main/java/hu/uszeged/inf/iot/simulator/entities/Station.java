@@ -240,17 +240,11 @@ public class Station extends Device{
 					}
 				};
 				
-				int rsIdx = fuzzyDecision(s);
-				Application.addStation(this, Application.applications.get(rsIdx));
-				this.lmap.put(sd.name, Station.latency);
-				this.lmap.put(this.app.cloud.iaas.repositories.get(0).getName(), Station.latency);
-					
-				
 				// 
 				// Application.applications.get(i).instance.pricePerTick // ar
 				// Application.applications.get(i).vmlist.size()() hany van most
 				// Station.sd. (start stop time) -> ekkor kuld jeleket
-				// Station.sd. freq -> adatgyujtes gyakorisága
+				// Station.sd. freq -> adatgyujtes gyakorisï¿½ga
 				// Cloud.
 				
 				// Application.applications.get(i).stations
