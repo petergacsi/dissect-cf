@@ -276,10 +276,9 @@ public class Station extends Device{
 		
 		Kappa kappa = new Kappa(3.0,0.4);
 		//System.out.println("test");
-		Sigmoid sig = new Sigmoid(new Double(-1.0/128.0), new Double(20));
+		Sigmoid sig = new Sigmoid(new Double(-1.0/96.0), new Double(15));
 		Vector<Double> price = new Vector<Double>();
 		for(int i=0;i<Application.applications.size();++i){
-			
 			price.add(kappa.getAt(sig.getat(Application.applications.get(i).instance.pricePerTick*1000000000)));
 		}
 		//System.out.println(price);
@@ -296,23 +295,48 @@ public class Station extends Device{
 			sum_stations += Application.applications.get(i).stations.size();
 		}
 		
-		
 		Vector<Double> numberofstation = new Vector<Double>();
 		sig = new Sigmoid(new Double(-0.125),new Double(sum_stations/(Application.applications.size())));
 		for(int i=0;i<Application.applications.size();++i){		
 			numberofstation.add(kappa.getAt(sig.getat(new Double(Application.applications.get(i).stations.size()))));
 		}
+		
+		Vector<Double> numberofActiveStation = new Vector<Double>();
+		for(int i=0;i<Application.applications.size();++i){		
+			double sum = 0.0;
+			for(int j=0;j<Application.applications.get(i).stations.size();j++) {
+				Station stat = Application.applications.get(i).stations.get(j);
+				long time = Timed.getFireCount();
+				if(stat.sd.starttime >= time && stat.sd.stoptime >= time)
+					sum +=1;
+			}	
+			numberofActiveStation.add(sum);
+		}
+		sum_stations = 0.0;
+		for(int i=0;i<numberofActiveStation.size();++i){			
+			sum_stations += numberofActiveStation.get(i);
+		}
+		
+		sig = new Sigmoid(new Double(-0.125),new Double(sum_stations/(numberofActiveStation.size())));
+		for(int i=0;i<numberofActiveStation.size();++i){
+			double a = numberofActiveStation.get(i);
+			double b = sig.getat(a);
+			double c = kappa.getAt(b);
+			numberofActiveStation.set(i, c);
+		}
+		
+		
 		//System.out.println(numberofstation);
 		
 		Vector<Double> preferVM = new Vector<Double>();
-		sig = new Sigmoid(new Double(0.125),new Double(4));
+		sig = new Sigmoid(new Double(1.0/32),new Double(3));
 		for(int i=0;i<Application.applications.size();++i){
 			preferVM.add(kappa.getAt(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredCPUs()))));
 		}
 		//System.out.println(preferVM);
 		
 		Vector<Double> preferVMMem = new Vector<Double>();
-		sig = new Sigmoid(new Double(1.0/256.0),new Double(214.0));
+		sig = new Sigmoid(new Double(1.0/256.0),new Double(350.0));
 		for(int i=0;i<Application.applications.size();++i){	
 			preferVMMem.add(kappa.getAt(sig.getat(new Double(Application.applications.get(i).instance.arc.getRequiredMemory() / 10000000))));
 		}
@@ -320,14 +344,16 @@ public class Station extends Device{
 		
 		
 		
+		
 		Vector<Double> score = new Vector<Double>();
 		for(int i=0;i<price.size();++i){
 			Vector<Double> temp = new Vector<Double>();
 			temp.add(price.get(i));
-			temp.add(numberofvm.get(i));
+			//temp.add(numberofvm.get(i));
 			temp.add(numberofstation.get(i));
+			temp.add(numberofActiveStation.get(i));
 			temp.add(preferVM.get(i));
-			temp.add(preferVMMem.get(i));
+			//temp.add(preferVMMem.get(i));
 			score.add(FuzzyIndicators.getAggregation(temp)*100);
 		}
 		Vector<Integer> finaldecision = new Vector<Integer>();
