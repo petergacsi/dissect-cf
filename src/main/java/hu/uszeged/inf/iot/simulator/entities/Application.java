@@ -204,7 +204,6 @@ public class Application extends Timed {
 		this.localfilesize = (this.sumOfData() - this.allgenerateddatasize);
 		// System.out.println(this.sumOfData());
 		if (this.localfilesize > 0) {
-
 			long processed = 0;
 			boolean havevm = true;
 			while (this.localfilesize != processed && havevm) { // akkor addig
@@ -289,6 +288,24 @@ public class Application extends Timed {
 		}
 	}
 
+		
+	public double getCurrentCostofApp() {
+		return this.instance.calculateCloudCost(this.allWorkTime);
+	}
+	
+	public double getCurrentCostofVM(VmCollector vmc) {
+		return this.instance.calculateCloudCost(vmc.workingTime);
+	}
+	
+	public double getLoadOfCloud(){
+		double usedCPU=0.0;
+		for(VirtualMachine vm : this.cloud.iaas.listVMs()) {
+			usedCPU+=vm.getResourceAllocation().allocated.getRequiredCPUs();
+		}
+		System.out.println(this.cloud.name + " load: "+ (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100  );
+		return 0;
+	}
+	
 	private void countVmRunningTime() {
 		for (VmCollector vmc : this.vmlist) {
 			if ( /* vmc.vm!=null &&*/ vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {

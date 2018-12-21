@@ -37,12 +37,12 @@ public class Scenario {
 		
 		// Set up the clouds
 		new Cloud(CScloudfile,"cloud1");
-		new Cloud(CScloudfile,"cloud2");
-		new Cloud(CScloudfile,"cloud3");
+		//new Cloud(CScloudfile,"cloud2");
+		//new Cloud(CScloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(CSstationfile);
+		Station.loadDevice(stationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
