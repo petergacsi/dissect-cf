@@ -302,8 +302,8 @@ public class Application extends Timed {
 		for(VirtualMachine vm : this.cloud.iaas.listVMs()) {
 			usedCPU+=vm.getResourceAllocation().allocated.getRequiredCPUs();
 		}
-		System.out.println(this.cloud.name + " load: "+ (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100  );
-		return 0;
+		//System.out.println(this.cloud.name + " load: "+ (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100  );
+		return (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100;
 	}
 	
 	private void countVmRunningTime() {
