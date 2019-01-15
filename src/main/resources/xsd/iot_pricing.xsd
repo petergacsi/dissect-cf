@@ -1,0 +1,54 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="providers">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="bluemix">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="price-per-MB" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:simpleContent>
+                    <xs:extension base="xs:float">
+                      <xs:attribute type="xs:int" name="mbfrom" use="optional"/>
+                      <xs:attribute type="xs:int" name="mbto" use="optional"/>
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="amazon">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:byte" name="price"/>
+              <xs:element type="xs:int" name="message-count"/>
+              <xs:element type="xs:short" name="block-size"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="oracle">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:float" name="deviceprice-per-month"/>
+              <xs:element type="xs:short" name="messages-per-month-per-device"/>
+              <xs:element type="xs:short" name="am-messages-per-month-per-device"/>
+              <xs:element type="xs:float" name="am-deviceprice-per-month"/>
+            </xs:sequence>
+            <xs:attribute type="xs:long" name="freq"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="azure">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:float" name="price-per-month"/>
+              <xs:element type="xs:int" name="messages-per-day"/>
+              <xs:element type="xs:byte" name="messagesize-per-KB"/>
+            </xs:sequence>
+            <xs:attribute type="xs:int" name="freq"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
