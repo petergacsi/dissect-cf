@@ -203,7 +203,6 @@ public class Application extends Timed {
 	public void tick(long fires) {
 		// ha erkezett be a kozponti repoba feldolgozatlan adat
 		this.localfilesize = (this.sumOfData() - this.allgenerateddatasize);
-		System.err.println(this.localfilesize);
 		// System.out.println(this.sumOfData());
 		if (this.localfilesize > 0) {
 			long processed = 0;
