@@ -155,6 +155,7 @@ public class Application extends Timed {
 		return false;
 	} */
 
+
 	private PhysicalMachine findRA() {
 		for(PhysicalMachine pm : this.cloud.iaas.machines) {
 			if(pm.isHostableRequest(this.instance.arc)) {
@@ -202,6 +203,7 @@ public class Application extends Timed {
 	public void tick(long fires) {
 		// ha erkezett be a kozponti repoba feldolgozatlan adat
 		this.localfilesize = (this.sumOfData() - this.allgenerateddatasize);
+		System.err.println(this.localfilesize);
 		// System.out.println(this.sumOfData());
 		if (this.localfilesize > 0) {
 			long processed = 0;
@@ -320,14 +322,14 @@ public class Application extends Timed {
 	}
 
 	private boolean checkStationState() { // TODO probably wrong, but lets see
-		for(Application app : Application.applications) {
-			for (Station s : app.stations) {
+		
+			for (Station s : this.stations) {
 				// System.out.println(s + " "+ Timed.getFireCount());
 				if (s.isSubscribed()) {
 					return false;
 				}
 			}
-		}
+		
 		return true;
 	}
 

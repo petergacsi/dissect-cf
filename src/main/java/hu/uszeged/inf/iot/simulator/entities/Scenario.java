@@ -35,8 +35,8 @@ public class Scenario {
 		
 		// Set up the clouds
 		new Cloud(CScloudfile,"cloud1");
-		new Cloud(CScloudfile,"cloud2");
-		new Cloud(CScloudfile,"cloud3");
+		new Cloud(cloudfile,"cloud2");
+		new Cloud(cloudfile2,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
@@ -52,7 +52,7 @@ public class Scenario {
 	
 	private static void printInformation() {
 		System.out.println("~~Informations about the simulation:~~");
-		double totalCost=0.0;
+		double totalCost=0.0;double finalCost = 0.0;
 		for (Cloud c : Cloud.clouds.values()) {
 			System.out.println("cloud: " + c.name);
 
@@ -60,8 +60,10 @@ public class Scenario {
 				totalCost+=a.instance.cost;
 				int usedVM = 0;
 				int tasks = 0;
+				long runtime = 0;
+				
 				for (VmCollector vmcl : a.vmlist) {
-					
+						runtime += vmcl.workingTime;
 						usedVM++;
 						tasks += vmcl.tasknumber;
 						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.tasknumber + " worktime: " + vmcl.workingTime + " installed at: "
@@ -70,14 +72,15 @@ public class Scenario {
 
 				}
 				System.out.println(	a.name + " VMs " + usedVM + " tasks: " + tasks + " stations: " + a.stations.size());
-
+				System.out.println("worktime: " + runtime + " price: "+Double.toString(a.instance.pricePerTick)  + " cost: "+a.instance.cost);
+				finalCost+=runtime*a.instance.pricePerTick;
 			}
 			for (PhysicalMachine pm : c.iaas.machines) {
 				System.out.println(pm);
 			}
 			System.out.println("\n");
 		}
-		System.out.println(totalCost);
+		System.out.println(totalCost +  "  +  "+finalCost);
 		System.out.println("Generated/processed data: " + Station.allstationsize + "/" + Application.allprocessed);
 	}
 }

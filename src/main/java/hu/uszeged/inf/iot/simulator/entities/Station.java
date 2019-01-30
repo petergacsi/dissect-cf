@@ -25,12 +25,15 @@ import hu.uszeged.inf.xml.model.DeviceModel;
 public class Station extends Device{
 	private class StorObjEvent implements ConsumptionEvent {
 		private String so;
-		private StorObjEvent(String soid) {
+		long size;
+		private StorObjEvent(String soid,Long size) {
 			this.so = soid;
+			this.size= size;
 		}
 
 		@Override
 		public void conComplete() {
+			sentData+=this.size;
 			localRepository.deregisterObject(this.so);
 			// TODO: fix this "cheat"
 			app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
@@ -48,6 +51,7 @@ public class Station extends Device{
 	
 	public static class Stationdata {
 
+		
 		long starttime;
 		public long stoptime;
 		public long filesize;
@@ -100,7 +104,7 @@ public class Station extends Device{
 	public static long allstationsize = 0;
 	public int messageCount;
 	//long realStartTime; 
-	
+	long sentData;
 	public Station(long maxinbw, long maxoutbw, long diskbw, long reposize, final Stationdata sd,String strategy) throws NetworkException {
 		this.strategy=strategy;
 		this.sd = sd;
@@ -110,12 +114,13 @@ public class Station extends Device{
 		installionProcess(this);
 		this.startMeter();
 		this.messageCount=0;
+		this.sentData=0;
 	}
 
 	private void startCommunicate() throws NetworkException {
 		if(this.cloudRepository.getCurrState().equals(Repository.State.RUNNING)){
 			for (StorageObject so : localRepository.contents()) {
-				StorObjEvent soe = new StorObjEvent(so.id);
+				StorObjEvent soe = new StorObjEvent(so.id,so.size);
 				localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
 
 			}
