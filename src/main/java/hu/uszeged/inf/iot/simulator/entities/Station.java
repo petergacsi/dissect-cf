@@ -23,7 +23,6 @@ import hu.uszeged.inf.iot.simulator.pliant.Sigmoid;
 import hu.uszeged.inf.xml.model.DeviceModel;
 
 public class Station extends Device{
-
 	private class StorObjEvent implements ConsumptionEvent {
 		private String so;
 		private StorObjEvent(String soid) {
@@ -70,7 +69,7 @@ public class Station extends Device{
 
 	}
 
-	// TODO: these burned values need to delete
+	// TODO: these burned values need to be deleted
 	public static final double minpower = 20;
 	public static final double idlepower = 200;
 	public static final double maxpower = 300;
@@ -118,6 +117,7 @@ public class Station extends Device{
 			for (StorageObject so : localRepository.contents()) {
 				StorObjEvent soe = new StorObjEvent(so.id);
 				localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
+
 			}
 		}
 	}
@@ -189,7 +189,7 @@ public class Station extends Device{
 	}
 
 	public  void installionProcess(final Station s) {
-		 if(this.strategy.equals("load")){		
+		if(this.strategy.equals("load")){		
 				new DeferredEvent(this.sd.starttime) {
 					
 					@Override
@@ -303,8 +303,9 @@ public class Station extends Device{
 		for(int i=0;i<Application.applications.size();++i){
 			currentprice.add(kappa.getAt(sig.getat(Application.applications.get(i).getCurrentCostofApp())));
 		}
+		
 	
-		System.out.println(currentprice);
+		//System.out.println(currentprice);
 		
 		
 		double minworkload = Double.MAX_VALUE;

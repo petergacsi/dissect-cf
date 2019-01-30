@@ -6,7 +6,7 @@
 
 	<!-- pluto - AMD Opteron(tm) Processor 6262HE (3200.07 bogomips) x64, 256GB, 
 		disk ??? -->
-	<machine id="plutoPM" cores="64" processing="0.001" memory="256000000000">
+	<machine id="plutoPM" cores="128" processing="0.001" memory="256000000000">
 		<powerstates kind="host">
 			<power
 				model="hu.mta.sztaki.lpds.cloud.simulator.energy.powermodelling.LinearConsumptionModel"
@@ -61,7 +61,7 @@
 
 	<!-- sasha - AMD Opteron(tm) Processor 6376 (4588.61 bogomips) x32, 128GB, 
 		disk ??? -->
-	<machine id="sashaPM" cores="32" processing="0.001434063"
+	<machine id="sashaPM" cores="64" processing="0.001434063"
 		memory="128000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
@@ -117,7 +117,7 @@
 
 	<!-- moon - AMD Opteron(tm) Processor 6164HE (3400.23 bogomips) x48, 128GB, 
 		disk 6x1T -->
-	<machine id="moonPM" cores="48" processing="0.0010625" memory="128000000000">
+	<machine id="moonPM" cores="96" processing="0.0010625" memory="128000000000">
 		<!-- 1x Moon - 4xOpteron 6164HE, 128G RAM, 6x1TDisk -->
 		<powerstates kind="host">
 			<power
@@ -172,7 +172,7 @@
 
 	<!-- mimas - AMD Opteron(tm) Processor 2376 (4599.87 bogomips) x8, 12GB, 
 		disk ??? -->
-	<machine id="mimasPM" cores="8" processing="0.0014375" memory="12000000000">
+	<machine id="mimasPM" cores="16" processing="0.0014375" memory="12000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
 			<power
@@ -227,7 +227,7 @@
 
 	<!-- enceladus - AMD Opteron(tm) Processor 2376 (4599.87 bogomips) x8, 12GB, 
 		disk ??? -->
-	<machine id="enceladusPM" cores="8" processing="0.0014375"
+	<machine id="enceladusPM" cores="16" processing="0.0014375"
 		memory="12000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
@@ -283,7 +283,7 @@
 
 	<!-- rhea - AMD Opteron(tm) Processor 2376 (4599.87 bogomips) x8, 12GB, 
 		disk ??? -->
-	<machine id="rheaPM" cores="8" processing="0.0014375" memory="12000000000">
+	<machine id="rheaPM" cores="16" processing="0.0014375" memory="12000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
 			<power
@@ -338,7 +338,7 @@
 
 	<!-- thetys - AMD Opteron(tm) Processor 2376 (4599.87 bogomips) x8, 12GB, 
 		disk ??? -->
-	<machine id="thetysPM" cores="8" processing="0.0014375" memory="12000000000">
+	<machine id="thetysPM" cores="16" processing="0.0014375" memory="12000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
 			<power
@@ -393,7 +393,7 @@
 
 	<!-- dione - AMD Opteron(tm) Processor 2376 (4599.87 bogomips) x8, 12GB, 
 		disk ??? -->
-	<machine id="dionePM" cores="8" processing="0.0014375" memory="12000000000">
+	<machine id="dionePM" cores="16" processing="0.0014375" memory="12000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
 			<power
@@ -447,7 +447,7 @@
 	</machine>
 
 	<!-- io - Intel(R) Xeon(R) CPU E5420 (4987.75 bogomips) x8, 8GB, disk ??? -->
-	<machine id="ioPM" cores="8" processing="0.00155875" memory="8000000000">
+	<machine id="ioPM" cores="16" processing="0.00155875" memory="8000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
 			<power
@@ -502,7 +502,7 @@
 
 	<!-- callisto - Intel(R) Xeon(R) CPU E5420 (4987.75 bogomips) x8, 8GB, disk 
 		??? -->
-	<machine id="callistoPM" cores="8" processing="0.00155875"
+	<machine id="callistoPM" cores="16" processing="0.00155875"
 		memory="8000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
@@ -558,7 +558,7 @@
 
 	<!-- europa - Intel(R) Xeon(R) CPU E5420 (4987.75 bogomips) x8, 8GB, disk 
 		??? -->
-	<machine id="europaPM" cores="8" processing="0.00155875"
+	<machine id="europaPM" cores="16" processing="0.00155875"
 		memory="8000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">
@@ -614,7 +614,7 @@
 
 	<!-- ganymede - Intel(R) Xeon(R) CPU E5420 (4987.75 bogomips) x8, 8GB, disk 
 		??? -->
-	<machine id="ganymedePM" cores="8" processing="0.00155875"
+	<machine id="ganymedePM" cores="16" processing="0.00155875"
 		memory="8000000000">
 		<!-- power and statedelays are unknown -->
 		<powerstates kind="host">

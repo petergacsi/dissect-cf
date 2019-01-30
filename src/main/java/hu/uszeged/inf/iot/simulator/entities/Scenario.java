@@ -20,9 +20,9 @@ public class Scenario {
 										append(File.separator).
 										toString();
 		
-		String cloudfile=resourcePath+"LPDSCloud.xml";
-		String cloudfile2=resourcePath+"LPDSCloud2.xml";
-		String cloudfile3=resourcePath+"LPDSCloud3.xml";
+		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
+		String cloudfile2=resourcePath+"LPDSCloud2.xml"; // this one should use in scenario_3
+	
 		
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";
@@ -30,19 +30,17 @@ public class Scenario {
 		String providerfile=resourcePath+"Pricing.xml";
 		
 		//CSCS strings
-		String CScloudfile=resourcePath+"/resources_cscs/LPDSCloud.xml";
-
-		
-		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml";
+		String CScloudfile=resourcePath+"/resources_cscs/LPDSCloud.xml"; // this one should use in scenario_1
+		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml"; // this one should use in scenario_1
 		
 		// Set up the clouds
 		new Cloud(CScloudfile,"cloud1");
-		//new Cloud(CScloudfile,"cloud2");
-		//new Cloud(CScloudfile,"cloud3");
+		new Cloud(CScloudfile,"cloud2");
+		new Cloud(CScloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(stationfile);
+		Station.loadDevice(CSstationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation

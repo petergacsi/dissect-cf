@@ -9,7 +9,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>random</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>
@@ -26,7 +26,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>random</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>
@@ -43,7 +43,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>random</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>
@@ -60,7 +60,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>random</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>

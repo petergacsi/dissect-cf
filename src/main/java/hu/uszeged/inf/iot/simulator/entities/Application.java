@@ -168,7 +168,6 @@ public class Application extends Timed {
 		for (int i = 0; i < this.vmlist.size(); i++) {
 			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isReHostableRequest(this.instance.arc)){
 				try {
-					
 					ResourceAllocation ra = this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
 							PhysicalMachine.defaultAllocLen);
 							
@@ -185,6 +184,7 @@ public class Application extends Timed {
 	private void turnoffVM() {
 		
 		for (VmCollector vmcl : this.vmlist) {
+			
 			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isworking==false &&  vmcl.installed<(Timed.getFireCount()-this.getFrequency())) {
 				try {
 					vmcl.restarted++;
