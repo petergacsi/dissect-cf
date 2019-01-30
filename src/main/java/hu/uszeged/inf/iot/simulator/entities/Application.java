@@ -300,6 +300,8 @@ public class Application extends Timed {
 	public double getLoadOfCloud(){
 		double usedCPU=0.0;
 		for(VirtualMachine vm : this.cloud.iaas.listVMs()) {
+			if(vm.getResourceAllocation() == null)
+				return 0;
 			usedCPU+=vm.getResourceAllocation().allocated.getRequiredCPUs();
 		}
 		//System.out.println(this.cloud.name + " load: "+ (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100  );
