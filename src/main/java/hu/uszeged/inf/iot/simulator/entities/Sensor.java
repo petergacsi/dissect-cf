@@ -50,6 +50,7 @@ class Sensor extends DeferredEvent {
 			this.s.generatedfilesize += this.filesize;
 			//System.out.println("hi fucker");
 			Station.allstationsize += this.filesize;
+			this.s.app.stationgenerated+=this.filesize;
 			this.s.messageCount++;
 		}
 		;

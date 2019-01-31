@@ -60,7 +60,7 @@ public class Application extends Timed {
 	public ArrayList<Provider> providers;
 	public long allWorkTime;
 	public ArrayList<VmCollector> vmlist;
-	private long allgenerateddatasize = 0;
+	public long allgenerateddatasize = 0, stationgenerated = 0;
 	static long allprocessed = 0;
 	private long localfilesize = 0;
 	private long temp;
@@ -172,7 +172,8 @@ public class Application extends Timed {
 					ResourceAllocation ra = this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
 							PhysicalMachine.defaultAllocLen);
 							
-					this.vmlist.get(i).vm.switchOn(ra, null);			
+					this.vmlist.get(i).vm.switchOn(ra, null);	
+					this.vmlist.get(i).lastWorked = Timed.getFireCount();
 					return true;
 				} catch (Exception e) {
 					e.printStackTrace();

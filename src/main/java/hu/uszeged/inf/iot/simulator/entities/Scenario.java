@@ -33,14 +33,17 @@ public class Scenario {
 		String CScloudfile=resourcePath+"/resources_cscs/LPDSCloud.xml"; // this one should use in scenario_1
 		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml"; // this one should use in scenario_1
 		
+		//newSetup
+		String tina=resourcePath+"/resources_cscs/new.xml"; 
+		
 		// Set up the clouds
-		new Cloud(cloudfile,"cloud1");
+		new Cloud(CScloudfile,"cloud1");
 		new Cloud(cloudfile,"cloud2");
-		new Cloud(cloudfile,"cloud3");
+		new Cloud(CScloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(stationfile);
+		Station.loadDevice(tina);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -82,5 +85,15 @@ public class Scenario {
 		}
 		System.out.println(totalCost +  "  +  "+finalCost);
 		System.out.println("Generated/processed data: " + Station.allstationsize + "/" + Application.allprocessed);
+		
+	/*	for(Cloud c : Cloud.clouds.values()) {
+			long d=0, b=0;
+			for(Application a : c.applications) {
+				d+=a.allgenerateddatasize;
+				b+=a.stationgenerated;
+				System.out.println(a.allgenerateddatasize + " : "+ a.stationgenerated);
+			}
+			System.out.println(b + " asd "+ d);
+		}*/
 	}
 }
