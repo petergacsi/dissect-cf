@@ -34,16 +34,17 @@ public class Scenario {
 		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml"; // this one should use in scenario_1
 		
 		//newSetup
-		String tina=resourcePath+"/resources_cscs/new.xml"; 
+		String scen4=resourcePath+"/resources_cscs/new.xml";
+		String joska=resourcePath+"/resources_cscs/joska.xml";
 		
 		// Set up the clouds
 		new Cloud(CScloudfile,"cloud1");
-		new Cloud(cloudfile,"cloud2");
+		new Cloud(CScloudfile,"cloud2");
 		new Cloud(CScloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(tina);
+		Station.loadDevice(CSstationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation

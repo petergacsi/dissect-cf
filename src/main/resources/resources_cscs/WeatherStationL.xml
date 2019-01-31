@@ -9,7 +9,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>load</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>
@@ -17,7 +17,7 @@
       </shutdown>
 	</device>
 
-	<device starttime="7200000" stoptime="36000000" number="300" filesize="50">
+	<device starttime="7200000" stoptime="79200000" number="300" filesize="50">
       <name>test2</name>
       <freq>60000</freq>
       <sensor>8</sensor>
@@ -26,7 +26,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>load</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>
@@ -34,8 +34,8 @@
       </shutdown>
 	</device>
 	
-	<device starttime="25200000" stoptime="57600000" number="500" filesize="50">
-      <name>test3</name>
+	<device starttime="36000000" stoptime="50400000" number="300" filesize="50">
+      <name>test2</name>
       <freq>60000</freq>
       <sensor>8</sensor>
       <maxinbw>1000</maxinbw>
@@ -43,7 +43,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>load</strategy>
+      <strategy>fuzzy</strategy>
       <shutdown>
       	<number>5</number>
       	<from>2</from>
@@ -51,21 +51,5 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="50400000" number="300" filesize="50">
-      <name>test4</name>
-      <freq>60000</freq>
-      <sensor>8</sensor>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <reposize>60000</reposize>
-      <ratio>1</ratio>
-      <strategy>load</strategy>
-      <shutdown>
-      	<number>5</number>
-      	<from>2</from>
-      	<to>8</to>
-      </shutdown>
-	</device>
 
 </devices>

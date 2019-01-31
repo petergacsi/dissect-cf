@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devices>
+ 	<device starttime="0" stoptime="86400000" number="200" filesize="50">
+      <name>test1</name>
+      <freq>60000</freq>
+      <sensor>8</sensor>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>load</strategy>
+      <shutdown>
+      	<number>5</number>
+      	<from>2</from>
+      	<to>8</to>
+      </shutdown>
+	</device>
+	
+	<device starttime="7200000" stoptime="79200000" number="100" filesize="50">
+      <name>test1</name>
+      <freq>60000</freq>
+      <sensor>8</sensor>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>load</strategy>
+      <shutdown>
+      	<number>5</number>
+      	<from>2</from>
+      	<to>8</to>
+      </shutdown>
+	</device>
+
+	
+
+</devices>
