@@ -2,6 +2,7 @@ package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Application;
+import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.entities.Station;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
@@ -27,8 +28,8 @@ public class AzureProvider extends Provider{
 	
 	public long avarageFileSize() {
 		long tmp=0;
-		for(Station s : this.app.stations) {
-			tmp+=s.sd.filesize;
+		for(Device s : this.app.stations) {
+			tmp+=s.getFilesize();
 		}
 		return tmp/this.app.stations.size();
 	}

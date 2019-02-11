@@ -1,6 +1,7 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.uszeged.inf.iot.simulator.entities.Application;
+import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.entities.Station;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
@@ -30,19 +31,19 @@ public class OracleProvider extends Provider {
 		}
 
 		if(this.amMessagesPerMonthPerDevice>0){
-				for(Station s : this.app.stations){
-					long month = s.sd.stoptime/(this.getFrequency());
+				for(Device s : this.app.stations){
+					long month = s.getStopTime()/(this.getFrequency());
 					if(month==0){
 						month=1;
-						this.ORACLE=this.ORACLE+this.devicepricePerMonth*s.sd.sensornumber*month;
-					}else if(s.sd.stoptime%(this.getFrequency())!=0){
-						this.ORACLE=this.ORACLE+this.devicepricePerMonth*s.sd.sensornumber*(month+1);
+						this.ORACLE=this.ORACLE+this.devicepricePerMonth*((Station) s).getSensorNum()*month;
+					}else if(s.getStopTime()%(this.getFrequency())!=0){
+						this.ORACLE=this.ORACLE+this.devicepricePerMonth*((Station) s).getSensorNum()*(month+1);
 					}else{
-						this.ORACLE=this.ORACLE+this.devicepricePerMonth*s.sd.sensornumber*month;
+						this.ORACLE=this.ORACLE+this.devicepricePerMonth*((Station) s).getSensorNum()*month;
 					}
 					// additional cost
-					long device = s.messageCount/s.sd.sensornumber;// 1 device hany uzenetet generalt
-					s.messageCount=0; 
+					long device = s.getMessageCount()/((Station) s).getSensorNum();// 1 device hany uzenetet generalt
+					s.setMessageCount(0); 
 					if(device>this.messagesPerMonthPerDevice){
 						device-=this.messagesPerMonthPerDevice;
 						long whole=device/this.amMessagesPerMonthPerDevice;

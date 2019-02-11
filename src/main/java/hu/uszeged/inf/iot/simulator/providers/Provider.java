@@ -3,7 +3,7 @@ package hu.uszeged.inf.iot.simulator.providers;
 import java.util.ArrayList;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Application;
-import hu.uszeged.inf.iot.simulator.entities.Station;
+import hu.uszeged.inf.iot.simulator.entities.Device;
 
 
 public abstract class Provider extends Timed{
@@ -63,9 +63,9 @@ public abstract class Provider extends Timed{
 
 	public long getHighestStopTime(long given) {
 		long max = -1;
-		for(Station s : this.app.stations) {
-			if(s.sd.stoptime>max) {
-				max=s.sd.stoptime;
+		for(Device s : this.app.stations) {
+			if(s.getStopTime()>max) {
+				max=s.getStopTime();
 			}
 		}
 		if(max<given) {

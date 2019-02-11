@@ -68,7 +68,7 @@ public class Application extends Timed {
 	private static int feladatszam = 0;
 	private long tasksize;
 	public Cloud cloud;
-	public ArrayList<Station> stations;
+	public ArrayList<Device> stations;
 	public String name;
 	Instance instance;
 
@@ -80,7 +80,7 @@ public class Application extends Timed {
 
 	private Application(final long freq, long tasksize, String cloud, String instance, String name) {
 		this.vmlist = new ArrayList<VmCollector>();
-		this.stations = new ArrayList<Station>();
+		this.stations = new ArrayList<Device>();
 		this.tasksize = tasksize;
 		this.allWorkTime=0;
 		this.cloud = Cloud.addApplication(this, cloud);
@@ -156,14 +156,14 @@ public class Application extends Timed {
 	} */
 
 
-	private PhysicalMachine findRA() {
+	/*private PhysicalMachine findRA() {
 		for(PhysicalMachine pm : this.cloud.iaas.machines) {
 			if(pm.isHostableRequest(this.instance.arc)) {
 				return pm;
 			}
 		}
 		return null;
-	}
+	}*/
 	
 	private boolean turnonVM() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
@@ -323,7 +323,7 @@ public class Application extends Timed {
 
 	private boolean checkStationState() { // TODO probably wrong, but lets see
 		
-			for (Station s : this.stations) {
+			for (Device s : this.stations) {
 				// System.out.println(s + " "+ Timed.getFireCount());
 				if (s.isSubscribed()) {
 					return false;
@@ -335,13 +335,13 @@ public class Application extends Timed {
 
 	public long sumOfData() {
 		long temp = 0;
-		for (Station s : this.stations) {
-			temp += s.generatedfilesize;
+		for (Device s : this.stations) {
+			temp += s.generatedFilesize;
 		}
 		return temp;
 	}
 
-	public static void addStation(Station s, Application a) {
+	public static void addStation(Device s, Application a) {
 		a.stations.add(s);
 		s.app = a;
 	}

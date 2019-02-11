@@ -1,6 +1,7 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
+
 import hu.mta.sztaki.lpds.cloud.simulator.*;
 
 /**
@@ -43,15 +44,15 @@ class Sensor extends DeferredEvent {
 	@Override
 	protected void eventAction() {
 		StorageObject so = new StorageObject(
-				this.s.sd.name + " " + this.filesize + " " + this.sensorID + " " + Timed.getFireCount(),
+				this.s.getDn().repoName + " " + this.filesize + " " + this.sensorID + " " + Timed.getFireCount(),
 				this.filesize, false);
 		//System.out.println(this.s.localRepository.getFreeStorageCapacity());
-		if (this.s.localRepository.registerObject(so)) {
-			this.s.generatedfilesize += this.filesize;
+		if (this.s.dn.localRepository.registerObject(so)) {
+			this.s.generatedFilesize += this.filesize;
 			//System.out.println("hi fucker");
 			Station.allstationsize += this.filesize;
 			this.s.app.stationgenerated+=this.filesize;
-			this.s.messageCount++;
+			this.s.setMessageCount(this.s.getMessageCount() + 1);
 		}
 		;
 	}
