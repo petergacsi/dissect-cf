@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<applications>
+	<application tasksize="2500000">
+		<name>Idokep-1</name>
+		<freq>300000</freq>
+		<cloud>cloud1</cloud>
+		<instance>bluemix-large</instance>
+		<provider>bluemix</provider>
+	</application>
+</applications>

@@ -20,6 +20,25 @@ public class Scenario {
 										append(File.separator).
 										toString();
 		
+		/*
+		 * New configuration for fog extension
+		 * */
+		String cloudfile=resourcePath+"/fog/LPDSCloud.xml";
+		String appfile=resourcePath+"/fog/fogApp.xml";
+		String instancefile=resourcePath+"/fog/fogInstance.xml";
+		String stationfile=resourcePath+"/fog/fogStation.xml";
+		
+		
+		new Cloud(cloudfile,"cloud1");
+
+		// Load the virtual machine instances, the applications and finally the devices
+		Instance.loadInstance(instancefile);
+		Application.loadApplication(appfile);
+		Station.loadDevice(stationfile);
+		//Provider.loadProvider(providerfile); 
+		/* 
+		 * Old configuration for multi-cloud extension
+		 * 
 		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
 		String cloudfile2=resourcePath+"LPDSCloud2.xml"; // this one should use in scenario_3
 	
@@ -45,7 +64,7 @@ public class Scenario {
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
 		Station.loadDevice(CSstationfile);
-		//Provider.loadProvider(providerfile); 
+		//Provider.loadProvider(providerfile); */
 		
 		// Start the simulation
 		Timed.simulateUntilLastEvent();

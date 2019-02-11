@@ -204,11 +204,11 @@ public class Application extends Timed {
 	public void tick(long fires) {
 		// ha erkezett be a kozponti repoba feldolgozatlan adat
 		this.localfilesize = (this.sumOfData() - this.allgenerateddatasize);
+		
 		// System.out.println(this.sumOfData());
 		if (this.localfilesize > 0) {
 			long processed = 0;
-			boolean havevm = true;
-			while (this.localfilesize != processed && havevm) { // akkor addig
+			while (this.localfilesize != processed) { // akkor addig
 																// inditsunk
 																// feladatokat a
 																// VM-en, amig
@@ -228,7 +228,7 @@ public class Application extends Timed {
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					this.generateAndAddVM();
-					havevm = false;
+					break;
 				} else {
 					try {
 						processed += this.temp;
