@@ -61,7 +61,7 @@ public class Scenario {
 		long generatedData=0,processedData=0;
 		int usedVM = 0;
 		int tasks = 0;
-		long finalStoptime=Long.MAX_VALUE;
+		long finalStoptime=Long.MIN_VALUE;
 		for (Cloud c : Cloud.clouds.values()) {
 			System.out.println("cloud: " + c.name);
 			for (Application a : c.applications) {
@@ -79,7 +79,7 @@ public class Scenario {
 				for(Device d : a.stations) {
 					generatedData+=d.sumOfGeneratedData;
 				}
-				if(a.stopTime<finalStoptime) {
+				if(a.stopTime>finalStoptime) {
 					finalStoptime+=a.stopTime;
 				}
 				System.out.println(" stations: " + a.stations.size() + " stopped: "+a.stopTime);
