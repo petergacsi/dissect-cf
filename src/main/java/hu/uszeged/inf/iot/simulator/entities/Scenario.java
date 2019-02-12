@@ -44,7 +44,7 @@ public class Scenario {
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(newScen);
+		Station.loadDevice(CSstationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -80,7 +80,7 @@ public class Scenario {
 					generatedData+=d.sumOfGeneratedData;
 				}
 				if(a.stopTime>finalStoptime) {
-					finalStoptime+=a.stopTime;
+					finalStoptime=a.stopTime;
 				}
 				System.out.println(" stations: " + a.stations.size() + " stopped: "+a.stopTime);
 
