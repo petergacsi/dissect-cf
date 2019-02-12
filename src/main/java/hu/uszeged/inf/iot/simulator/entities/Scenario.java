@@ -1,6 +1,7 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -47,13 +48,14 @@ public class Scenario {
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
+		long starttime = System.nanoTime();
 		Timed.simulateUntilLastEvent();
-		
+		long stopttime = System.nanoTime();
 		// Print some informations to the monitor / in file
-		printInformation();
+		printInformation((stopttime-starttime));
 	}
 	
-	private static void printInformation() {
+	private static void printInformation(long t) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
 		long generatedData=0,processedData=0;
@@ -85,5 +87,6 @@ public class Scenario {
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
 		System.out.println(totalCost);
+		System.out.println(TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 	}
 }
