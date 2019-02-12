@@ -5,6 +5,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
+import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
@@ -40,8 +41,9 @@ public class Station extends Device{
 
 	private void startCommunicate() throws NetworkException {
 		for (StorageObject so : this.dn.localRepository.contents()) {
-			StorObjEvent soe = new StorObjEvent(so.id);
-			this.dn.localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
+			StorObjEvent soe = new StorObjEvent(so);
+			//this.dn.localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
+			NetworkNode.initTransfer(so.size, ResourceConsumption.unlimitedProcessing, this.dn.localRepository, this.cloudRepository, soe);
 		}
 	}
 
@@ -115,9 +117,11 @@ public class Station extends Device{
 	}
 	
 	private class StorObjEvent implements ConsumptionEvent {
-		private String so;
-		private StorObjEvent(String soid) {
-			this.so = soid;
+		private StorageObject so;
+		private long size;
+		private StorObjEvent(StorageObject so) {
+			this.so = so;
+
 		}
 
 		@Override

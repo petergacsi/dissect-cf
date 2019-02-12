@@ -86,7 +86,7 @@ public class Scenario {
 		}
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
-		System.out.println(totalCost);
-		System.out.println(TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
+		System.out.println("Cost: "+totalCost);
+		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 	}
 }
