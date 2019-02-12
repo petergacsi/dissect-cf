@@ -25,7 +25,7 @@ public class AmazonProvider extends Provider{
 	
 	public void tick(long fires) {		
 		if(this.blockPrice>0 && this.blockSize>0){
-			this.AMAZON= ((this.app.sumOfData() / this.blockSize) + 1) * this.blockPrice / this.messageCount;
+			this.AMAZON= ((this.app.sumOfGeneratedData() / this.blockSize) + 1) * this.blockPrice / this.messageCount;
 		}
 		
 		if(this.app.isSubscribed()==false) {

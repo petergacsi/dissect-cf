@@ -12,44 +12,16 @@ import hu.uszeged.inf.xml.model.DeviceModel;
 
 public class Station extends Device{
 	
-	private class StorObjEvent implements ConsumptionEvent {
-		private String so;
-		long size;
-		private StorObjEvent(String soid,Long size) {
-			this.so = soid;
-			this.size= size;
-		}
-
-		@Override
-		public void conComplete() {
-			//sentData+=this.size;
-			dn.localRepository.deregisterObject(this.so);
-			// TODO: fix this "cheat"
-			app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
-		}
-
-		@Override
-		public void conCancelled(ResourceConsumption problematic) {
-			try {
-				throw new Exception("Deleting StorageObject from local repository is unsuccessful!");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public int sensorNum;
 	private long freq;
-	private double ratio;
 	private String strategy;
-	public static long allstationsize = 0;
-	
+	//  TODO: this function should be re-think
+	//private double ratio;
 	
 	public int getSensorNum() {
 		return sensorNum;
 	}
 
-	//long sentData;
 	public Station(DeviceNetwork dn, long startTime,long stopTime,long filesize, String strategy,int sensorNum,
 			long freq,double ratio)  {
 		this.startTime=startTime;
@@ -59,71 +31,56 @@ public class Station extends Device{
 		this.dn=dn;
 		this.sensorNum=sensorNum;
 		this.freq=freq;
-		this.ratio=ratio;
+		//this.ratio=ratio;
 				
 		installionProcess(this);
 		this.startMeter();
 		this.setMessageCount(0);
-		//this.sentData=0;
 	}
 
 	private void startCommunicate() throws NetworkException {
-		if(this.cloudRepository.getCurrState().equals(Repository.State.RUNNING)){
-			for (StorageObject so : this.dn.localRepository.contents()) {
-				StorObjEvent soe = new StorObjEvent(so.id,so.size);
-				this.dn.localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
-
-			}
+		for (StorageObject so : this.dn.localRepository.contents()) {
+			StorObjEvent soe = new StorObjEvent(so.id);
+			this.dn.localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
 		}
 	}
 
 	public void startMeter() {
-		Random rand = new Random();
-		int  delay = rand.nextInt(20)*1000*60;
-		
 		if (this.isSubscribed()==false) {
+			Random rand = new Random();
+			int  delay = rand.nextInt(20)*1000*60;
 			new DeferredEvent(this.startTime+delay) {
 				
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
 					cloudRepository = app.cloud.iaas.repositories.get(0);
-					//realStartTime = Timed.getFireCount();
 				}
 			};
-			
 		}
 	}
 
 	private void stopMeter() {
 		unsubscribe();
 		// TODO: fix the "cheat"
-		this.cloudRepository.registerObject(new StorageObject(this.dn.repoName, generatedFilesize, false));
+		this.cloudRepository.registerObject(new StorageObject(this.dn.repoName, sumOfGeneratedData, false));
 	}
 
 	@Override
 	public void tick(long fires) {
-		
-		// a meres a megadott ideig tart csak - metering takes the given time
 		if (Timed.getFireCount() < (stopTime ) && Timed.getFireCount() >= (startTime)) {
 			for (int i = 0; i < sensorNum; i++) {
-					new Sensor(this, i, filesize, 1);
+					new Sensor(this, i, 1);
 			}
 		}
-		// a station mukodese addig amig az osszes SO el nem lett kuldve -
-		// stations work while there are data unsent
+
 		if (this.dn.localRepository.getFreeStorageCapacity() == this.dn.localRepository.getMaxStorageCapacity() && Timed.getFireCount() > stopTime ) {
 			this.stopMeter();
 		}
 
-
-			// repository then sending the data
 			try {
-				if (this.cloudRepository != null) {
-					if ((this.dn.localRepository.getMaxStorageCapacity() - this.dn.localRepository.getFreeStorageCapacity()) >= ratio
-							* filesize || isSubscribed() == false) {
-						this.startCommunicate();
-					}
+				if (this.cloudRepository.getCurrState().equals(Repository.State.RUNNING)) {
+					this.startCommunicate();
 				}
 			} catch (NetworkException e) {
 				e.printStackTrace();
@@ -155,5 +112,28 @@ public class Station extends Device{
 	@Override
 	public void shutdownProcess() {	
 		// TODO: this method will handle the 'shutdown for a while' process
+	}
+	
+	private class StorObjEvent implements ConsumptionEvent {
+		private String so;
+		private StorObjEvent(String soid) {
+			this.so = soid;
+		}
+
+		@Override
+		public void conComplete() {
+			dn.localRepository.deregisterObject(this.so);
+			// TODO: fix this "cheat"
+			app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
+		}
+
+		@Override
+		public void conCancelled(ResourceConsumption problematic) {
+			try {
+				throw new Exception("Deleting StorageObject from local repository is unsuccessful!");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -23,7 +23,7 @@ public class Cloud {
 	}
 	
 	public Cloud(String cloudfile,String name)throws IOException, SAXException, ParserConfigurationException {
-		if (iaas == null) this.iaas = CloudLoader.loadNodes(cloudfile);
+		this.iaas = CloudLoader.loadNodes(cloudfile);
 		applications = new ArrayList<Application>();
 		Cloud.clouds.put(name,this);
 		this.name=name;

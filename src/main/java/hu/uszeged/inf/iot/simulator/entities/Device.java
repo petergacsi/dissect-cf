@@ -17,7 +17,7 @@ public abstract class Device extends Timed {
 	
 	protected Application app;
 	protected DeviceNetwork dn;
-	protected long generatedFilesize;
+	protected long sumOfGeneratedData;
 	protected int messageCount;
 	protected Repository cloudRepository;
 	protected long startTime;

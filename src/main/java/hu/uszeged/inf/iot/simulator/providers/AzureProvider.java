@@ -40,7 +40,7 @@ public class AzureProvider extends Provider{
 		}
 		
 		if(this.messagesPerDay>0 && this.avarageFileSize()<=(this.messagesizePerKB*1024)){
-			long totalMassages=this.app.sumOfData()  / this.avarageFileSize();
+			long totalMassages=this.app.sumOfGeneratedData()  / this.avarageFileSize();
 			long msg = totalMassages - usedMessage;
 			usedMessage= msg;
 			

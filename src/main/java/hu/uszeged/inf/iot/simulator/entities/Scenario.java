@@ -20,31 +20,30 @@ public class Scenario {
 										append(File.separator).
 										toString();
 		
-		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
-		String cloudfile2=resourcePath+"LPDSCloud2.xml"; // this one should use in scenario_3
-	
 		
-		String appfile=resourcePath+"NEWApplication.xml";
-		String instancefile=resourcePath+"NEWInstance.xml";
-		String stationfile=resourcePath+"wsF.xml";
-		String providerfile=resourcePath+"Pricing.xml";
-		
-		//CSCS strings
 		String CScloudfile=resourcePath+"/resources_cscs/LPDSCloud.xml"; // this one should use in scenario_1
 		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml"; // this one should use in scenario_1
 		
+		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
+		String cloudfile2=resourcePath+"LPDSCloud2.xml"; // this one should use in scenario_3
+		String stationfile=resourcePath+"wsF.xml"; // this one should use in scenario_2-3
+		
+		String appfile=resourcePath+"NEWApplication.xml";
+		String instancefile=resourcePath+"NEWInstance.xml";
+		String providerfile=resourcePath+"Pricing.xml";
+				
 		//newSetup
-		String scen4=resourcePath+"/resources_cscs/new.xml";
-		String joska=resourcePath+"/resources_cscs/joska.xml";
+		String newScen=resourcePath+"/resources_cscs/new.xml";
+
 		
 		// Set up the clouds
 		new Cloud(CScloudfile,"cloud1");
-		new Cloud(CScloudfile,"cloud2");
-		new Cloud(CScloudfile,"cloud3");
+		new Cloud(cloudfile,"cloud2");
+		new Cloud(cloudfile2,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(CSstationfile);
+		Station.loadDevice(newScen);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -56,45 +55,35 @@ public class Scenario {
 	
 	private static void printInformation() {
 		System.out.println("~~Informations about the simulation:~~");
-		double totalCost=0.0;double finalCost = 0.0;
+		double totalCost=0.0;
+		long generatedData=0,processedData=0;
+		int usedVM = 0;
+		int tasks = 0;
+		
 		for (Cloud c : Cloud.clouds.values()) {
 			System.out.println("cloud: " + c.name);
-
 			for (Application a : c.applications) {
-				totalCost+=a.instance.cost;
-				int usedVM = 0;
-				int tasks = 0;
-				long runtime = 0;
+
+				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
+				processedData+=a.sumOfProcessedData;
+				usedVM+=a.vmlist.size();
 				
 				for (VmCollector vmcl : a.vmlist) {
-						runtime += vmcl.workingTime;
-						usedVM++;
-						tasks += vmcl.tasknumber;
-						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.tasknumber + " worktime: " + vmcl.workingTime + " installed at: "
-								+ vmcl.installed +" restarted: "+vmcl.restarted);
-					
 
+						tasks += vmcl.taskCounter;
+						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
+								+ vmcl.installed);
 				}
-				System.out.println(	a.name + " VMs " + usedVM + " tasks: " + tasks + " stations: " + a.stations.size());
-				System.out.println("worktime: " + runtime + " price: "+Double.toString(a.instance.pricePerTick)  + " cost: "+a.instance.cost);
-				finalCost+=runtime*a.instance.pricePerTick;
+				for(Device d : a.stations) {
+					generatedData+=d.sumOfGeneratedData;
+				}
+				System.out.println(" stations: " + a.stations.size() + " stopped: "+a.stopTime);
+
 			}
-			for (PhysicalMachine pm : c.iaas.machines) {
-				System.out.println(pm);
-			}
-			System.out.println("\n");
+			System.out.println();
 		}
-		System.out.println(totalCost +  "  +  "+finalCost);
-		System.out.println("Generated/processed data: " + Station.allstationsize + "/" + Application.allprocessed);
-		
-	/*	for(Cloud c : Cloud.clouds.values()) {
-			long d=0, b=0;
-			for(Application a : c.applications) {
-				d+=a.allgenerateddatasize;
-				b+=a.stationgenerated;
-				System.out.println(a.allgenerateddatasize + " : "+ a.stationgenerated);
-			}
-			System.out.println(b + " asd "+ d);
-		}*/
+		System.out.println("VMs " + usedVM + " tasks: " + tasks);
+		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
+		System.out.println(totalCost);
 	}
 }
