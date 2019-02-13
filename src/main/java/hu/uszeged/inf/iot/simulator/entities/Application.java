@@ -26,6 +26,7 @@ public class Application extends Timed {
 		public long workingTime;
 		String id;
 		public long installed;
+		public int restarted;
 
 		VmCollector(VirtualMachine vm) {
 			this.vm = vm;
@@ -35,6 +36,7 @@ public class Application extends Timed {
 			this.lastWorked = Timed.getFireCount();
 			this.installed = Timed.getFireCount();
 			this.id=Integer.toString(vmlist.size());
+			this.restarted=0;
 		}
 	}
 
@@ -131,7 +133,7 @@ public class Application extends Timed {
 				try {
 					ResourceAllocation ra = this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
 							PhysicalMachine.defaultAllocLen);
-							
+					this.vmlist.get(i).restarted++;		
 					this.vmlist.get(i).vm.switchOn(ra, null);	
 					this.vmlist.get(i).lastWorked = Timed.getFireCount();
 					return true;
@@ -147,7 +149,8 @@ public class Application extends Timed {
 		
 		for (VmCollector vmcl : this.vmlist) {
 			
-			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false) {
+			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false
+					&& vmcl.installed<(Timed.getFireCount()-this.getFrequency())) {
 				try {
 					vmcl.lastWorked = Timed.getFireCount();
 					vmcl.vm.switchoff(false);					
@@ -251,7 +254,6 @@ public class Application extends Timed {
 				}
 			}
 		}
-		
 		this.countVmRunningTime();
 		this.turnoffVM();
 

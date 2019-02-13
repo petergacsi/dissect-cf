@@ -38,13 +38,13 @@ public class Scenario {
 
 		
 		// Set up the clouds
-		new Cloud(CScloudfile,"cloud1");
+		new Cloud(cloudfile,"cloud1");
 		new Cloud(cloudfile,"cloud2");
-		new Cloud(cloudfile3,"cloud3");
+		new Cloud(cloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(newScen);
+		Station.loadDevice(stationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -74,7 +74,7 @@ public class Scenario {
 
 						tasks += vmcl.taskCounter;
 						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
-								+ vmcl.installed);
+								+ vmcl.installed+" restarted: "+vmcl.restarted);
 				}
 				for(Device d : a.stations) {
 					generatedData+=d.sumOfGeneratedData;
