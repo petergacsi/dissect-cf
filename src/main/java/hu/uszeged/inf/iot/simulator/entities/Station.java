@@ -50,12 +50,14 @@ public class Station extends Device{
 	public void startMeter() {
 		if (this.isSubscribed()==false) {
 			Random rand = new Random();
-			int  delay = rand.nextInt(20)*1000*60;
+			final int  delay = rand.nextInt(20)*1000*60;
 			new DeferredEvent(this.startTime+delay) {
 				
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
+					stopTime+=(long) delay;
+					startTime+=(long) delay;
 					cloudRepository = app.cloud.iaas.repositories.get(0);
 				}
 			};
