@@ -118,7 +118,7 @@ public class Station extends Device{
 	
 	private class StorObjEvent implements ConsumptionEvent {
 		private StorageObject so;
-		private long size;
+
 		private StorObjEvent(StorageObject so) {
 			this.so = so;
 
@@ -129,6 +129,7 @@ public class Station extends Device{
 			dn.localRepository.deregisterObject(this.so);
 			// TODO: fix this "cheat"
 			app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
+			app.sumOfArrivedData+=this.so.size;
 		}
 
 		@Override

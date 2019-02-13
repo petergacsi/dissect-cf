@@ -7,6 +7,7 @@ import java.util.HashMap;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.IaaSService;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.util.CloudLoader;
 
 public class Cloud {

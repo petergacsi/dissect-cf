@@ -50,8 +50,9 @@ public class Application extends Timed {
 	public long sumOfWorkTime;
 	public long sumOfProcessedData;
 	private long allocatedData;
-	private int currentTask = 0;
+	private int currentTask;
 	public long stopTime;
+	public long sumOfArrivedData;
 	
 	public static void loadApplication(String appfile) throws JAXBException {
 		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
@@ -75,7 +76,9 @@ public class Application extends Timed {
 		this.startBroker();
 		providers = new ArrayList<Provider>();
 		this.sumOfWorkTime=0;
-		sumOfProcessedData = 0;
+		this.sumOfProcessedData = 0;
+		this.currentTask = 0;
+		this.sumOfArrivedData=0;
 	}
 
 	private void startBroker() {
@@ -166,13 +169,7 @@ public class Application extends Timed {
 		return (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100;
 	}
 	
-	public long sumOfGeneratedData() {
-		long temp = 0;
-		for (Device s : this.stations) {
-			temp += s.sumOfGeneratedData;
-		}
-		return temp;
-	}
+	
 	
 	public static void addStation(Device s, Application a) {
 		a.stations.add(s);
@@ -206,7 +203,7 @@ public class Application extends Timed {
 		
 	public void tick(long fires) {
 
-		long unprocessedData = (this.sumOfGeneratedData() - this.sumOfProcessedData);
+		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 
 		if (unprocessedData > 0) {
 			
