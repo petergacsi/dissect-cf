@@ -149,8 +149,7 @@ public class Application extends Timed {
 		
 		for (VmCollector vmcl : this.vmlist) {
 			
-			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false
-					&& vmcl.installed<(Timed.getFireCount()-this.getFrequency())) {
+			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false) {
 				try {
 					vmcl.lastWorked = Timed.getFireCount();
 					vmcl.vm.switchoff(false);					
