@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocation;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
@@ -56,7 +57,8 @@ public class Application extends Timed {
 	private int currentTask;
 	public long stopTime;
 	public long sumOfArrivedData;
-	
+	private long freq;
+	private VmCollector broker;
 	public static void loadApplication(String appfile) throws JAXBException {
 		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
 			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name);
@@ -71,12 +73,21 @@ public class Application extends Timed {
 		this.cloud = Cloud.addApplication(this, cloud);
 		this.name = name;
 		if (cloud != null) {
+			this.freq=freq;
 			subscribe(freq);
 		}
 		this.instance = Instance.instances.get(instance);
 		Application.applications.add(this);
 		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
-		this.startBroker();
+		try {
+			this.startBroker();
+		} catch (VMManagementException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NetworkException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		providers = new ArrayList<Provider>();
 		this.sumOfWorkTime=0;
 		this.sumOfProcessedData = 0;
@@ -84,16 +95,42 @@ public class Application extends Timed {
 		this.sumOfArrivedData=0;
 	}
 
-	private void startBroker() {
+	private void startBroker() throws VMManagementException, NetworkException {
+		if(this.vmlist.contains(this.broker)) {
+			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.arc, false,
+					PhysicalMachine.defaultAllocLen);
+			this.broker.restarted++;		
+			this.broker.vm.switchOn(ra, null);
+			this.broker.lastWorked = Timed.getFireCount();
+		}else {
+			try {
+				VirtualMachine vm =this.cloud.iaas.requestVM(this.instance.va, this.instance.arc,this.cloud.iaas.repositories.get(0), 1)[0];
+				if(vm!=null) {
+					VmCollector vmc = new VmCollector(vm);
+					vmc.id="broker";
+					this.vmlist.add(vmc);
+					this.broker=vmc;
+			 }
 
-		try {
-			VmCollector vmc = new VmCollector(this.cloud.iaas.requestVM(this.instance.va, this.instance.arc,
-					this.cloud.iaas.repositories.get(0), 1)[0]);
-			vmc.id="broker";
-			this.vmlist.add(vmc);
-		} catch (Exception e) {
-			e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			/*
+			 * VirtualMachine vm = pm.requestVM(this.instance.va, this.instance.arc,
+								this.cloud.iaas.repositories.get(0), 1)[0];
+						if(vm!=null) {
+							VmCollector vmc = new VmCollector(vm);
+							vmc.pm=pm;
+							this.vmlist.add(vmc);
+						}
+			 * 
+			 * 
+			 * */
+			
+			
 		}
+		
 	}
 	
 	private VmCollector VmSearch() {
@@ -204,6 +241,12 @@ public class Application extends Timed {
 		}
 	}
 	
+	public void restartApplication() throws VMManagementException, NetworkException {
+		System.out.println(this.name+" application has been restarted!");
+		subscribe(this.freq);
+		this.startBroker();
+	}
+	
 		
 	public void tick(long fires) {
 
@@ -265,6 +308,9 @@ public class Application extends Timed {
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
+						if(vmcl.id.equals("broker")) {
+							vmcl.pm=vmcl.vm.getResourceAllocation().getHost();
+						}
 						vmcl.vm.switchoff(true);
 					}
 				} catch (StateChangeException e) {

@@ -6,6 +6,8 @@ import java.util.Vector;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
+import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.uszeged.inf.iot.simulator.pliant.FuzzyIndicators;
 import hu.uszeged.inf.iot.simulator.pliant.Kappa;
 import hu.uszeged.inf.iot.simulator.pliant.Sigmoid;
@@ -27,6 +29,19 @@ class RandomStrategy implements installionStrategy{
 		
 		Device.lmap.put(s.getDn().repoName, Device.latency);
 		Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+		
+		if(!s.app.isSubscribed()) {
+			try {
+				s.app.restartApplication();
+				
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 	}
 }
@@ -50,6 +65,18 @@ class CostStrategy implements installionStrategy{
 		Device.lmap.put(s.getDn().repoName, Device.latency);
 		Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
 		
+		if(!s.app.isSubscribed()) {
+			try {
+				s.app.restartApplication();
+				
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 }
@@ -77,8 +104,22 @@ class RuntimeStrategy implements installionStrategy{
 				Application.addStation(s, Application.applications.get(choosen));
 				Device.lmap.put(s.getDn().repoName, Device.latency);
 				Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+				
+				if(!s.app.isSubscribed()) {
+					try {
+						s.app.restartApplication();
+						
+					} catch (VMManagementException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NetworkException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		};
+		
 		
 	}
 	
@@ -91,7 +132,7 @@ class FuzzyStrategy implements installionStrategy{
 		this.install(s);
 	}
 	@Override
-	public void install(Device s) {
+	public void install(final Device s) {
 		new DeferredEvent(s.startTime) {
 			
 			@Override
@@ -100,7 +141,22 @@ class FuzzyStrategy implements installionStrategy{
 				Application.addStation(d, Application.applications.get(rsIdx));
 				Device.lmap.put(d.getDn().repoName, Device.latency);
 				Device.lmap.put(d.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+				if(!s.app.isSubscribed()) {
+					try {
+						s.app.restartApplication();
+						
+					} catch (VMManagementException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (NetworkException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
 			}
+			
+			
 		};
 		
 

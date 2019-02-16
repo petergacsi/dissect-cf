@@ -2,6 +2,7 @@ package hu.uszeged.inf.iot.simulator.entities;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
@@ -103,6 +104,8 @@ public class Station extends Device{
 		}else if(this.strategy.equals("fuzzy")){
 				new FuzzyStrategy(this);	
 		}
+		
+		
 	}
 
 	@Override
