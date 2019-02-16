@@ -27,7 +27,7 @@ public class Scenario {
 		
 		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
 		String cloudfile3=resourcePath+"LPDSCloud3.xml"; // this one should use in scenario_3
-		String stationfile=resourcePath+"wsF.xml"; // this one should use in scenario_2-3
+		String stationfile=resourcePath+"wsR.xml"; // this one should use in scenario_2-3
 		
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";

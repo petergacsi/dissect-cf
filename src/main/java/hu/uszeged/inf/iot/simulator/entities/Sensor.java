@@ -6,25 +6,20 @@ import hu.mta.sztaki.lpds.cloud.simulator.*;
 
 class Sensor extends DeferredEvent {
 
-	private int sensorID;
 	private Station s;
 
-	
-
-	Sensor(Station s, int sensorID, long delay) {
+	Sensor(Station s, long delay) {
 		super(delay);
-		this.sensorID = sensorID;
 		this.s = s;
-
 	}
 
 	@Override
 	protected void eventAction() {
-		StorageObject so = new StorageObject(this.s.getDn().repoName + " " + this.s.filesize + " " + this.sensorID + " " + Timed.getFireCount(),
-				this.s.filesize, false);
+		StorageObject so = new StorageObject(this.s.getDn().repoName + " " + this.s.filesize + " " + this.s.sensorNum + " " + Timed.getFireCount(),
+				this.s.filesize*this.s.sensorNum, false);
 
 		if (this.s.dn.localRepository.registerObject(so)) {
-			this.s.sumOfGeneratedData += this.s.filesize;
+			this.s.sumOfGeneratedData += this.s.filesize*this.s.sensorNum;
 			this.s.messageCount+=1;
 		}else {
 			try {

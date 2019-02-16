@@ -7,6 +7,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
+import hu.mta.sztaki.lpds.cloud.simulator.util.SeedSyncer;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.uszeged.inf.xml.model.DeviceModel;
@@ -25,15 +26,15 @@ public class Station extends Device{
 
 	public Station(DeviceNetwork dn, long startTime,long stopTime,long filesize, String strategy,int sensorNum,
 			long freq,double ratio)  {
-		this.startTime=startTime;
-		this.stopTime=stopTime;
+		long delay = Math.abs(SeedSyncer.centralRnd.nextLong()%20)*60*1000;
+		this.startTime=startTime+delay;
+		this.stopTime=stopTime+delay;
 		this.filesize=filesize;
 		this.strategy=strategy;
 		this.dn=dn;
 		this.sensorNum=sensorNum;
 		this.freq=freq;
-		//this.ratio=ratio;
-				
+		this.sumOfGeneratedData=0;				
 		installionProcess(this);
 		this.startMeter();
 		this.setMessageCount(0);
@@ -49,15 +50,11 @@ public class Station extends Device{
 
 	public void startMeter() {
 		if (this.isSubscribed()==false) {
-			Random rand = new Random();
-			final int  delay = rand.nextInt(20)*1000*60;
-			new DeferredEvent(this.startTime+delay) {
+			new DeferredEvent(this.startTime) {
 				
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
-					stopTime+=(long) delay;
-					startTime+=(long) delay;
 					cloudRepository = app.cloud.iaas.repositories.get(0);
 				}
 			};
@@ -67,15 +64,13 @@ public class Station extends Device{
 	private void stopMeter() {
 		unsubscribe();
 		// TODO: fix the "cheat"
-		this.cloudRepository.registerObject(new StorageObject(this.dn.repoName, sumOfGeneratedData, false));
+		this.cloudRepository.registerObject(new StorageObject(this.dn.repoName, this.app.sumOfArrivedData, false));
 	}
 
 	@Override
 	public void tick(long fires) {
 		if (Timed.getFireCount() < (stopTime ) && Timed.getFireCount() >= (startTime)) {
-			for (int i = 0; i < sensorNum; i++) {
-					new Sensor(this, i, 1);
-			}
+			new Sensor(this, 1);
 		}
 
 		if (this.dn.localRepository.getFreeStorageCapacity() == this.dn.localRepository.getMaxStorageCapacity() && Timed.getFireCount() > stopTime ) {
@@ -120,7 +115,7 @@ public class Station extends Device{
 	
 	private class StorObjEvent implements ConsumptionEvent {
 		private StorageObject so;
-
+		private long t = Timed.getFireCount();
 		private StorObjEvent(StorageObject so) {
 			this.so = so;
 
