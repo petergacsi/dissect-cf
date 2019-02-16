@@ -43,7 +43,6 @@
 					idle="0" max="0" inState="OFF" />
 			</powerstates>
                         <!-- latencies are unknown -->
-		<latency towards="pluto" value="5" />
 		<latency towards="sasha" value="5" />
 		<latency towards="moon" value="5" />
 		<latency towards="mimas" value="5" />
@@ -121,7 +120,6 @@
 		<latency towards="callisto" value="5" />
 		<latency towards="europa" value="5" />
 		<latency towards="ganymede" value="5" />
-		<latency towards="pluto2" value="5" />
 		<latency towards="sasha2" value="5" />
 		<latency towards="moon2" value="5" />
 		<latency towards="mimas2" value="5" />
@@ -178,7 +176,6 @@
 			</powerstates>
 			<!-- latencies are unknown -->
 			<latency towards="pluto" value="5" />
-		<latency towards="sasha" value="5" />
 		<latency towards="moon" value="5" />
 		<latency towards="mimas" value="5" />
 		<latency towards="enceladus" value="5" />
@@ -257,7 +254,6 @@
 		<latency towards="europa" value="5" />
 		<latency towards="ganymede" value="5" />
 		<latency towards="pluto2" value="5" />
-		<latency towards="sasha2" value="5" />
 		<latency towards="moon2" value="5" />
 		<latency towards="mimas2" value="5" />
 		<latency towards="enceladus2" value="5" />
@@ -313,7 +309,6 @@
 			<!-- latencies are unknown -->
 			<latency towards="pluto" value="5" />
 		<latency towards="sasha" value="5" />
-		<latency towards="moon" value="5" />
 		<latency towards="mimas" value="5" />
 		<latency towards="enceladus" value="5" />
 		<latency towards="rhea" value="5" />
@@ -391,7 +386,6 @@
 		<latency towards="ganymede" value="5" />
 		<latency towards="pluto2" value="5" />
 		<latency towards="sasha2" value="5" />
-		<latency towards="moon2" value="5" />
 		<latency towards="mimas2" value="5" />
 		<latency towards="enceladus2" value="5" />
 		<latency towards="rhea2" value="5" />
@@ -448,7 +442,6 @@
 			<latency towards="pluto" value="5" />
 		<latency towards="sasha" value="5" />
 		<latency towards="moon" value="5" />
-		<latency towards="mimas" value="5" />
 		<latency towards="enceladus" value="5" />
 		<latency towards="rhea" value="5" />
 		<latency towards="thetys" value="5" />
@@ -525,7 +518,6 @@
 		<latency towards="pluto2" value="5" />
 		<latency towards="sasha2" value="5" />
 		<latency towards="moon2" value="5" />
-		<latency towards="mimas2" value="5" />
 		<latency towards="enceladus2" value="5" />
 		<latency towards="rhea2" value="5" />
 		<latency towards="thetys2" value="5" />
@@ -582,7 +574,6 @@
 		<latency towards="sasha" value="5" />
 		<latency towards="moon" value="5" />
 		<latency towards="mimas" value="5" />
-		<latency towards="enceladus" value="5" />
 		<latency towards="rhea" value="5" />
 		<latency towards="thetys" value="5" />
 		<latency towards="dione" value="5" />
@@ -660,7 +651,6 @@
 		<latency towards="sasha2" value="5" />
 		<latency towards="moon2" value="5" />
 		<latency towards="mimas2" value="5" />
-		<latency towards="enceladus2" value="5" />
 		<latency towards="rhea2" value="5" />
 		<latency towards="thetys2" value="5" />
 		<latency towards="dione2" value="5" />
@@ -716,7 +706,6 @@
 		<latency towards="moon" value="5" />
 		<latency towards="mimas" value="5" />
 		<latency towards="enceladus" value="5" />
-		<latency towards="rhea" value="5" />
 		<latency towards="thetys" value="5" />
 		<latency towards="dione" value="5" />
 		<latency towards="io" value="5" />
@@ -793,7 +782,6 @@
 		<latency towards="moon2" value="5" />
 		<latency towards="mimas2" value="5" />
 		<latency towards="enceladus2" value="5" />
-		<latency towards="rhea2" value="5" />
 		<latency towards="thetys2" value="5" />
 		<latency towards="dione2" value="5" />
 		<latency towards="io2" value="5" />
@@ -850,7 +838,6 @@
 		<latency towards="mimas" value="5" />
 		<latency towards="enceladus" value="5" />
 		<latency towards="rhea" value="5" />
-		<latency towards="thetys" value="5" />
 		<latency towards="dione" value="5" />
 		<latency towards="io" value="5" />
 		<latency towards="callisto" value="5" />
@@ -927,7 +914,6 @@
 		<latency towards="mimas2" value="5" />
 		<latency towards="enceladus2" value="5" />
 		<latency towards="rhea2" value="5" />
-		<latency towards="thetys2" value="5" />
 		<latency towards="dione2" value="5" />
 		<latency towards="io2" value="5" />
 		<latency towards="callisto2" value="5" />
@@ -984,7 +970,6 @@
 		<latency towards="enceladus" value="5" />
 		<latency towards="rhea" value="5" />
 		<latency towards="thetys" value="5" />
-		<latency towards="dione" value="5" />
 		<latency towards="io" value="5" />
 		<latency towards="callisto" value="5" />
 		<latency towards="europa" value="5" />
@@ -1061,7 +1046,6 @@
 		<latency towards="enceladus2" value="5" />
 		<latency towards="rhea2" value="5" />
 		<latency towards="thetys2" value="5" />
-		<latency towards="dione2" value="5" />
 		<latency towards="io2" value="5" />
 		<latency towards="callisto2" value="5" />
 		<latency towards="europa2" value="5" />
@@ -1116,7 +1100,6 @@
 		<latency towards="rhea" value="5" />
 		<latency towards="thetys" value="5" />
 		<latency towards="dione" value="5" />
-		<latency towards="io" value="5" />
 		<latency towards="callisto" value="5" />
 		<latency towards="europa" value="5" />
 		<latency towards="ganymede" value="5" />
@@ -1193,7 +1176,6 @@
 		<latency towards="rhea2" value="5" />
 		<latency towards="thetys2" value="5" />
 		<latency towards="dione2" value="5" />
-		<latency towards="io2" value="5" />
 		<latency towards="callisto2" value="5" />
 		<latency towards="europa2" value="5" />
 		<latency towards="ganymede2" value="5" />
@@ -1250,7 +1232,6 @@
 		<latency towards="thetys" value="5" />
 		<latency towards="dione" value="5" />
 		<latency towards="io" value="5" />
-		<latency towards="callisto" value="5" />
 		<latency towards="europa" value="5" />
 		<latency towards="ganymede" value="5" />
 		<latency towards="pluto2" value="5" />
@@ -1328,7 +1309,6 @@
 		<latency towards="thetys2" value="5" />
 		<latency towards="dione2" value="5" />
 		<latency towards="io2" value="5" />
-		<latency towards="callisto2" value="5" />
 		<latency towards="europa2" value="5" />
 		<latency towards="ganymede2" value="5" />
 			<latency towards="ceph" value="5" />
@@ -1385,7 +1365,6 @@
 		<latency towards="dione" value="5" />
 		<latency towards="io" value="5" />
 		<latency towards="callisto" value="5" />
-		<latency towards="europa" value="5" />
 		<latency towards="ganymede" value="5" />
 		<latency towards="pluto2" value="5" />
 		<latency towards="sasha2" value="5" />
@@ -1463,7 +1442,6 @@
 		<latency towards="dione2" value="5" />
 		<latency towards="io2" value="5" />
 		<latency towards="callisto2" value="5" />
-		<latency towards="europa2" value="5" />
 		<latency towards="ganymede2" value="5" />
 			<latency towards="ceph" value="5" />
 			<latency towards="iscsi-izabel" value="5" />
@@ -1520,7 +1498,6 @@
 		<latency towards="io" value="5" />
 		<latency towards="callisto" value="5" />
 		<latency towards="europa" value="5" />
-		<latency towards="ganymede" value="5" />
 		<latency towards="pluto2" value="5" />
 		<latency towards="sasha2" value="5" />
 		<latency towards="moon2" value="5" />
@@ -1598,7 +1575,6 @@
 		<latency towards="io2" value="5" />
 		<latency towards="callisto2" value="5" />
 		<latency towards="europa2" value="5" />
-		<latency towards="ganymede2" value="5" />
 			<latency towards="ceph" value="5" />
 			<latency towards="iscsi-izabel" value="5" />
 		</repository>
@@ -1705,7 +1681,6 @@
 		<latency towards="callisto2" value="5" />
 		<latency towards="europa2" value="5" />
 		<latency towards="ganymede2" value="5" />
-
 		<latency towards="ceph" value="5" />
 
 	</repository>

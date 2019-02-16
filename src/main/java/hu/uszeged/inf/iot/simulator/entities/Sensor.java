@@ -16,10 +16,10 @@ class Sensor extends DeferredEvent {
 	@Override
 	protected void eventAction() {
 		StorageObject so = new StorageObject(this.s.getDn().repoName + " " + this.s.filesize + " " + this.s.sensorNum + " " + Timed.getFireCount(),
-				this.s.filesize*this.s.sensorNum, false);
+				this.s.filesize, false);
 
 		if (this.s.dn.localRepository.registerObject(so)) {
-			this.s.sumOfGeneratedData += this.s.filesize*this.s.sensorNum;
+			this.s.sumOfGeneratedData += this.s.filesize;
 			this.s.messageCount+=1;
 		}else {
 			try {

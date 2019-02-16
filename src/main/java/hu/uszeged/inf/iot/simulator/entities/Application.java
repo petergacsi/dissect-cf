@@ -10,6 +10,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
+import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
@@ -260,7 +261,7 @@ public class Application extends Timed {
 		if (this.currentTask == 0 && checkStationState()) {
 			unsubscribe();
 			this.stopTime=Timed.getFireCount();
-
+			this.cloud.iaas.repositories.get(0).registerObject(new StorageObject(this.name, this.sumOfProcessedData, false));
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {

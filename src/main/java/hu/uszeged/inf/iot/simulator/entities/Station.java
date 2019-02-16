@@ -1,6 +1,5 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
-import java.util.Random;
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
@@ -29,7 +28,7 @@ public class Station extends Device{
 		long delay = Math.abs(SeedSyncer.centralRnd.nextLong()%20)*60*1000;
 		this.startTime=startTime+delay;
 		this.stopTime=stopTime+delay;
-		this.filesize=filesize;
+		this.filesize=filesize*sensorNum;
 		this.strategy=strategy;
 		this.dn=dn;
 		this.sensorNum=sensorNum;
@@ -62,9 +61,7 @@ public class Station extends Device{
 	}
 
 	private void stopMeter() {
-		unsubscribe();
-		// TODO: fix the "cheat"
-		this.cloudRepository.registerObject(new StorageObject(this.dn.repoName, this.app.sumOfArrivedData, false));
+		unsubscribe();		
 	}
 
 	@Override
@@ -89,7 +86,7 @@ public class Station extends Device{
 	public static void loadDevice(String stationfile) throws Exception {
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			for(int i=0;i<dm.number;i++){
-				DeviceNetwork dn = new DeviceNetwork(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,dm.name);
+				DeviceNetwork dn = new DeviceNetwork(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,dm.name+i);
 				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq,dm.ratio);
 			}
 			
@@ -115,7 +112,7 @@ public class Station extends Device{
 	
 	private class StorObjEvent implements ConsumptionEvent {
 		private StorageObject so;
-		private long t = Timed.getFireCount();
+		
 		private StorObjEvent(StorageObject so) {
 			this.so = so;
 
@@ -126,7 +123,8 @@ public class Station extends Device{
 			dn.localRepository.deregisterObject(this.so);
 			// TODO: fix this "cheat"
 			app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
-			app.sumOfArrivedData+=this.so.size;
+					app.sumOfArrivedData+=this.so.size;
+			
 		}
 
 		@Override

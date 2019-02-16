@@ -2,15 +2,13 @@ package hu.uszeged.inf.iot.simulator.entities;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
-import hu.uszeged.inf.iot.simulator.providers.Provider;
 
 public class Scenario {
-
+	static Cloud a,b,c;
 	public static void main(String[] args) throws Exception {
 		// XML config files
 		String resourcePath = new StringBuilder(System.getProperty("user.dir")).
@@ -27,7 +25,7 @@ public class Scenario {
 		
 		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
 		String cloudfile3=resourcePath+"LPDSCloud3.xml"; // this one should use in scenario_3
-		String stationfile=resourcePath+"wsR.xml"; // this one should use in scenario_2-3
+		String stationfile=resourcePath+"wsF.xml"; // this one should use in scenario_2-3
 		
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";
@@ -38,13 +36,13 @@ public class Scenario {
 
 		
 		// Set up the clouds
-		new Cloud(cloudfile,"cloud1");
-		new Cloud(cloudfile,"cloud2");
-		new Cloud(cloudfile,"cloud3");
+		a= new Cloud(cloudfile3,"cloud1");
+		b= new Cloud(cloudfile3,"cloud2");
+		c = new Cloud(cloudfile3,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(stationfile);
+		Station.loadDevice(newScen);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -92,5 +90,10 @@ public class Scenario {
 		System.out.println("Cost: "+totalCost);
 		System.out.println("Stopped: "+finalStoptime);
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
+		
+		System.out.println(a.iaas.repositories.get(0));
+		System.out.println(b.iaas.repositories.get(0));
+		System.out.println(c.iaas.repositories.get(0));
+
 	}
 }
