@@ -155,6 +155,7 @@ public class Application extends Timed {
 							VmCollector vmc = new VmCollector(vm);
 							vmc.pm=pm;
 							this.vmlist.add(vmc);
+							System.out.print(" asked new VM");
 						}
 						return;
 					}
@@ -174,6 +175,7 @@ public class Application extends Timed {
 					this.vmlist.get(i).restarted++;		
 					this.vmlist.get(i).vm.switchOn(ra, null);	
 					this.vmlist.get(i).lastWorked = Timed.getFireCount();
+					System.out.print(" turned on VM");
 					return true;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -187,7 +189,8 @@ public class Application extends Timed {
 		
 		for (VmCollector vmcl : this.vmlist) {
 			
-			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false) {
+			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false 
+					&& vmcl.installed<(Timed.getFireCount()-this.getFrequency()) ) {
 				try {
 					vmcl.vm.switchoff(false);					
 				} catch (StateChangeException e) {
@@ -231,12 +234,13 @@ public class Application extends Timed {
 	}
 	
 	private void countVmRunningTime() {
+		long t=0;
 		for (VmCollector vmc : this.vmlist) {
 			if ( vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				vmc.workingTime += (Timed.getFireCount() - vmc.lastWorked);
 				sumOfWorkTime+= (Timed.getFireCount() - vmc.lastWorked);
 				vmc.lastWorked = Timed.getFireCount();
-				
+				t+= vmc.workingTime;
 			}
 		}
 	}
@@ -249,11 +253,10 @@ public class Application extends Timed {
 	
 		
 	public void tick(long fires) {
-
 		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 
 		if (unprocessedData > 0) {
-			
+			System.out.print(Timed.getFireCount()+" unprocessed data: "+unprocessedData+ " "+this.name+" ");
 			long processedData = 0;
 
 			while (unprocessedData != processedData) { 
@@ -264,7 +267,9 @@ public class Application extends Timed {
 				}
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
+					System.out.print("data/VM: "+((double)unprocessedData/this.tasksize)+" unprocessed after exit: "+unprocessedData+ " decision:");
 					this.generateAndAddVM();
+					
 					break;
 				} else {
 					try {
@@ -297,6 +302,7 @@ public class Application extends Timed {
 					}
 				}
 			}
+			System.out.println(" load(%): "+this.getLoadOfCloud());
 		}
 		this.countVmRunningTime();
 		this.turnoffVM();

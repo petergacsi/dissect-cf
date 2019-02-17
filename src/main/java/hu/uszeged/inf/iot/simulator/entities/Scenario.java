@@ -25,7 +25,7 @@ public class Scenario {
 		
 		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
 		String cloudfile3=resourcePath+"LPDSCloud3.xml"; // this one should use in scenario_3
-		String stationfile=resourcePath+"wsF.xml"; // this one should use in scenario_2-3
+		String stationfile=resourcePath+"wsC.xml"; // this one should use in scenario_2-3
 		
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";
@@ -36,9 +36,9 @@ public class Scenario {
 
 		
 		// Set up the clouds
-		a= new Cloud(cloudfile,"cloud1");
-		b= new Cloud(cloudfile,"cloud2");
-		c = new Cloud(cloudfile,"cloud3");
+		a= new Cloud(cloudfile3,"cloud1");
+		b= new Cloud(cloudfile3,"cloud2");
+		c = new Cloud(cloudfile3,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
@@ -63,25 +63,23 @@ public class Scenario {
 		for (Cloud c : Cloud.clouds.values()) {
 			System.out.println("cloud: " + c.name);
 			for (Application a : c.applications) {
-
 				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
 				processedData+=a.sumOfProcessedData;
 				usedVM+=a.vmlist.size();
 				
 				for (VmCollector vmcl : a.vmlist) {
-
 						tasks += vmcl.taskCounter;
 						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
 								+ vmcl.installed+" restarted: "+vmcl.restarted);
 				}
 				for(Device d : a.stations) {
 					generatedData+=d.sumOfGeneratedData;
+					
 				}
 				if(a.stopTime>finalStoptime) {
 					finalStoptime=a.stopTime;
 				}
 				System.out.println(" stations: " + a.stations.size() + " stopped: "+a.stopTime);
-
 			}
 			System.out.println();
 		}
