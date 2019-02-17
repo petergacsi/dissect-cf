@@ -304,7 +304,11 @@ public class Application extends Timed {
 		if (this.currentTask == 0 && checkStationState()) {
 			unsubscribe();
 			this.stopTime=Timed.getFireCount();
-			this.cloud.iaas.repositories.get(0).registerObject(new StorageObject(this.name, this.sumOfProcessedData, false));
+			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
+			if(!this.cloud.iaas.repositories.get(0).registerObject(so)){
+				this.cloud.iaas.repositories.get(0).deregisterObject(so);
+				this.cloud.iaas.repositories.get(0).registerObject(so);
+			}
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {

@@ -36,13 +36,13 @@ public class Scenario {
 
 		
 		// Set up the clouds
-		a= new Cloud(cloudfile3,"cloud1");
-		b= new Cloud(cloudfile3,"cloud2");
-		c = new Cloud(cloudfile3,"cloud3");
+		a= new Cloud(cloudfile,"cloud1");
+		b= new Cloud(cloudfile,"cloud2");
+		c = new Cloud(cloudfile,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(newScen);
+		Station.loadDevice(stationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
