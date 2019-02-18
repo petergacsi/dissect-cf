@@ -25,7 +25,7 @@ public class Scenario {
 		
 		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
 		String cloudfile3=resourcePath+"LPDSCloud3.xml"; // this one should use in scenario_3
-		String stationfile=resourcePath+"wsC.xml"; // this one should use in scenario_2-3
+		String stationfile=resourcePath+"wsF.xml"; // this one should use in scenario_2-3
 		
 		String appfile=resourcePath+"NEWApplication.xml";
 		String instancefile=resourcePath+"NEWInstance.xml";
@@ -38,7 +38,7 @@ public class Scenario {
 		// Set up the clouds
 		a= new Cloud(cloudfile3,"cloud1");
 		b= new Cloud(cloudfile3,"cloud2");
-		c = new Cloud(cloudfile3,"cloud3");
+		c = new Cloud(cloudfile3 ,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
@@ -92,6 +92,5 @@ public class Scenario {
 		System.out.println(a.iaas.repositories.get(0));
 		System.out.println(b.iaas.repositories.get(0));
 		System.out.println(c.iaas.repositories.get(0));
-
 	}
 }

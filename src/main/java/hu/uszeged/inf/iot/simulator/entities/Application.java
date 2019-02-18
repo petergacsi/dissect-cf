@@ -6,6 +6,7 @@ import javax.xml.bind.JAXBException;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocation;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.State;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
@@ -20,6 +21,11 @@ import hu.uszeged.inf.xml.model.ApplicationModel;
 public class Application extends Timed {
 
 	public class VmCollector {
+		@Override
+		public String toString() {
+			return "VmCollector [vm=" + vm + ", id=" + id + "]";
+		}
+
 		PhysicalMachine pm;
 		VirtualMachine vm;
 		boolean isWorking;
@@ -189,8 +195,8 @@ public class Application extends Timed {
 		
 		for (VmCollector vmcl : this.vmlist) {
 			
-			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false 
-					&& vmcl.installed<(Timed.getFireCount()-this.getFrequency()) ) {
+			if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING) && !vmcl.id.equals("broker") && vmcl.isWorking==false ) {
+					//&& vmcl.installed<(Timed.getFireCount()-this.getFrequency()) ) {
 				try {
 					vmcl.vm.switchoff(false);					
 				} catch (StateChangeException e) {
@@ -204,12 +210,19 @@ public class Application extends Timed {
 		double usedCPU=0.0;
 		for(VirtualMachine vm : this.cloud.iaas.listVMs()) {
 			if(vm.getResourceAllocation() == null) {
-				usedCPU+=0;
+				usedCPU+=0.0;
 			}else {
 				usedCPU+=vm.getResourceAllocation().allocated.getRequiredCPUs();
 			}
 		}
-		//System.out.println(this.cloud.name + " load: "+ (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100  );
+		// TODO: why IaaS runningCapacities isn't equals with pm's capacities? 
+		/* 
+		double t=0.0;
+		for(PhysicalMachine pm : this.cloud.iaas.runningMachines) {
+			t+=pm.getCapacities().getRequiredCPUs();
+		}
+		System.out.println(t+"/"+this.cloud.iaas.getRunningCapacities().getRequiredCPUs()+"/" +this.cloud.iaas.getCapacities().getRequiredCPUs());
+		*/
 		return (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100;
 	}
 	
@@ -234,13 +247,11 @@ public class Application extends Timed {
 	}
 	
 	private void countVmRunningTime() {
-		long t=0;
 		for (VmCollector vmc : this.vmlist) {
 			if ( vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				vmc.workingTime += (Timed.getFireCount() - vmc.lastWorked);
 				sumOfWorkTime+= (Timed.getFireCount() - vmc.lastWorked);
 				vmc.lastWorked = Timed.getFireCount();
-				t+= vmc.workingTime;
 			}
 		}
 	}
@@ -290,7 +301,7 @@ public class Application extends Timed {
 										vml.isWorking = false;
 										vml.taskCounter++;
 										currentTask--;
-											System.out.println(name + " started@ " + vmStartTime + " finished@ "
+											System.out.println(name +" "+vml.id+ " started@ " + vmStartTime + " finished@ "
 													+ Timed.getFireCount() + " with " + allocatedDataTemp + " bytes, lasted "
 													+ (Timed.getFireCount() - vmStartTime) + " ,noi: " + noiTemp);
 
