@@ -1,7 +1,12 @@
 package hu.uszeged.inf.iot.simulator.entities;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.TreeMap;
+import java.util.TreeSet;
+
 import javax.xml.bind.JAXBException;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -14,6 +19,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAda
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
+import hu.uszeged.inf.iot.simulator.entities.TimelineGenerator.TimelineCollector;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.inf.xml.model.ApplicationModel;
@@ -47,8 +53,8 @@ public class Application extends Timed {
 			this.restarted=0;
 		}
 	}
-
-
+	
+	public ArrayList<TimelineCollector> timelineList = new ArrayList<TimelineCollector>();
 	public static ArrayList<Application> applications = new ArrayList<Application>();
 	private long tasksize;
 	public Cloud cloud;
@@ -120,21 +126,7 @@ public class Application extends Timed {
 
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-			
-			/*
-			 * VirtualMachine vm = pm.requestVM(this.instance.va, this.instance.arc,
-								this.cloud.iaas.repositories.get(0), 1)[0];
-						if(vm!=null) {
-							VmCollector vmc = new VmCollector(vm);
-							vmc.pm=pm;
-							this.vmlist.add(vmc);
-						}
-			 * 
-			 * 
-			 * */
-			
-			
+			}			
 		}
 		
 	}
@@ -301,6 +293,7 @@ public class Application extends Timed {
 										vml.isWorking = false;
 										vml.taskCounter++;
 										currentTask--;
+										timelineList.add(new TimelineCollector(vmStartTime,Timed.getFireCount(),vml.id));
 											System.out.println(name +" "+vml.id+ " started@ " + vmStartTime + " finished@ "
 													+ Timed.getFireCount() + " with " + allocatedDataTemp + " bytes, lasted "
 													+ (Timed.getFireCount() - vmStartTime) + " ,noi: " + noiTemp);
@@ -326,6 +319,15 @@ public class Application extends Timed {
 				this.cloud.iaas.repositories.get(0).deregisterObject(so);
 				this.cloud.iaas.repositories.get(0).registerObject(so);
 			}
+			
+			Collections.sort(this.timelineList, new Comparator<TimelineCollector>() {
+
+				@Override
+				public int compare(TimelineCollector arg0, TimelineCollector arg1) {
+					return arg0.vmId.compareTo(arg1.vmId);
+				}
+			});
+			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
@@ -333,6 +335,7 @@ public class Application extends Timed {
 							vmcl.pm=vmcl.vm.getResourceAllocation().getHost();
 						}
 						vmcl.vm.switchoff(true);
+						
 					}
 				} catch (StateChangeException e) {
 					e.printStackTrace();

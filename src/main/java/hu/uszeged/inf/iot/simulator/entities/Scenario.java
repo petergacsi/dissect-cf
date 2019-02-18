@@ -42,7 +42,7 @@ public class Scenario {
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(stationfile);
+		Station.loadDevice(newScen);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -51,6 +51,7 @@ public class Scenario {
 		long stopttime = System.nanoTime();
 		// Print some informations to the monitor / in file
 		printInformation((stopttime-starttime));
+		TimelineGenerator.generate();
 	}
 	
 	private static void printInformation(long t) {
