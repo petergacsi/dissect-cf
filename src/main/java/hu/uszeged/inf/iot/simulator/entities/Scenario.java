@@ -42,7 +42,7 @@ public class Scenario {
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(newScen);
+		Station.loadDevice(CSstationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -60,9 +60,10 @@ public class Scenario {
 		long generatedData=0,processedData=0;
 		int usedVM = 0;
 		int tasks = 0;
-		long finalStoptime=Long.MIN_VALUE;
+		long timeout=Long.MIN_VALUE;
 		for (Cloud c : Cloud.clouds.values()) {
 			System.out.println("cloud: " + c.name);
+			long highestStationStoptime=Long.MIN_VALUE;
 			for (Application a : c.applications) {
 				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
 				processedData+=a.sumOfProcessedData;
@@ -76,18 +77,20 @@ public class Scenario {
 				for(Device d : a.stations) {
 					generatedData+=d.sumOfGeneratedData;
 					
+					if(d.stopTime>highestStationStoptime)
+						highestStationStoptime=d.stopTime;
 				}
-				if(a.stopTime>finalStoptime) {
-					finalStoptime=a.stopTime;
+				if((a.stopTime-highestStationStoptime)>timeout) {
+					timeout=(a.stopTime-highestStationStoptime);
 				}
-				System.out.println(" stations: " + a.stations.size() + " stopped: "+a.stopTime);
+				System.out.println(" stations: " + a.stations.size());
 			}
 			System.out.println();
 		}
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
 		System.out.println("Cost: "+totalCost);
-		System.out.println("Stopped: "+finalStoptime);
+		System.out.println("timeout: "+timeout/1000/60 +" min, real timeout: "+((timeout/1000/60)-10)+" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 		
 		System.out.println(a.iaas.repositories.get(0));

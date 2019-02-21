@@ -3,13 +3,17 @@ package hu.uszeged.inf.iot.simulator.entities;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 
 public class TimelineGenerator {
 
 	public static void generate() throws FileNotFoundException, UnsupportedEncodingException {
-		PrintWriter writer = new PrintWriter("timeline.html", "UTF-8");
+		Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+		PrintWriter writer = new PrintWriter(sdf.format(cal.getTime())+".html", "UTF-8");
 		writer.println("<!DOCTYPE html><html><head>");
 		writer.println("<script type=\'text/javascript\' src=\'https://www.gstatic.com/charts/loader.js\'></script>");
 		writer.println("<script type=\'text/javascript\'>");

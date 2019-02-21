@@ -320,14 +320,6 @@ public class Application extends Timed {
 				this.cloud.iaas.repositories.get(0).registerObject(so);
 			}
 			
-			Collections.sort(this.timelineList, new Comparator<TimelineCollector>() {
-
-				@Override
-				public int compare(TimelineCollector arg0, TimelineCollector arg1) {
-					return arg0.vmId.compareTo(arg1.vmId);
-				}
-			});
-			
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
