@@ -36,8 +36,8 @@ public class Scenario {
 
 		
 		// Set up the clouds
-		a= new Cloud(cloudfile3,"cloud1");
-		b= new Cloud(cloudfile3,"cloud2");
+		a= new Cloud(CScloudfile,"cloud1");
+		b= new Cloud(cloudfile,"cloud2");
 		c = new Cloud(cloudfile3 ,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
