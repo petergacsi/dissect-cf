@@ -103,6 +103,8 @@ public class Station extends Device{
 				new CostStrategy(this);
 		}else if(this.strategy.equals("fuzzy")){
 				new FuzzyStrategy(this);	
+		} else if(this.strategy.equals("speed")) {
+				new SpeedStrategy(this);
 		}
 		
 		

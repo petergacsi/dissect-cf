@@ -80,6 +80,44 @@ class CostStrategy implements installionStrategy{
 	}
 	
 }
+
+class SpeedStrategy implements installionStrategy{
+
+	public SpeedStrategy(Device d) {
+		this.install(d);
+	}
+	@Override
+	public void install(Device s) {
+		 double min=Integer.MIN_VALUE;
+		 int choosen=-1;
+		for(int i=0;i<Application.applications.size();++i){
+			if(Application.applications.get(i).instance.pricePerTick>min){
+				min = Application.applications.get(i).instance.pricePerTick;
+				choosen = i;
+			}
+		}
+		Application.addStation(s, Application.applications.get(choosen));
+		Device.lmap.put(s.getDn().repoName, Device.latency);
+		Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+		
+		if(!s.app.isSubscribed()) {
+			try {
+				s.app.restartApplication();
+				
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+}
+
+
+
 class RuntimeStrategy implements installionStrategy{
 	
 	public RuntimeStrategy(Device s) {

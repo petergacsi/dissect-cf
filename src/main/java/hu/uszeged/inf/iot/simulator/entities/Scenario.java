@@ -42,7 +42,7 @@ public class Scenario {
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(CSstationfile);
+		Station.loadDevice(newScen);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -82,6 +82,7 @@ public class Scenario {
 				}
 				if((a.stopTime-highestStationStoptime)>timeout) {
 					timeout=(a.stopTime-highestStationStoptime);
+					
 				}
 				System.out.println(" stations: " + a.stations.size());
 			}
@@ -90,7 +91,7 @@ public class Scenario {
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
 		System.out.println("Cost: "+totalCost);
-		System.out.println("timeout: "+timeout/1000/60 +" min, real timeout: "+((timeout/1000/60)-10)+" min");
+		System.out.println("timeout: "+timeout/1000/60 +" min, real timeout: "+((timeout/1000/60)-15)+" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 		
 		System.out.println(a.iaas.repositories.get(0));
