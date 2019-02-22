@@ -37,12 +37,12 @@ public class Scenario {
 		
 		// Set up the clouds
 		a= new Cloud(CScloudfile,"cloud1");
-		b= new Cloud(cloudfile,"cloud2");
-		c = new Cloud(cloudfile3 ,"cloud3");
+		b= new Cloud(CScloudfile,"cloud2");
+		c = new Cloud(CScloudfile ,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(newScen);
+		Station.loadDevice(CSstationfile);
 		//Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
@@ -84,14 +84,14 @@ public class Scenario {
 					timeout=(a.stopTime-highestStationStoptime);
 					
 				}
-				System.out.println(" stations: " + a.stations.size());
+				System.out.println(a.name+" stations: " + a.stations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
 			}
 			System.out.println();
 		}
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
 		System.out.println("Cost: "+totalCost);
-		System.out.println("timeout: "+timeout/1000/60 +" min, real timeout: "+((timeout/1000/60)-15)+" min");
+		System.out.println("timeout: "+timeout/1000/60 +" min, real timeout: "+((timeout/1000/60)-5)+" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 		
 		System.out.println(a.iaas.repositories.get(0));
