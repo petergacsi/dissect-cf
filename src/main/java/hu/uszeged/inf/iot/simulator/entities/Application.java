@@ -293,6 +293,7 @@ public class Application extends Timed {
 										vml.isWorking = false;
 										vml.taskCounter++;
 										currentTask--;
+										stopTime=Timed.getFireCount();
 										timelineList.add(new TimelineCollector(vmStartTime,Timed.getFireCount(),vml.id));
 											System.out.println(name +" "+vml.id+ " started@ " + vmStartTime + " finished@ "
 													+ Timed.getFireCount() + " with " + allocatedDataTemp + " bytes, lasted "
@@ -313,7 +314,6 @@ public class Application extends Timed {
 
 		if (this.currentTask == 0 && checkStationState()) {
 			unsubscribe();
-			this.stopTime=Timed.getFireCount();
 			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
 			if(!this.cloud.iaas.repositories.get(0).registerObject(so)){
 				this.cloud.iaas.repositories.get(0).deregisterObject(so);

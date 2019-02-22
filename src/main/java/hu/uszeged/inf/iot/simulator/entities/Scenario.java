@@ -91,7 +91,7 @@ public class Scenario {
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
 		System.out.println("Cost: "+totalCost);
-		System.out.println("timeout: "+timeout/1000/60 +" min, real timeout: "+((timeout/1000/60)-5)+" min");
+		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 		
 		System.out.println(a.iaas.repositories.get(0));
