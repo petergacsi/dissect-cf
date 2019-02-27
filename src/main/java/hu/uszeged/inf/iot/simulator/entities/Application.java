@@ -314,6 +314,11 @@ public class Application extends Timed {
 
 		if (this.currentTask == 0 && checkStationState()) {
 			unsubscribe();
+			for(Provider p : this.providers) {
+				if(p.isSubscribed()) {
+					p.shouldStop=true;
+				}
+			}
 			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
 			if(!this.cloud.iaas.repositories.get(0).registerObject(so)){
 				this.cloud.iaas.repositories.get(0).deregisterObject(so);

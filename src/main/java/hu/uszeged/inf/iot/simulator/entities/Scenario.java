@@ -6,6 +6,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
+import hu.uszeged.inf.iot.simulator.providers.Provider;
 
 public class Scenario {
 	static Cloud a,b,c;
@@ -43,7 +44,7 @@ public class Scenario {
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
 		Station.loadDevice(CSstationfile);
-		//Provider.loadProvider(providerfile); 
+		Provider.loadProvider(providerfile); 
 		
 		// Start the simulation
 		long starttime = System.nanoTime();
@@ -85,6 +86,7 @@ public class Scenario {
 					
 				}
 				System.out.println(a.name+" stations: " + a.stations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
+				System.out.println(a.providers);
 			}
 			System.out.println();
 		}

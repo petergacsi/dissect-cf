@@ -14,14 +14,9 @@ public class BluemixProvider extends Provider{
 
 	double BLUEMIX;
 	
-	public BluemixProvider(Application app,String providerfile) {
+	public BluemixProvider(Application app) {
+		super();
 		this.app=app;
-		try {
-			ProvidersModel.loadProviderXML(providerfile,this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		subscribe(this.getHighestStopTime(Long.MAX_VALUE));
 	}
 	
 	
@@ -37,9 +32,14 @@ public class BluemixProvider extends Provider{
  			
 			this.BLUEMIX=tmp*cost;
 		}
-
-		if(this.app.isSubscribed()==false) {
+		if(this.shouldStop) {
 			unsubscribe();
 		}
+	}
+
+
+	@Override
+	public void startProvider() {
+		subscribe(Integer.MAX_VALUE);
 	}
 }

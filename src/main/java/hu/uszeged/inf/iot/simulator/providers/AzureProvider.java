@@ -9,21 +9,17 @@ import hu.uszeged.inf.xml.model.ProvidersModel;
 public class AzureProvider extends Provider{
 	double AZURE;
 	private long usedMessage;
+
 	@Override
 	public String toString() {
 		return "[AZURE=" + AZURE + " "+this.getFrequency()+"]";
 	}
 
 
-	public AzureProvider(Application app,String providerfile) {
+	public AzureProvider(Application app) {
+		super();
 		this.usedMessage=0;
 		this.app=app;
-		try {
-			ProvidersModel.loadProviderXML(providerfile,this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		subscribe(this.getHighestStopTime(this.azureFreq));
 	}
 	
 	public long avarageFileSize() {
@@ -57,6 +53,16 @@ public class AzureProvider extends Provider{
 			}else{
 				this.AZURE=-1;
 			}
-}
+		}
+		if(this.shouldStop) {
+			unsubscribe();
+		}
+	}
+
+
+	@Override
+	public void startProvider() {
+		subscribe(this.azureFreq);
+		shouldStop=false;
 	}
 }

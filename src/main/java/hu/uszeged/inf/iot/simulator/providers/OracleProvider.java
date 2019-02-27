@@ -14,21 +14,12 @@ public class OracleProvider extends Provider {
 	}
 
 
-	public OracleProvider(Application app,String providerfile) {
+	public OracleProvider(Application app) {
+		super();
 		this.app=app;
-		try {
-			ProvidersModel.loadProviderXML(providerfile,this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		subscribe(this.getHighestStopTime(this.oracleFreq));
 	}
-
 	
 	public void tick(long fires) {
-		if(this.app.isSubscribed()==false) {
-			unsubscribe();
-		}
 
 		if(this.amMessagesPerMonthPerDevice>0){
 				for(Device s : this.app.stations){
@@ -56,7 +47,17 @@ public class OracleProvider extends Provider {
 						}
 					} 
 				}
+			if(this.shouldStop) {
+				unsubscribe();
+			}
 			
 		}
+	}
+
+
+	@Override
+	public void startProvider() {
+		subscribe(oracleFreq);
+		this.shouldStop=false;
 	}
 }

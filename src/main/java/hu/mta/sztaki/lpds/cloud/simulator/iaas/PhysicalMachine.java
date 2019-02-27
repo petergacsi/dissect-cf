@@ -76,7 +76,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
  *         of Innsbruck (c) 2013"
  * @author "Gabor Kecskemeti, Laboratory of Parallel and Distributed Systems,
  *         MTA SZTAKI (c) 2012"
- * @author "Andras Markus, Department of Softwere Enginieering, University of Szeged, (c) 2019"
+ * @author "Andras Markus, Software Engineering Department, University of Szeged, (c) 2019"
  */
 
 public class PhysicalMachine extends MaxMinProvider implements VMManager<PhysicalMachine, ResourceConstraints> {
