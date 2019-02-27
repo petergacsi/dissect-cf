@@ -76,7 +76,9 @@ import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
  *         of Innsbruck (c) 2013"
  * @author "Gabor Kecskemeti, Laboratory of Parallel and Distributed Systems,
  *         MTA SZTAKI (c) 2012"
+ * @author "Andras Markus, Department of Softwere Enginieering, University of Szeged, (c) 2019"
  */
+
 public class PhysicalMachine extends MaxMinProvider implements VMManager<PhysicalMachine, ResourceConstraints> {
 
 	/**
@@ -1168,6 +1170,19 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 		return requested.compareTo(totalCapacities) <= 0;
 	}
 	
+	/**
+	 * checks if the requested resources could be hosted on the
+	 * PM
+	 * 
+	 * @param requested
+	 *            the resource set to be checked for hostability
+	 * @return
+	 *         <ul>
+	 *         <li><i>true</i> if the such resource request has a chance of
+	 *         acceptance
+	 *         <li><i>false</i> otherwise
+	 *         </ul>
+	 */
 	public boolean isReHostableRequest(final ResourceConstraints requested) {
 		return requested.compareTo(freeCapacities) <= 0;
 	}

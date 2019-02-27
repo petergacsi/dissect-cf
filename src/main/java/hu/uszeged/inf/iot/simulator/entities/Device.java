@@ -56,9 +56,15 @@ public abstract class Device extends Timed {
 	  Repository localRepository;
 	  String repoName;
 		  
-		public DeviceNetwork(long maxinbw, long maxoutbw, long diskbw, long repoSize,String repoName) {
+		public DeviceNetwork(long maxinbw, long maxoutbw, long diskbw, long repoSize,String repoName,Map<String, PowerState> storageTransitions,Map<String, PowerState> networkTransitions) {
 			this.repoName=repoName;
-			localRepository = new Repository(repoSize, repoName, maxinbw, maxoutbw, diskbw, lmap, defaultStorageTransitions, defaultNetworkTransitions);
+			if(storageTransitions==null) {
+				storageTransitions=defaultStorageTransitions();
+			}
+			if(networkTransitions==null) {
+				networkTransitions=defaultNetworkTransitions();
+			}
+			localRepository = new Repository(repoSize, repoName, maxinbw, maxoutbw, diskbw, lmap, storageTransitions, networkTransitions);
 			try {
 				localRepository.setState(NetworkNode.State.RUNNING);
 			} catch (NetworkException e) {
@@ -69,24 +75,57 @@ public abstract class Device extends Timed {
 
 	}
   
-  //TODO: these burned values need to be deleted
-	public static final double minpower = 20;
-	public static final double idlepower = 200;
-	public static final double maxpower = 300;
-	public static final double diskDivider = 10;
-	public static final double netDivider = 20;
-	public final static Map<String, PowerState> defaultStorageTransitions;
-	public final static Map<String, PowerState> defaultNetworkTransitions;
-  
-	static {
+	private static Map<String, PowerState> defaultStorageTransitions(){
+		double minpower = 20;
+		double idlepower = 200;
+		double maxpower = 300;
+		double diskDivider = 10;
+		double netDivider = 20;
+		EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions = null;
 		try {
-			EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions = PowerTransitionGenerator
+			transitions = PowerTransitionGenerator
 					.generateTransitions(minpower, idlepower, maxpower, diskDivider, netDivider);
-			defaultStorageTransitions = transitions.get(PowerTransitionGenerator.PowerStateKind.storage);
-			defaultNetworkTransitions = transitions.get(PowerTransitionGenerator.PowerStateKind.network);
-		} catch (Exception e) {
-			throw new IllegalStateException("Cannot initialize the default transitions");
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		return transitions.get(PowerTransitionGenerator.PowerStateKind.storage);
 	}
+	
+	private static Map<String, PowerState> defaultNetworkTransitions(){
+		double minpower = 20;
+		double idlepower = 200;
+		double maxpower = 300;
+		double diskDivider = 10;
+		double netDivider = 20;
+		EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions = null;
+		try {
+			transitions = PowerTransitionGenerator
+					.generateTransitions(minpower, idlepower, maxpower, diskDivider, netDivider);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return transitions.get(PowerTransitionGenerator.PowerStateKind.network);
+	}
+	
 
 }
