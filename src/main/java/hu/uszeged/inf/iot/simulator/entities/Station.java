@@ -124,7 +124,7 @@ public class Station extends Device{
 		public void conComplete() {
 			dn.localRepository.deregisterObject(this.so);
 			// TODO: fix this "cheat"
-			app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
+			//app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
 					app.sumOfArrivedData+=this.so.size;
 			
 		}

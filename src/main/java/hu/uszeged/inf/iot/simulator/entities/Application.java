@@ -53,7 +53,7 @@ public class Application extends Timed {
 			this.restarted=0;
 		}
 	}
-	
+	public static double defaultNoi = 2400;
 	public ArrayList<TimelineCollector> timelineList = new ArrayList<TimelineCollector>();
 	public static ArrayList<Application> applications = new ArrayList<Application>();
 	private long tasksize;
@@ -73,11 +73,14 @@ public class Application extends Timed {
 	private VmCollector broker;
 	public static void loadApplication(String appfile) throws JAXBException {
 		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
-			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name);
+			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name,0);
 		}
 	}
 
-	private Application(final long freq, long tasksize, String cloud, String instance, String name) {
+	private Application(final long freq, long tasksize, String cloud, String instance, String name, double noi) {
+		if(noi>0) {
+			defaultNoi=noi;
+		}
 		this.vmlist = new ArrayList<VmCollector>();
 		this.stations = new ArrayList<Device>();
 		this.tasksize = tasksize;
@@ -279,8 +282,7 @@ public class Application extends Timed {
 					break;
 				} else {
 					try {
-						//TODO: should delete the burned value
-						final double noi = this.allocatedData == this.tasksize ? 2400 : (double) (2400 * this.allocatedData / this.tasksize);
+						final double noi = this.allocatedData == this.tasksize ? defaultNoi : (double) (2400 * this.allocatedData / this.tasksize);
 						processedData += this.allocatedData;
 						vml.isWorking = true;
 						this.currentTask++;

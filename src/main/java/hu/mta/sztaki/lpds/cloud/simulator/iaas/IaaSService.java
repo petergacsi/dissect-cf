@@ -31,9 +31,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import cloudprovider.CloudPricing;
-//import cloudprovider.CloudPricing;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocation;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.State;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
@@ -172,22 +169,7 @@ public class IaaSService implements VMManager<IaaSService, PhysicalMachine>, Phy
 	 * the PM scheduler applied by this IaaSService object
 	 */
 	public final PhysicalMachineController pmcontroller;
-	
-	
-	/**
-	 * pricing attribute of the IaaSService object
-	 */
-	public CloudPricing cloudpricing;
-	
-	
-	public CloudPricing getCloudpricing() {
-		return cloudpricing;
-	}
-
-	public void setCloudpricing(CloudPricing cloudpricing) {
-		this.cloudpricing = cloudpricing;
-	}
-	
+		
 	
 	/**
 	 *  if you want to know there is a new VM
