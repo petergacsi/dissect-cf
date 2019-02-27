@@ -108,12 +108,15 @@ public class Application extends Timed {
 	}
 
 	private void startBroker() throws VMManagementException, NetworkException {
-		if(this.vmlist.contains(this.broker)) {
+		if(this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.arc)) {
 			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.arc, false,
 					PhysicalMachine.defaultAllocLen);
 			this.broker.restarted++;		
 			this.broker.vm.switchOn(ra, null);
 			this.broker.lastWorked = Timed.getFireCount();
+			for(Provider p : this.providers) {
+				p.startProvider();
+			}
 		}else {
 			try {
 				VirtualMachine vm =this.cloud.iaas.requestVM(this.instance.va, this.instance.arc,this.cloud.iaas.repositories.get(0), 1)[0];
