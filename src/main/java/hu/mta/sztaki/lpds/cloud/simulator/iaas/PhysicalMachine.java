@@ -193,7 +193,7 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 		public final ResourceConstraints allocated;
 		/**
 		 * The resource set that is actually reserved on the PM. If
-		 * allocated>realAllocated, then the VM might get resources up to allocated but
+		 * allocated&gt;realAllocated, then the VM might get resources up to allocated but
 		 * only when the PM is not over-committed.
 		 */
 		private final ResourceConstraints realAllocated;
@@ -720,6 +720,8 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 */
 	private boolean directConsumerUsageMoratory = true;
 
+	private boolean secureExtensions = false;
+
 	/**
 	 * Defines a new physical machine, ensures that there are no VMs running so far
 	 * 
@@ -732,7 +734,7 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 *            defines the total physical memory this machine has under control
 	 *            (in bytes)
 	 * @param disk
-	 *            defines the local physical disk & networking this machine has
+	 *            defines the local physical disk &amp; networking this machine has
 	 *            under control
 	 * @param onD
 	 *            defines the time delay between the machine's switch on and the
@@ -740,10 +742,10 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 * @param offD
 	 *            defines the time delay the machine needs to shut down all of its
 	 *            operations while it does not serve any more VMs
-	 * @param powerTransitions
+	 * @param cpuPowerTransitions
 	 *            determines the applied power state transitions while the physical
 	 *            machine state changes. This is the principal way to alter a PM's
-	 *            energy consumption behavior.
+	 *            energy consumption behaviour.
 	 */
 	public PhysicalMachine(double cores, double perCorePocessing, long memory, Repository disk, int onD, int offD,
 			Map<String, PowerState> cpuPowerTransitions) {
@@ -785,7 +787,7 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 *            defines the total physical memory this machine has under control
 	 *            (in bytes)
 	 * @param disk
-	 *            defines the local physical disk & networking this machine has
+	 *            defines the local physical disk &amp; networking this machine has
 	 *            under control
 	 * @param turnonOperations
 	 *            defines the tasks to execute before the PM can be turned on - this
@@ -797,10 +799,10 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 *            this can be considered as the simulation of the shutdown process.
 	 *            for the complete definition of this array have a look at the
 	 *            powerstatedelayer class.
-	 * @param powerTransitions
+	 * @param cpuPowerTransitions
 	 *            determines the applied power state transitions while the physical
 	 *            machine state changes. This is the principal way to alter a PM's
-	 *            energy consumption behavior.
+	 *            energy consumption behaviour.
 	 */
 
 	public PhysicalMachine(double cores, double perCorePocessing, long memory, Repository disk,
@@ -1003,18 +1005,27 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	@Override
 	public void migrateVM(final VirtualMachine vm, final PhysicalMachine target)
 			throws VMManagementException, NetworkNode.NetworkException {
+		vm.migrate(prepareMigration(vm, target));
+	}
+
+	private ResourceAllocation prepareMigration(final VirtualMachine vm, final PhysicalMachine target)
+			throws VMManagementException, NetworkNode.NetworkException {
 		if (vms.contains(vm)) {
-			vm.migrate(target.allocateResources(vm.getResourceAllocation().allocated, true, migrationAllocLen));
+			ResourceAllocation ra = target.allocateResources(vm.getResourceAllocation().allocated, true,
+					migrationAllocLen);
+			if (ra == null) {
+				throw new VMManagementException("Not enough resources on target host for migration");
+			}
+			return ra;
+		} else {
+			throw new VMManagementException("VM not hosted on source PM");
 		}
 
 	}
 
 	public void migrateVMLive(final VirtualMachine vm, final PhysicalMachine target)
 			throws VMManagementException, NetworkNode.NetworkException {
-		if (vms.contains(vm)) {
-			vm.migrateLive(target.allocateResources(vm.getResourceAllocation().allocated, true, migrationAllocLen));
-		}
-
+		vm.migrateLive(prepareMigration(vm, target));
 	}
 
 	/**
@@ -1522,5 +1533,25 @@ public class PhysicalMachine extends MaxMinProvider implements VMManager<Physica
 	 */
 	public boolean isDirectConsumerUsageMoratory() {
 		return directConsumerUsageMoratory;
+	}
+
+	/**
+	 * Rudimentary api to query security related behaviour of the PM
+	 * 
+	 * @return if the PM supports secure VMs (e.g., via Intel SGX) then this returns
+	 *         true
+	 */
+	public boolean isSecure() {
+		return secureExtensions;
+	}
+
+	/**
+	 * Allows PM's secure behavior to be set. This is only recommended to be used
+	 * during PM setup.
+	 * 
+	 * @param secureExtensions
+	 */
+	public void setSecure(boolean secureExtensions) {
+		this.secureExtensions = secureExtensions;
 	}
 }
