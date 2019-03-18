@@ -27,7 +27,7 @@ public class Station extends Device{
 	}
 
 	public Station(DeviceNetwork dn, long startTime,long stopTime,long filesize, String strategy,int sensorNum,
-			long freq,double ratio,Fog fog)  {
+			long freq,double ratio)  {
 		long delay = Math.abs(SeedSyncer.centralRnd.nextLong()%20)*60*1000;
 		this.startTime=startTime+delay;
 		this.stopTime=stopTime+delay;
@@ -84,13 +84,25 @@ public class Station extends Device{
 			} catch (NetworkException e) {
 				e.printStackTrace();
 			}
+			if(!this.app.isSubscribed()) {
+				try {
+					this.app.restartApplication();
+					
+				} catch (VMManagementException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NetworkException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 	}
 
 	public static void loadDevice(String stationfile) throws Exception {
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			for(int i=0;i<dm.number;i++){
 				DeviceNetwork dn = new DeviceNetwork(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,dm.name+i,null,null);
-				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq,dm.ratio,null);
+				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq,dm.ratio);
 			}
 			
 		}

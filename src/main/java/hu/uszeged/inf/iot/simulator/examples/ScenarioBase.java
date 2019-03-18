@@ -32,6 +32,7 @@ public abstract class ScenarioBase {
 			System.out.println("cloud: " + c.name);
 			long highestStationStoptime=Long.MIN_VALUE;
 			for (Application a : c.applications) {
+				System.out.println(a.name);
 				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
 				processedData+=a.sumOfProcessedData;
 				usedVM+=a.vmlist.size();
