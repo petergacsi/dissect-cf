@@ -1,7 +1,6 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.uszeged.inf.iot.simulator.entities.Application;
-import hu.uszeged.inf.xml.model.ProvidersModel;
 
 public class AmazonProvider extends Provider{
 	double AMAZON;

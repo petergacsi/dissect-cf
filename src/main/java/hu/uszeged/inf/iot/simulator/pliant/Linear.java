@@ -1,8 +1,6 @@
 package hu.uszeged.inf.iot.simulator.pliant;
 
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**

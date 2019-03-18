@@ -1,6 +1,5 @@
 package hu.uszeged.inf.iot.simulator.pliant;
 
-import java.util.Collection;
 import java.util.Vector;
 
 public class Sigmoid implements INormalizer {

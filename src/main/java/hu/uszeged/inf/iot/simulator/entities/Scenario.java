@@ -3,7 +3,6 @@ package hu.uszeged.inf.iot.simulator.entities;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
