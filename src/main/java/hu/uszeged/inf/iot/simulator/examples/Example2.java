@@ -9,8 +9,6 @@ import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.fog.Cloud;
 import hu.uszeged.inf.iot.simulator.fog.Fog;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
-import hu.uszeged.inf.iot.simulator.providers.Provider;
-import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 
 public class Example2 {
 
@@ -19,14 +17,23 @@ public static void main(String[] args) throws Exception {
 		String fogfile=ScenarioBase.resourcePath+"/resources_cscs/LPDSCloud.xml"; 
 		String cloudfile=ScenarioBase.resourcePath+"LPDSCloud.xml"; 
 		// Set up the clouds
-		new Cloud(cloudfile,"cloud1");
 		Fog f = new Fog(fogfile,"fog1");
+		Cloud c = new Cloud(cloudfile,"cloud1");
+			
 		VirtualAppliance va = new VirtualAppliance("va1", 100, 0, false, 1000000);
 		AlterableResourceConstraints arc = new AlterableResourceConstraints(4,0.001,2147483648L);
 		new Instance(va,arc,(1.0/60),"instance1");
-		new Application(5*60*1000, 2500000, "cloud1", "instance1", "teszt", -1);
+		Application appCloud = new Application(5*60*1000, 250, "cloud1", "instance1", "AppCloud","cloud", -1);
+		new Application(5*60*1000, 250, "fog1", "instance1", "AppFog","fog", -1);
+		
+		Fog.registerApplication(appCloud, f, c);
+		
 		DeviceNetwork dn  = new DeviceNetwork(10000, 10000, 10000, 10000, "tesztRepo", null, null);
-		new Station(dn, 0,24*60*60*1000,50, "random", 5,60*1000,1).startMeter();
+		new Station(dn, 0,24*60*60*1000,50, "random", 5,60*1000,1,f).startMeter();
+		
+		
+		
+		// TODO: IoT pricing set-up
 		
 		// Start the simulation
 		long starttime = System.nanoTime();

@@ -52,7 +52,7 @@ public abstract class Provider extends Timed{
 	
 	public static void loadProvider(String providerfile){
 		Provider.PROVIDERFILE=providerfile;
-		for(Application app: Application.applications) {
+		for(Application app: Application.fogApplications) {
 			app.providers.add(new BluemixProvider(app));
 			app.providers.add(new AmazonProvider(app));
 			app.providers.add(new OracleProvider(app));

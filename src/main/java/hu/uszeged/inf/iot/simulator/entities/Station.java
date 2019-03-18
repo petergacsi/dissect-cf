@@ -2,6 +2,7 @@ package hu.uszeged.inf.iot.simulator.entities;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
@@ -9,6 +10,8 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.SeedSyncer;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
+import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.fog.Fog;
 import hu.uszeged.inf.xml.model.DeviceModel;
 
 public class Station extends Device{
@@ -24,7 +27,7 @@ public class Station extends Device{
 	}
 
 	public Station(DeviceNetwork dn, long startTime,long stopTime,long filesize, String strategy,int sensorNum,
-			long freq,double ratio)  {
+			long freq,double ratio,Fog fog)  {
 		long delay = Math.abs(SeedSyncer.centralRnd.nextLong()%20)*60*1000;
 		this.startTime=startTime+delay;
 		this.stopTime=stopTime+delay;
@@ -54,7 +57,7 @@ public class Station extends Device{
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
-					cloudRepository = app.cloud.iaas.repositories.get(0);
+					cloudRepository = app.fog.iaas.repositories.get(0);
 				}
 			};
 		}
@@ -87,22 +90,23 @@ public class Station extends Device{
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			for(int i=0;i<dm.number;i++){
 				DeviceNetwork dn = new DeviceNetwork(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,dm.name+i,null,null);
-				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq,dm.ratio);
+				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq,dm.ratio,null);
 			}
 			
 		}
 	}
 
 	public  void installionProcess(final Station s) {
-		if(this.strategy.equals("load")){		
+		
+			if(this.strategy.equals("load")){		
 				new RuntimeStrategy(this);
-		}else if(this.strategy.equals("random")){
+			}else if(this.strategy.equals("random")){
 				new RandomStrategy(this);
-		}else if(this.strategy.equals("cost")) {
+			}else if(this.strategy.equals("cost")) {
 				new CostStrategy(this);
-		}else if(this.strategy.equals("fuzzy")){
+			}else if(this.strategy.equals("fuzzy")){
 				new FuzzyStrategy(this);	
-		} 		
+			} 		
 		
 	}
 

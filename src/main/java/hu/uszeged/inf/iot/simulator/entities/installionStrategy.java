@@ -25,11 +25,11 @@ class RandomStrategy implements installionStrategy{
 	@Override
 	public void install(Device s) {
 		Random randomGenerator = new Random();
-		int rnd = randomGenerator.nextInt(Application.applications.size());
-		Application.addStation(s, Application.applications.get(rnd));
+		int rnd = randomGenerator.nextInt(Application.fogApplications.size());
+		Application.addStation(s, Application.fogApplications.get(rnd));
 		
 		Device.lmap.put(s.getDn().repoName, Device.latency);
-		Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+		Device.lmap.put(s.app.fog.iaas.repositories.get(0).getName(), Device.latency);
 		
 		if(!s.app.isSubscribed()) {
 			try {
@@ -56,15 +56,15 @@ class CostStrategy implements installionStrategy{
 	public void install(Device s) {
 		 double min=Integer.MAX_VALUE-1.0;
 		 int choosen=-1;
-		for(int i=0;i<Application.applications.size();++i){
-			if(Application.applications.get(i).instance.pricePerTick<min){
-				min = Application.applications.get(i).instance.pricePerTick;
+		for(int i=0;i<Application.fogApplications.size();++i){
+			if(Application.fogApplications.get(i).instance.pricePerTick<min){
+				min = Application.fogApplications.get(i).instance.pricePerTick;
 				choosen = i;
 			}
 		}
-		Application.addStation(s, Application.applications.get(choosen));
+		Application.addStation(s, Application.fogApplications.get(choosen));
 		Device.lmap.put(s.getDn().repoName, Device.latency);
-		Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+		Device.lmap.put(s.app.fog.iaas.repositories.get(0).getName(), Device.latency);
 		
 		if(!s.app.isSubscribed()) {
 			try {
@@ -96,16 +96,16 @@ class RuntimeStrategy implements installionStrategy{
 			protected void eventAction() {
 				double min = Double.MAX_VALUE-1.0;
 				int choosen = -1;
-				for(int i=0;i< Application.applications.size();i++ ){
-					double loadRatio = (Application.applications.get(i).stations.size())/(Application.applications.get(i).cloud.iaas.machines.size());
+				for(int i=0;i< Application.fogApplications.size();i++ ){
+					double loadRatio = (Application.fogApplications.get(i).stations.size())/(Application.fogApplications.get(i).fog.iaas.machines.size());
 					if(loadRatio<min){
 						min=loadRatio;
 						choosen = i;
 					}
 				}
-				Application.addStation(s, Application.applications.get(choosen));
+				Application.addStation(s, Application.fogApplications.get(choosen));
 				Device.lmap.put(s.getDn().repoName, Device.latency);
-				Device.lmap.put(s.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+				Device.lmap.put(s.app.fog.iaas.repositories.get(0).getName(), Device.latency);
 				
 				if(!s.app.isSubscribed()) {
 					try {
@@ -140,9 +140,9 @@ class FuzzyStrategy implements installionStrategy{
 			@Override
 			protected void eventAction() {
 				int rsIdx = fuzzyDecision(d);
-				Application.addStation(d, Application.applications.get(rsIdx));
+				Application.addStation(d, Application.fogApplications.get(rsIdx));
 				Device.lmap.put(d.getDn().repoName, Device.latency);
-				Device.lmap.put(d.app.cloud.iaas.repositories.get(0).getName(), Device.latency);
+				Device.lmap.put(d.app.fog.iaas.repositories.get(0).getName(), Device.latency);
 				if(!s.app.isSubscribed()) {
 					try {
 						s.app.restartApplication();
@@ -196,8 +196,8 @@ private int fuzzyDecision(Device s) {
 		//System.out.println("test");
 		Sigmoid sig = new Sigmoid(Double.valueOf(-1.0/96.0), Double.valueOf(15));
 		Vector<Double> price = new Vector<Double>();
-		for(int i=0;i<Application.applications.size();++i){
-			price.add(kappa.getAt(sig.getat(Application.applications.get(i).instance.pricePerTick*1000000000)));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			price.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).instance.pricePerTick*1000000000)));
 			//System.out.println(Application.applications.get(i).instance.pricePerTick*1000000000);
 			//System.out.println("Cost: " + Application.applications.get(i).getCurrentCostofApp());
 			//System.out.println("Load: " + Application.applications.get(i).getLoadOfCloud());
@@ -209,8 +209,8 @@ private int fuzzyDecision(Device s) {
 		//System.out.println(price);
 		double minprice = Double.MAX_VALUE;
 		double maxprice= Double.MIN_VALUE;
-		for(int i=0;i<Application.applications.size();++i){
-			double currentprice = Application.applications.get(i).getCurrentCostofApp();
+		for(int i=0;i<Application.fogApplications.size();++i){
+			double currentprice = Application.fogApplications.get(i).getCurrentCostofApp();
 			if(currentprice > maxprice)
 				maxprice = currentprice;
 			if(currentprice < minprice)
@@ -221,8 +221,8 @@ private int fuzzyDecision(Device s) {
 		Vector<Double> currentprice = new Vector<Double>();
 		//System.out.println("test");
 		sig = new Sigmoid(Double.valueOf(-1.0), Double.valueOf((maxprice-minprice)/2.0));
-		for(int i=0;i<Application.applications.size();++i){
-			currentprice.add(kappa.getAt(sig.getat(Application.applications.get(i).getCurrentCostofApp())));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			currentprice.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).getCurrentCostofApp())));
 		}
 		
 	
@@ -231,8 +231,8 @@ private int fuzzyDecision(Device s) {
 		
 		double minworkload = Double.MAX_VALUE;
 		double maxworkload= Double.MIN_VALUE;
-		for(int i=0;i<Application.applications.size();++i){
-			double workload = Application.applications.get(i).getLoadOfCloud();
+		for(int i=0;i<Application.fogApplications.size();++i){
+			double workload = Application.fogApplications.get(i).getLoadOfCloud();
 			if(workload > maxworkload)
 				maxworkload = workload;
 			if(workload < minworkload)
@@ -242,8 +242,8 @@ private int fuzzyDecision(Device s) {
 		Vector<Double> workload = new Vector<Double>();
 		//System.out.println("test");
 		sig = new Sigmoid(Double.valueOf(-1.0), Double.valueOf(maxworkload));
-		for(int i=0;i<Application.applications.size();++i){
-			workload.add(kappa.getAt(sig.getat(Application.applications.get(i).getLoadOfCloud())));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			workload.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).getLoadOfCloud())));
 			//temp2.add(Application.applications.get(i).getLoadOfCloud());
 		}
 		//System.out.println(temp2);
@@ -252,30 +252,30 @@ private int fuzzyDecision(Device s) {
 		
 		Vector<Double> numberofvm = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(-1.0/8.0),Double.valueOf(3));
-		for(int i=0;i<Application.applications.size();++i){			
-			numberofvm.add(kappa.getAt(sig.getat(Double.valueOf(Application.applications.get(i).vmlist.size()))));
+		for(int i=0;i<Application.fogApplications.size();++i){			
+			numberofvm.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).vmlist.size()))));
 			//temp2.add((double)Application.applications.get(i).vmlist.size());
 		}
 		//System.out.println(temp2);
 		//System.out.println(numberofvm);
 		
 		double sum_stations = 0.0;
-		for(int i=0;i<Application.applications.size();++i){			
-			sum_stations += Application.applications.get(i).stations.size();
+		for(int i=0;i<Application.fogApplications.size();++i){			
+			sum_stations += Application.fogApplications.get(i).stations.size();
 		}
 		
 		Vector<Double> numberofstation = new Vector<Double>();
-		sig = new Sigmoid(Double.valueOf(-0.125),Double.valueOf(sum_stations/(Application.applications.size())));
-		for(int i=0;i<Application.applications.size();++i){		
-			numberofstation.add(kappa.getAt(sig.getat(Double.valueOf(Application.applications.get(i).stations.size()))));
+		sig = new Sigmoid(Double.valueOf(-0.125),Double.valueOf(sum_stations/(Application.fogApplications.size())));
+		for(int i=0;i<Application.fogApplications.size();++i){		
+			numberofstation.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).stations.size()))));
 			//temp2.add((double)Application.applications.get(i).stations.size());
 		}
 		
 		Vector<Double> numberofActiveStation = new Vector<Double>();
-		for(int i=0;i<Application.applications.size();++i){		
+		for(int i=0;i<Application.fogApplications.size();++i){		
 			double sum = 0.0;
-			for(int j=0;j<Application.applications.get(i).stations.size();j++) {
-				Station stat = (Station) Application.applications.get(i).stations.get(j);
+			for(int j=0;j<Application.fogApplications.get(i).stations.size();j++) {
+				Station stat = (Station) Application.fogApplications.get(i).stations.get(j);
 				long time = Timed.getFireCount();
 				if(stat.startTime >= time && stat.stopTime >= time)
 					sum +=1;
@@ -301,15 +301,15 @@ private int fuzzyDecision(Device s) {
 		
 		Vector<Double> preferVM = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/32),Double.valueOf(3));
-		for(int i=0;i<Application.applications.size();++i){
-			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.applications.get(i).instance.arc.getRequiredCPUs()))));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.arc.getRequiredCPUs()))));
 		}
 		//System.out.println(preferVM);
 		
 		Vector<Double> preferVMMem = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/256.0),Double.valueOf(350.0));
-		for(int i=0;i<Application.applications.size();++i){	
-			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.applications.get(i).instance.arc.getRequiredMemory() / 10000000))));
+		for(int i=0;i<Application.fogApplications.size();++i){	
+			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.arc.getRequiredMemory() / 10000000))));
 		}
 		//System.out.println(preferVMMem);
 		
@@ -330,7 +330,7 @@ private int fuzzyDecision(Device s) {
 			score.add(FuzzyIndicators.getAggregation(temp)*100);
 		}
 		Vector<Integer> finaldecision = new Vector<Integer>();
-		for(int i=0;i<Application.applications.size();++i){
+		for(int i=0;i<Application.fogApplications.size();++i){
 			finaldecision.add(i);	
 		}
 		for(int i=0;i<score.size();++i){

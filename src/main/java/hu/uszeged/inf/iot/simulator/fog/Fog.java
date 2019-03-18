@@ -8,7 +8,7 @@ import org.xml.sax.SAXException;
 
 public class Fog extends Cloud{
 	
-	Cloud cloud;
+	
 	static ArrayList<Fog> fogs = new ArrayList<Fog>();
 
 	public Fog(String cloudfile, String name) throws IOException, SAXException, ParserConfigurationException {
@@ -16,7 +16,8 @@ public class Fog extends Cloud{
 		fogs.add(this);
 	}
 
-	public static void addFog(Cloud c, Fog f) {
+	public static void registerApplication(Application app, Fog f,Cloud c) {
+		f.app=app;
 		f.cloud=c;
 		c.fogs.add(f);
 	}

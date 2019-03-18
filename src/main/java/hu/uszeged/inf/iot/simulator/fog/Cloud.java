@@ -16,7 +16,8 @@ public class Cloud {
 	public ArrayList<Application> applications;
 	public ArrayList<Fog> fogs;
 	public String name;
-	
+	public Cloud cloud;
+	public Application app;
 	public static Cloud addApplication(Application app,String cloud) {
 		Cloud c = clouds.get(cloud);
 		c.applications.add(app);
