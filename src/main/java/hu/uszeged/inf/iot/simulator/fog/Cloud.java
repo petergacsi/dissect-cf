@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.entities;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class Cloud {
 	public IaaSService iaas;
 	public static HashMap<String, Cloud> clouds = new HashMap<String, Cloud>();
 	public ArrayList<Application> applications;
-	String name;
+	public String name;
 	
 	public static Cloud addApplication(Application app,String cloud) {
 		Cloud c = clouds.get(cloud);

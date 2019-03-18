@@ -1,10 +1,13 @@
-package hu.uszeged.inf.iot.simulator.entities;
+package hu.uszeged.inf.iot.simulator.util;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.fog.Cloud;
 
 public class TimelineGenerator {
 

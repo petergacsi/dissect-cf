@@ -1,6 +1,6 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
-import hu.uszeged.inf.iot.simulator.entities.Application;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public class BluemixProvider extends Provider{
 	

@@ -1,8 +1,8 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.uszeged.inf.iot.simulator.entities.Application;
 import hu.uszeged.inf.iot.simulator.entities.Device;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public class AzureProvider extends Provider{
 	double AZURE;

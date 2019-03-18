@@ -1,11 +1,16 @@
-package hu.uszeged.inf.iot.simulator.entities;
+package hu.uszeged.inf.iot.simulator.examples;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.uszeged.inf.iot.simulator.entities.Application.VmCollector;
+import hu.uszeged.inf.iot.simulator.entities.Device;
+import hu.uszeged.inf.iot.simulator.entities.Station;
+import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.fog.Cloud;
+import hu.uszeged.inf.iot.simulator.fog.Application.VmCollector;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
+import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 
 public class Scenario {
 	static Cloud a,b,c;

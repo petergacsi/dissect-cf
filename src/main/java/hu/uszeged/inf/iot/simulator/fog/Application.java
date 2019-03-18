@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.entities;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.util.ArrayList;
 import javax.xml.bind.JAXBException;
@@ -12,9 +12,11 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAda
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import hu.uszeged.inf.iot.simulator.entities.TimelineGenerator.TimelineCollector;
+import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
+import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
+import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
 import hu.uszeged.inf.xml.model.ApplicationModel;
 
 public class Application extends Timed {
@@ -26,12 +28,12 @@ public class Application extends Timed {
 		}
 
 		PhysicalMachine pm;
-		VirtualMachine vm;
+		public VirtualMachine vm;
 		boolean isWorking;
-		int taskCounter;
+		public int taskCounter;
 		long lastWorked;
 		public long workingTime;
-		String id;
+		public String id;
 		public long installed;
 		public int restarted;
 
@@ -53,7 +55,7 @@ public class Application extends Timed {
 	public Cloud cloud;
 	public ArrayList<Device> stations;
 	public String name;
-	Instance instance;
+	public Instance instance;
 	public ArrayList<Provider> providers;
 	public ArrayList<VmCollector> vmlist;
 	public long sumOfWorkTime;

@@ -9,19 +9,20 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public abstract class Device extends Timed {
 	
 	protected static final int latency=11;
 	protected static HashMap<String, Integer> lmap = new HashMap<String, Integer>();
 	
-	protected Application app;
+	public Application app;
 	protected DeviceNetwork dn;
-	protected long sumOfGeneratedData;
+	public long sumOfGeneratedData;
 	protected int messageCount;
 	protected Repository cloudRepository;
 	protected long startTime;
-	protected long stopTime;
+	public long stopTime;
 	protected long filesize;
 	
 
