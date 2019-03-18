@@ -12,54 +12,16 @@ import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 
-public class Scenario {
-	static Cloud a,b,c;
-	public static void main(String[] args) throws Exception {
-		// XML config files
-		String resourcePath = new StringBuilder(System.getProperty("user.dir")).
-										append(File.separator).
-										append("target").
-										append(File.separator).
-										append("resources").
-										append(File.separator).
-										toString();
-		
-		
-		String CScloudfile=resourcePath+"/resources_cscs/LPDSCloud.xml"; // this one should use in scenario_1
-		String CSstationfile=resourcePath+"/resources_cscs/WeatherStationL.xml"; // this one should use in scenario_1
-		
-		String cloudfile=resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
-		String cloudfile3=resourcePath+"LPDSCloud3.xml"; // this one should use in scenario_3
-		String stationfile=resourcePath+"wsF.xml"; // this one should use in scenario_2-3
-		
-		String appfile=resourcePath+"NEWApplication.xml";
-		String instancefile=resourcePath+"NEWInstance.xml";
-		String providerfile=resourcePath+"Pricing.xml";
-				
-		//newSetup
-		String newScen=resourcePath+"/resources_cscs/new.xml";
-
-		
-		// Set up the clouds
-		a= new Cloud(CScloudfile,"cloud1");
-		b= new Cloud(CScloudfile,"cloud2");
-		c = new Cloud(CScloudfile ,"cloud3");
-		// Load the virtual machine instances, the applications and finally the devices
-		Instance.loadInstance(instancefile);
-		Application.loadApplication(appfile);
-		Station.loadDevice(CSstationfile);
-		Provider.loadProvider(providerfile); 
-		
-		// Start the simulation
-		long starttime = System.nanoTime();
-		Timed.simulateUntilLastEvent();
-		long stopttime = System.nanoTime();
-		// Print some informations to the monitor / in file
-		printInformation((stopttime-starttime));
-		TimelineGenerator.generate();
-	}
+public abstract class ScenarioBase {
+	final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
+			append(File.separator).
+			append("target").
+			append(File.separator).
+			append("resources").
+			append(File.separator).
+			toString();
 	
-	private static void printInformation(long t) {
+	 static void printInformation(long t) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
 		long generatedData=0,processedData=0;
@@ -100,8 +62,6 @@ public class Scenario {
 		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 		
-		System.out.println(a.iaas.repositories.get(0));
-		System.out.println(b.iaas.repositories.get(0));
-		System.out.println(c.iaas.repositories.get(0));
+
 	}
 }

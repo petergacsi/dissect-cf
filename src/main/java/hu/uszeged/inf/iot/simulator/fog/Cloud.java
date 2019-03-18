@@ -14,6 +14,7 @@ public class Cloud {
 	public IaaSService iaas;
 	public static HashMap<String, Cloud> clouds = new HashMap<String, Cloud>();
 	public ArrayList<Application> applications;
+	public ArrayList<Fog> fogs;
 	public String name;
 	
 	public static Cloud addApplication(Application app,String cloud) {
@@ -23,10 +24,13 @@ public class Cloud {
 	}
 	
 	public Cloud(String cloudfile,String name)throws IOException, SAXException, ParserConfigurationException {
-		this.iaas = CloudLoader.loadNodes(cloudfile);
+		if(cloudfile!=null) {
+			this.iaas = CloudLoader.loadNodes(cloudfile);
+			Cloud.clouds.put(name,this);
+			this.name=name;
+		}
 		applications = new ArrayList<Application>();
-		Cloud.clouds.put(name,this);
-		this.name=name;
+		fogs = new ArrayList<Fog>();
 	}
 	
 }

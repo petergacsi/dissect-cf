@@ -72,7 +72,7 @@ public class Application extends Timed {
 		}
 	}
 
-	private Application(final long freq, long tasksize, String cloud, String instance, String name, double noi) {
+	public Application(final long freq, long tasksize, String cloud, String instance, String name, double noi) {
 		if(noi>0) {
 			defaultNoi=noi;
 		}
