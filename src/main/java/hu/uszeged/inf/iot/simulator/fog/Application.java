@@ -151,7 +151,7 @@ public class Application extends Timed {
 		return null;
 	}
 	
-	private void generateAndAddVM() {
+	private boolean generateAndAddVM() {
 		try {
 			if (this.turnonVM() == false) {
 				for (PhysicalMachine pm : this.fog.iaas.machines) {
@@ -163,14 +163,16 @@ public class Application extends Timed {
 							vmc.pm=pm;
 							this.vmlist.add(vmc);
 							System.out.print(" asked new VM");
+							return true;
 						}
-						return;
+						
 					}
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
 	private boolean turnonVM() {
@@ -280,7 +282,8 @@ public class Application extends Timed {
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
-					if(ratio>3) {
+										
+					if(ratio>2) {
 						if(this.fog.cloud!=null) {
 							try {
 								if(this.fog.app.isSubscribed()) {
@@ -292,7 +295,6 @@ public class Application extends Timed {
 
 												@Override
 												public void conComplete() {
-													System.err.println("asdasdasdadasdasd");
 													foggy.app.sumOfArrivedData +=  unprocessed;
 												}
 
@@ -315,14 +317,14 @@ public class Application extends Timed {
 								e.printStackTrace();
 							}
 						}
-						ratio = ((double)unprocessedData/this.tasksize);
 					}
-					
-					
 					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
 					this.generateAndAddVM();
 					
 					break;
+					
+					
+					
 				} else {
 					try {
 						final double noi = this.allocatedData == this.tasksize ? defaultNoi : (double) (2400 * this.allocatedData / this.tasksize);
