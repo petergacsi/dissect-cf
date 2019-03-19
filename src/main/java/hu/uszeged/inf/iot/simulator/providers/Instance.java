@@ -19,13 +19,18 @@ public class Instance {
 	
 	public static void loadInstance(String instancefile) throws JAXBException {
 		for(InstanceModel im : InstanceModel.loadInstanceXML(instancefile)) {
-			Instance i = new Instance();
-			i.va = new VirtualAppliance(im.name, im.startupProcess, im.networkLoad, false, im.reqDisk);
-			i.arc = new AlterableResourceConstraints(im.cpuCores,im.coreProcessingPower,im.ram);
-			i.name=im.name; 
-			i.pricePerTick=im.pricePerTick;
+			Instance i = new Instance(new VirtualAppliance(im.name, im.startupProcess, im.networkLoad, false, im.reqDisk), 
+							new AlterableResourceConstraints(im.cpuCores,im.coreProcessingPower,im.ram), im.pricePerTick,im.name);
 			instances.put(i.name,i);
 		}
+	}
+	
+	public Instance(VirtualAppliance va,AlterableResourceConstraints arc,double pricePerTick,String name){
+		this.va=va;
+		this.arc=arc;
+		this.pricePerTick=pricePerTick;
+		this.name=name;
+		instances.put(this.name,this);
 	}
 	
 	public double calculateCloudCost(long time){

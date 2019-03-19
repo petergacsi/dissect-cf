@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.entities;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +14,10 @@ public class Cloud {
 	public IaaSService iaas;
 	public static HashMap<String, Cloud> clouds = new HashMap<String, Cloud>();
 	public ArrayList<Application> applications;
-	String name;
-	
+	public ArrayList<Fog> fogs;
+	public String name;
+	public Cloud cloud;
+	public Application app;
 	public static Cloud addApplication(Application app,String cloud) {
 		Cloud c = clouds.get(cloud);
 		c.applications.add(app);
@@ -23,10 +25,13 @@ public class Cloud {
 	}
 	
 	public Cloud(String cloudfile,String name)throws IOException, SAXException, ParserConfigurationException {
-		if (iaas == null) this.iaas = CloudLoader.loadNodes(cloudfile);
+		if(cloudfile!=null) {
+			this.iaas = CloudLoader.loadNodes(cloudfile);
+			Cloud.clouds.put(name,this);
+			this.name=name;
+		}
 		applications = new ArrayList<Application>();
-		Cloud.clouds.put(name,this);
-		this.name=name;
+		fogs = new ArrayList<Fog>();
 	}
 	
 }

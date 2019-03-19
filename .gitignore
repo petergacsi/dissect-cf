@@ -4,11 +4,4 @@ bin
 .project
 .DS_Store
 /target
-tasks-0.csv
-tasks-1.csv
-tasks-2.csv
-tasks-3.csv
-tasks-4.csv
-tasks-5.csv
-tasks-6.csv
-tasks-7.csv
+*.html

@@ -17,7 +17,7 @@
       </shutdown>
 	</device>
 
-	<device starttime="7200000" stoptime="79200000" number="300" filesize="50">
+	<device starttime="7200000" stoptime="79200000" number="100" filesize="50">
       <name>test2</name>
       <freq>60000</freq>
       <sensor>8</sensor>
@@ -34,7 +34,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="36000000" stoptime="50400000" number="300" filesize="50">
+	<device starttime="36000000" stoptime="50400000" number="200" filesize="50">
       <name>test2</name>
       <freq>60000</freq>
       <sensor>8</sensor>
@@ -51,5 +51,4 @@
       </shutdown>
 	</device>
 	
-
 </devices>

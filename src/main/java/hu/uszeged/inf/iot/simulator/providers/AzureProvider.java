@@ -1,34 +1,29 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.uszeged.inf.iot.simulator.entities.Application;
-import hu.uszeged.inf.iot.simulator.entities.Station;
-import hu.uszeged.inf.xml.model.ProvidersModel;
+import hu.uszeged.inf.iot.simulator.entities.Device;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public class AzureProvider extends Provider{
 	double AZURE;
 	private long usedMessage;
+
 	@Override
 	public String toString() {
 		return "[AZURE=" + AZURE + " "+this.getFrequency()+"]";
 	}
 
 
-	public AzureProvider(Application app,String providerfile) {
+	public AzureProvider(Application app) {
+		super();
 		this.usedMessage=0;
 		this.app=app;
-		try {
-			ProvidersModel.loadProviderXML(providerfile,this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		subscribe(this.getHighestStopTime(this.azureFreq));
 	}
 	
 	public long avarageFileSize() {
 		long tmp=0;
-		for(Station s : this.app.stations) {
-			tmp+=s.sd.filesize;
+		for(Device s : this.app.stations) {
+			tmp+=s.getFilesize();
 		}
 		return tmp/this.app.stations.size();
 	}
@@ -39,7 +34,7 @@ public class AzureProvider extends Provider{
 		}
 		
 		if(this.messagesPerDay>0 && this.avarageFileSize()<=(this.messagesizePerKB*1024)){
-			long totalMassages=this.app.sumOfData()  / this.avarageFileSize();
+			long totalMassages=this.app.sumOfProcessedData / this.avarageFileSize();
 			long msg = totalMassages - usedMessage;
 			usedMessage= msg;
 			
@@ -56,6 +51,16 @@ public class AzureProvider extends Provider{
 			}else{
 				this.AZURE=-1;
 			}
-}
+		}
+		if(this.shouldStop) {
+			unsubscribe();
+		}
+	}
+
+
+	@Override
+	public void startProvider() {
+		subscribe(this.azureFreq);
+		shouldStop=false;
 	}
 }

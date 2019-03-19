@@ -88,7 +88,6 @@ public class CloudLoader {
 			boolean incloud = false;
 			boolean inmachine = false;
 			boolean inrepo = false;
-			String mid;
 			String rid;
 			double cores;
 			double processing;
@@ -127,7 +126,6 @@ public class CloudLoader {
 						cores = Double.parseDouble(attributes.getValue("cores"));
 						processing = Double.parseDouble(attributes.getValue("processing"));
 						memory = Long.parseLong(attributes.getValue("memory"));
-						mid = attributes.getValue("id");
 					}
 					if (inmachine) {
 						if (qName.equals("statedelays")) {

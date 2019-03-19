@@ -1,7 +1,6 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
-import hu.uszeged.inf.iot.simulator.entities.Application;
-import hu.uszeged.inf.xml.model.ProvidersModel;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public class BluemixProvider extends Provider{
 	
@@ -14,20 +13,15 @@ public class BluemixProvider extends Provider{
 
 	double BLUEMIX;
 	
-	public BluemixProvider(Application app,String providerfile) {
+	public BluemixProvider(Application app) {
+		super();
 		this.app=app;
-		try {
-			ProvidersModel.loadProviderXML(providerfile,this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
-		subscribe(this.getHighestStopTime(Long.MAX_VALUE));
 	}
 	
 	
 	public void tick(long fires) {		
 		if(this.bmList.size()!=0){
-			double tmp= (double) this.app.sumOfData() / (double)1048576; // 1 MB
+			double tmp= (double) this.app.sumOfProcessedData / (double)1048576; // 1 MB
 			double cost=0.0;
  			for(Bluemix bm : this.bmList){
 				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {
@@ -37,9 +31,14 @@ public class BluemixProvider extends Provider{
  			
 			this.BLUEMIX=tmp*cost;
 		}
-
-		if(this.app.isSubscribed()==false) {
+		if(this.shouldStop) {
 			unsubscribe();
 		}
+	}
+
+
+	@Override
+	public void startProvider() {
+		subscribe(Integer.MAX_VALUE);
 	}
 }

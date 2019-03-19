@@ -1,7 +1,6 @@
 package hu.uszeged.inf.iot.simulator.providers;
 
-import hu.uszeged.inf.iot.simulator.entities.Application;
-import hu.uszeged.inf.xml.model.ProvidersModel;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public class AmazonProvider extends Provider{
 	double AMAZON;
@@ -12,24 +11,25 @@ public class AmazonProvider extends Provider{
 	}
 
 
-	public AmazonProvider(Application app,String providerfile) {
+	public AmazonProvider(Application app) {
+		super();
 		this.app=app;
-		try {
-			ProvidersModel.loadProviderXML(providerfile,this);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		subscribe(this.getHighestStopTime(Long.MAX_VALUE));
 	}
 	
 	
 	public void tick(long fires) {		
 		if(this.blockPrice>0 && this.blockSize>0){
-			this.AMAZON= ((this.app.sumOfData() / this.blockSize) + 1) * this.blockPrice / this.messageCount;
+			this.AMAZON= (((double)this.app.sumOfProcessedData / this.blockSize) + 1) * this.blockPrice / this.messageCount;
 		}
-		
-		if(this.app.isSubscribed()==false) {
+		if(this.shouldStop) {
 			unsubscribe();
 		}
+	}
+
+
+	@Override
+	public void startProvider() {
+		subscribe(Integer.MAX_VALUE);
+		
 	}
 }
