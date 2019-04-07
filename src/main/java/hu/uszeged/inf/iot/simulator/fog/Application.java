@@ -1,3 +1,28 @@
+/*
+ *  ========================================================================
+ *  DIScrete event baSed Energy Consumption simulaTor 
+ *    					             for Clouds and Federations (DISSECT-CF)
+ *  ========================================================================
+ *  
+ *  This file is part of DISSECT-CF.
+ *  
+ *  DISSECT-CF is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or (at
+ *  your option) any later version.
+ *  
+ *  DISSECT-CF is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ *  General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
+ */
+
+
 package hu.uszeged.inf.iot.simulator.fog;
 
 import java.util.ArrayList;
@@ -52,10 +77,9 @@ public class Application extends Timed {
 	}
 	public static double defaultNoi = 2400;
 	public ArrayList<TimelineCollector> timelineList = new ArrayList<TimelineCollector>();
-	public static ArrayList<Application> cloudApplications = new ArrayList<Application>();
-	public static ArrayList<Application> fogApplications = new ArrayList<Application>();
+	public static ArrayList<Application> applications = new ArrayList<Application>();
 	private long tasksize;
-	public Cloud fog;
+	public Cloud cloud;
 	public ArrayList<Device> stations;
 	public String name;
 	public Instance instance;
@@ -72,11 +96,11 @@ public class Application extends Timed {
 	private String type;
 	public static void loadApplication(String appfile) throws JAXBException {
 		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
-			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name,"fog",0);
+			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name,0);
 		}
 	}
 
-	public Application(final long freq, long tasksize, String cloud, String instance, String name, String type,double noi) {
+	public Application(final long freq, long tasksize, String cloud, String instance, String name,double noi) {
 		if(noi>0) {
 			defaultNoi=noi;
 		}
@@ -84,21 +108,16 @@ public class Application extends Timed {
 		this.stations = new ArrayList<Device>();
 		this.tasksize = tasksize;
 		//this.allWorkTime=0;
-		this.fog = Cloud.addApplication(this, cloud);
+		this.cloud = Cloud.addApplication(this, cloud);
 		this.name = name;
 		if (cloud != null) {
 			this.freq=freq;
 			subscribe(freq);
 		}
 		this.instance = Instance.instances.get(instance);
-		this.type=type;
-		if(type.equals("fog")) {
-			Application.fogApplications.add(this);
-		}else{
-			Application.cloudApplications.add(this);
-		}
+		Application.applications.add(this);
 		
-		this.fog.iaas.repositories.get(0).registerObject(this.instance.va);
+		this.cloud.iaas.repositories.get(0).registerObject(this.instance.va);
 		try {
 			this.startBroker();
 		} catch (VMManagementException e) {
@@ -125,7 +144,7 @@ public class Application extends Timed {
 			}
 		}else {
 			try {
-				VirtualMachine vm =this.fog.iaas.requestVM(this.instance.va, this.instance.arc,this.fog.iaas.repositories.get(0), 1)[0];
+				VirtualMachine vm =this.cloud.iaas.requestVM(this.instance.va, this.instance.arc,this.cloud.iaas.repositories.get(0), 1)[0];
 				if(vm!=null) {
 					VmCollector vmc = new VmCollector(vm);
 					vmc.id="broker";
@@ -154,10 +173,10 @@ public class Application extends Timed {
 	private boolean generateAndAddVM() {
 		try {
 			if (this.turnonVM() == false) {
-				for (PhysicalMachine pm : this.fog.iaas.machines) {
+				for (PhysicalMachine pm : this.cloud.iaas.machines) {
 					if (pm.isReHostableRequest(this.instance.arc)) {
 						VirtualMachine vm = pm.requestVM(this.instance.va, this.instance.arc,
-								this.fog.iaas.repositories.get(0), 1)[0];
+								this.cloud.iaas.repositories.get(0), 1)[0];
 						if(vm!=null) {
 							VmCollector vmc = new VmCollector(vm);
 							vmc.pm=pm;
@@ -211,7 +230,7 @@ public class Application extends Timed {
 
 	public double getLoadOfCloud(){
 		double usedCPU=0.0;
-		for(VirtualMachine vm : this.fog.iaas.listVMs()) {
+		for(VirtualMachine vm : this.cloud.iaas.listVMs()) {
 			if(vm.getResourceAllocation() == null) {
 				usedCPU+=0.0;
 			}else {
@@ -226,14 +245,14 @@ public class Application extends Timed {
 		}
 		System.out.println(t+"/"+this.cloud.iaas.getRunningCapacities().getRequiredCPUs()+"/" +this.cloud.iaas.getCapacities().getRequiredCPUs());
 		*/
-		return (usedCPU / this.fog.iaas.getRunningCapacities().getRequiredCPUs())*100;
+		return (usedCPU / this.cloud.iaas.getRunningCapacities().getRequiredCPUs())*100;
 	}
 	
 	
 	
 	public static void addStation(Device s, Application a) {
 		a.stations.add(s);
-		s.app = a;
+		s.setApp(a);
 	}
 	
 	private boolean checkStationState() { 
@@ -282,42 +301,7 @@ public class Application extends Timed {
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
-										
-					if(ratio>2) {
-						if(this.fog.cloud!=null) {
-							try {
-								if(this.fog.app.isSubscribed()) {
-									this.sumOfArrivedData-=unprocessedData;
-									final Fog foggy = (Fog) this.fog;
-									final long unprocessed = unprocessedData;
-									NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
-											this.fog.iaas.repositories.get(0), this.fog.cloud.iaas.repositories.get(0), new ConsumptionEvent() {
-
-												@Override
-												public void conComplete() {
-													foggy.app.sumOfArrivedData +=  unprocessed;
-												}
-
-												@Override
-												public void conCancelled(ResourceConsumption problematic) {
-													
-												}
-										
-									});
-								}else {
-									try {
-										this.fog.app.restartApplication();
-									} catch (VMManagementException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-								
-							} catch (NetworkException e) {
-								e.printStackTrace();
-							}
-						}
-					}
+					
 					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
 					this.generateAndAddVM();
 					
@@ -370,9 +354,9 @@ public class Application extends Timed {
 				}
 			}
 			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
-			if(!this.fog.iaas.repositories.get(0).registerObject(so)){
-				this.fog.iaas.repositories.get(0).deregisterObject(so);
-				this.fog.iaas.repositories.get(0).registerObject(so);
+			if(!this.cloud.iaas.repositories.get(0).registerObject(so)){
+				this.cloud.iaas.repositories.get(0).deregisterObject(so);
+				this.cloud.iaas.repositories.get(0).registerObject(so);
 			}
 			
 			for (VmCollector vmcl : this.vmlist) {
