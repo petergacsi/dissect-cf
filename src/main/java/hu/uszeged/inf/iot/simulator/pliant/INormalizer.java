@@ -26,11 +26,11 @@ package hu.uszeged.inf.iot.simulator.pliant;
 
 import java.util.Vector;
 
-public interface INormalizer <E> {
+public interface INormalizer {
 
 	//if the higher value is better
-	public Vector normalizeincremental(Vector source_vector);
+	public Vector<?> normalizeincremental(Vector<?> source_vector);
 		
 	//if the lower value is better
-	public Vector normalizedecremental(Vector source_vector);
+	public Vector<?> normalizedecremental(Vector<?> source_vector);
 }

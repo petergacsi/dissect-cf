@@ -1,7 +1,5 @@
 package hu.uszeged.inf.iot.simulator.examples;
 
-import java.io.File;
-
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Station;
 import hu.uszeged.inf.iot.simulator.fog.Application;

@@ -28,11 +28,8 @@ package hu.uszeged.inf.iot.simulator.entities;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Vector;
-
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
-import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.pliant.FuzzyIndicators;
 import hu.uszeged.inf.iot.simulator.pliant.Kappa;
@@ -190,7 +187,7 @@ private int fuzzyDecision(Device s) {
 		//Vector<Double> temp2 = new Vector<Double>();
 		Kappa kappa = new Kappa(3.0,0.4);
 		//System.out.println("test");
-		Sigmoid sig = new Sigmoid(Double.valueOf(-1.0/96.0), Double.valueOf(15));
+		Sigmoid<Object> sig = new Sigmoid<Object>(Double.valueOf(-1.0/96.0), Double.valueOf(15));
 		Vector<Double> price = new Vector<Double>();
 		for(int i=0;i<Application.getApplications().size();++i){
 			price.add(kappa.getAt(sig.getat(Application.getApplications().get(i).getInstance().getPricePerTick()*1000000000)));
@@ -216,7 +213,7 @@ private int fuzzyDecision(Device s) {
 		
 		Vector<Double> currentprice = new Vector<Double>();
 		//System.out.println("test");
-		sig = new Sigmoid(Double.valueOf(-1.0), Double.valueOf((maxprice-minprice)/2.0));
+		sig = new Sigmoid<Object>(Double.valueOf(-1.0), Double.valueOf((maxprice-minprice)/2.0));
 		for(int i=0;i<Application.getApplications().size();++i){
 			currentprice.add(kappa.getAt(sig.getat(Application.getApplications().get(i).getCurrentCostofApp())));
 		}
@@ -237,7 +234,7 @@ private int fuzzyDecision(Device s) {
 		
 		Vector<Double> workload = new Vector<Double>();
 		//System.out.println("test");
-		sig = new Sigmoid(Double.valueOf(-1.0), Double.valueOf(maxworkload));
+		sig = new Sigmoid<Object>(Double.valueOf(-1.0), Double.valueOf(maxworkload));
 		for(int i=0;i<Application.getApplications().size();++i){
 			workload.add(kappa.getAt(sig.getat(Application.getApplications().get(i).getLoadOfCloud())));
 			//temp2.add(Application.applications.get(i).getLoadOfCloud());
@@ -247,7 +244,7 @@ private int fuzzyDecision(Device s) {
 		
 		
 		Vector<Double> numberofvm = new Vector<Double>();
-		sig = new Sigmoid(Double.valueOf(-1.0/8.0),Double.valueOf(3));
+		sig = new Sigmoid<Object>(Double.valueOf(-1.0/8.0),Double.valueOf(3));
 		for(int i=0;i<Application.getApplications().size();++i){			
 			numberofvm.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getVmlist().size()))));
 			//temp2.add((double)Application.applications.get(i).vmlist.size());
@@ -261,7 +258,7 @@ private int fuzzyDecision(Device s) {
 		}
 		
 		Vector<Double> numberofstation = new Vector<Double>();
-		sig = new Sigmoid(Double.valueOf(-0.125),Double.valueOf(sum_stations/(Application.getApplications().size())));
+		sig = new Sigmoid<Object>(Double.valueOf(-0.125),Double.valueOf(sum_stations/(Application.getApplications().size())));
 		for(int i=0;i<Application.getApplications().size();++i){		
 			numberofstation.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getStations().size()))));
 			//temp2.add((double)Application.applications.get(i).stations.size());
@@ -283,7 +280,7 @@ private int fuzzyDecision(Device s) {
 			sum_stations += numberofActiveStation.get(i);
 		}
 		
-		sig = new Sigmoid(Double.valueOf(-0.125),Double.valueOf(sum_stations/(numberofActiveStation.size())));
+		sig = new Sigmoid<Object>(Double.valueOf(-0.125),Double.valueOf(sum_stations/(numberofActiveStation.size())));
 		for(int i=0;i<numberofActiveStation.size();++i){
 			double a = numberofActiveStation.get(i);
 			double b = sig.getat(a);
@@ -296,14 +293,14 @@ private int fuzzyDecision(Device s) {
 		//System.out.println(temp2);
 		
 		Vector<Double> preferVM = new Vector<Double>();
-		sig = new Sigmoid(Double.valueOf(1.0/32),Double.valueOf(3));
+		sig = new Sigmoid<Object>(Double.valueOf(1.0/32),Double.valueOf(3));
 		for(int i=0;i<Application.getApplications().size();++i){
 			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getInstance().getArc().getRequiredCPUs()))));
 		}
 		//System.out.println(preferVM);
 		
 		Vector<Double> preferVMMem = new Vector<Double>();
-		sig = new Sigmoid(Double.valueOf(1.0/256.0),Double.valueOf(350.0));
+		sig = new Sigmoid<Object>(Double.valueOf(1.0/256.0),Double.valueOf(350.0));
 		for(int i=0;i<Application.getApplications().size();++i){	
 			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getInstance().getArc().getRequiredMemory() / 10000000))));
 		}

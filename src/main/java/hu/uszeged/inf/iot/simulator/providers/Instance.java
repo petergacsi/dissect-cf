@@ -56,12 +56,7 @@ public class Instance {
 	 * The price of one time unit.
 	 */
 	private double pricePerTick;
-	
-	/**
-	 * It stores the final cost of the instance.
-	 */
-	private double cost;
-	
+		
 	/**
 	 * Map for the all of possible instances. The key should be the Id of the instance.
 	 */
@@ -104,7 +99,6 @@ public class Instance {
 	 * @return The elapsed time * unit price.
 	 */
 	public double calculateCloudCost(long time){
-		cost=time*getPricePerTick();
 		return time*getPricePerTick();
 	}
 
