@@ -313,10 +313,10 @@ public class Application extends Timed {
 			this.freq=freq;
 			subscribe(freq);
 		}
-		this.instance=(Instance.instances.get(instance));
+		this.instance=(Instance.getInstances().get(instance));
 		Application.getApplications().add(this);
 		
-		this.getCloud().getIaas().repositories.get(0).registerObject(this.getInstance().va);
+		this.getCloud().getIaas().repositories.get(0).registerObject(this.getInstance().getVa());
 		this.setFinalStorageObject(new StorageObject(this.getName()+"SO", 0, false));
 		this.getCloud().getIaas().repositories.get(0).registerObject(this.getFinalStorageObject());
 		this.startBroker();
@@ -332,10 +332,10 @@ public class Application extends Timed {
 	 * or if the broker virtual machine doesn't exist then generates one.
 	 */
 	private void startBroker()  {
-		if(this.getVmlist().contains(this.brokerVm) && this.brokerVm.pm.isReHostableRequest(this.getInstance().arc)) {
+		if(this.getVmlist().contains(this.brokerVm) && this.brokerVm.pm.isReHostableRequest(this.getInstance().getArc())) {
 			ResourceAllocation ra= null;
 			try {
-				ra = this.brokerVm.pm.allocateResources(this.getInstance().arc, false,
+				ra = this.brokerVm.pm.allocateResources(this.getInstance().getArc(), false,
 						PhysicalMachine.defaultAllocLen);
 			} catch (VMManagementException e) {
 				e.printStackTrace();
@@ -354,7 +354,7 @@ public class Application extends Timed {
 			}
 		}else {
 			try {
-				VirtualMachine vm =this.getCloud().getIaas().requestVM(this.getInstance().va, this.getInstance().arc,this.getCloud().getIaas().repositories.get(0), 1)[0];
+				VirtualMachine vm =this.getCloud().getIaas().requestVM(this.getInstance().getVa(), this.getInstance().getArc(),this.getCloud().getIaas().repositories.get(0), 1)[0];
 				if(vm!=null) {
 					VmCollector vmc = new VmCollector(vm);
 					vmc.id=(BROKER);
@@ -392,8 +392,8 @@ public class Application extends Timed {
 		try {
 			if (!this.turnonVM()) {
 				for (PhysicalMachine pm : this.getCloud().getIaas().machines) {
-					if (pm.isReHostableRequest(this.getInstance().arc)) {
-						VirtualMachine vm = pm.requestVM(this.getInstance().va, this.getInstance().arc,
+					if (pm.isReHostableRequest(this.getInstance().getArc())) {
+						VirtualMachine vm = pm.requestVM(this.getInstance().getVa(), this.getInstance().getArc(),
 								this.getCloud().getIaas().repositories.get(0), 1)[0];
 						if(vm!=null) {
 							VmCollector vmc = new VmCollector(vm);
@@ -417,9 +417,9 @@ public class Application extends Timed {
 	 */
 	private boolean turnonVM() {
 		for (int i = 0; i < this.getVmlist().size(); i++) {
-			if (this.getVmlist().get(i).getVm().getState().equals(VirtualMachine.State.SHUTDOWN) && this.getVmlist().get(i).pm.isReHostableRequest(this.getInstance().arc)){
+			if (this.getVmlist().get(i).getVm().getState().equals(VirtualMachine.State.SHUTDOWN) && this.getVmlist().get(i).pm.isReHostableRequest(this.getInstance().getArc())){
 				try {
-					ResourceAllocation ra = this.getVmlist().get(i).pm.allocateResources(this.getInstance().arc, false,
+					ResourceAllocation ra = this.getVmlist().get(i).pm.allocateResources(this.getInstance().getArc(), false,
 							PhysicalMachine.defaultAllocLen);
 					this.getVmlist().get(i).restarted=(this.getVmlist().get(i).getRestarted() + 1);		
 					this.getVmlist().get(i).getVm().switchOn(ra, null);	

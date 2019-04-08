@@ -80,8 +80,8 @@ class CostStrategy implements InstallionStrategy{
 		 double min=Integer.MAX_VALUE-1.0;
 		 int choosen=-1;
 		for(int i=0;i<Application.getApplications().size();++i){
-			if(Application.getApplications().get(i).getInstance().pricePerTick<min){
-				min = Application.getApplications().get(i).getInstance().pricePerTick;
+			if(Application.getApplications().get(i).getInstance().getPricePerTick()<min){
+				min = Application.getApplications().get(i).getInstance().getPricePerTick();
 				choosen = i;
 			}
 		}
@@ -193,7 +193,7 @@ private int fuzzyDecision(Device s) {
 		Sigmoid sig = new Sigmoid(Double.valueOf(-1.0/96.0), Double.valueOf(15));
 		Vector<Double> price = new Vector<Double>();
 		for(int i=0;i<Application.getApplications().size();++i){
-			price.add(kappa.getAt(sig.getat(Application.getApplications().get(i).getInstance().pricePerTick*1000000000)));
+			price.add(kappa.getAt(sig.getat(Application.getApplications().get(i).getInstance().getPricePerTick()*1000000000)));
 			//System.out.println(Application.applications.get(i).instance.pricePerTick*1000000000);
 			//System.out.println("Cost: " + Application.applications.get(i).getCurrentCostofApp());
 			//System.out.println("Load: " + Application.applications.get(i).getLoadOfCloud());
@@ -298,14 +298,14 @@ private int fuzzyDecision(Device s) {
 		Vector<Double> preferVM = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/32),Double.valueOf(3));
 		for(int i=0;i<Application.getApplications().size();++i){
-			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getInstance().arc.getRequiredCPUs()))));
+			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getInstance().getArc().getRequiredCPUs()))));
 		}
 		//System.out.println(preferVM);
 		
 		Vector<Double> preferVMMem = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/256.0),Double.valueOf(350.0));
 		for(int i=0;i<Application.getApplications().size();++i){	
-			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getInstance().arc.getRequiredMemory() / 10000000))));
+			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.getApplications().get(i).getInstance().getArc().getRequiredMemory() / 10000000))));
 		}
 		//System.out.println(preferVMMem);
 		

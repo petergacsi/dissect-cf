@@ -35,7 +35,11 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
-
+/**
+ * This class lets to create many IoT providers which can calculate the costs based on many possible parameters.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ *
+ */
 public abstract class Provider extends Timed{
 	public static String PROVIDERFILE;
 	public ArrayList<Bluemix> bmList;
@@ -90,13 +94,10 @@ public abstract class Provider extends Timed{
 		try {
 			ProvidersModel.loadProviderXML(Provider.PROVIDERFILE,this);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.startProvider();
@@ -106,8 +107,6 @@ public abstract class Provider extends Timed{
 	
 	@Override
 	public void tick(long fires) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }
