@@ -58,10 +58,10 @@ public abstract class TimelineGenerator {
 		writer.println("dataTable.addColumn({ type: 'date', id: 'End' });");
 		writer.println("dataTable.addRows([");
 		
-		for (Cloud c : Cloud.clouds.values()) {
-			for (Application a : c.applications) {
+		for (Cloud c : Cloud.getClouds().values()) {
+			for (Application a : c.getApplications()) {
 				for(TimelineCollector tc : a.timelineList) {
-					writer.println("[ '"+a.name+"', '"+tc.vmId+"', new Date(0,0,0,0,0,0,"+tc.start +"), new Date(0,0,0,0,0,0,"+tc.stop+")],");
+					writer.println("[ '"+a.getName()+"', '"+tc.vmId+"', new Date(0,0,0,0,0,0,"+tc.start +"), new Date(0,0,0,0,0,0,"+tc.stop+")],");
 				}
 			}
 		}

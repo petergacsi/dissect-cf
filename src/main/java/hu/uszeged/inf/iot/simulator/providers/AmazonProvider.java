@@ -43,7 +43,7 @@ public class AmazonProvider extends Provider{
 	
 	public void tick(long fires) {		
 		if(this.blockPrice>0 && this.blockSize>0){
-			this.AMAZON= (((double)this.app.sumOfProcessedData / this.blockSize) + 1) * this.blockPrice / this.messageCount;
+			this.AMAZON= (((double)this.app.getSumOfProcessedData() / this.blockSize) + 1) * this.blockPrice / this.messageCount;
 		}
 		if(this.shouldStop) {
 			unsubscribe();

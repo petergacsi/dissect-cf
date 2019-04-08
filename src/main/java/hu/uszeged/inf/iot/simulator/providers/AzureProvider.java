@@ -46,10 +46,10 @@ public class AzureProvider extends Provider{
 	
 	public long avarageFileSize() {
 		long tmp=0;
-		for(Device s : this.app.stations) {
+		for(Device s : this.app.getStations()) {
 			tmp+=s.getFilesize();
 		}
-		return tmp/this.app.stations.size();
+		return tmp/this.app.getStations().size();
 	}
 	
 	public void tick(long fires) {
@@ -58,7 +58,7 @@ public class AzureProvider extends Provider{
 		}
 		
 		if(this.messagesPerDay>0 && this.avarageFileSize()<=(this.messagesizePerKB*1024)){
-			long totalMassages=this.app.sumOfProcessedData / this.avarageFileSize();
+			long totalMassages=this.app.getSumOfProcessedData() / this.avarageFileSize();
 			long msg = totalMassages - usedMessage;
 			usedMessage= msg;
 			

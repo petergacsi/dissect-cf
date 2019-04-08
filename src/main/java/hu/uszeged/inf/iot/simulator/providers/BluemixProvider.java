@@ -45,7 +45,7 @@ public class BluemixProvider extends Provider{
 	
 	public void tick(long fires) {		
 		if(this.bmList.size()!=0){
-			double tmp= (double) this.app.sumOfProcessedData / (double)1048576; // 1 MB
+			double tmp= (double) this.app.getSumOfProcessedData() / (double)1048576; // 1 MB
 			double cost=0.0;
  			for(Bluemix bm : this.bmList){
 				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {

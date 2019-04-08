@@ -19,7 +19,6 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
  *  
- *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
  *  (C) Copyright 2019, Jozsef Daniel Dombi (dombijd@inf.u-szeged.hu)
  */
 

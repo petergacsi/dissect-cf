@@ -53,32 +53,32 @@ public abstract class ScenarioBase {
 		int usedVM = 0;
 		int tasks = 0;
 		long timeout=Long.MIN_VALUE;
-		for (Cloud c : Cloud.clouds.values()) {
-			System.out.println("cloud: " + c.name);
+		for (Cloud c : Cloud.getClouds().values()) {
+			System.out.println("cloud: " + c.getName());
 			long highestStationStoptime=Long.MIN_VALUE;
-			for (Application a : c.applications) {
-				System.out.println(a.name);
-				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
-				processedData+=a.sumOfProcessedData;
-				usedVM+=a.vmlist.size();
+			for (Application a : c.getApplications()) {
+				System.out.println(a.getName());
+				totalCost+=a.getInstance().calculateCloudCost(a.getSumOfWorkTime());
+				processedData+=a.getSumOfProcessedData();
+				usedVM+=a.getVmlist().size();
 				
-				for (VmCollector vmcl : a.vmlist) {
-						tasks += vmcl.taskCounter;
-						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
-								+ vmcl.installed+" restarted: "+vmcl.restarted);
+				for (VmCollector vmcl : a.getVmlist()) {
+						tasks += vmcl.getTaskCounter();
+						System.out.println(vmcl.getId() +" "+vmcl.getVm() + " tasks: " + vmcl.getTaskCounter() + " worktime: " + vmcl.getWorkingTime() + " installed at: "
+								+ vmcl.getInstalled()+" restarted: "+vmcl.getRestarted());
 				}
-				for(Device d : a.stations) {
+				for(Device d : a.getStations()) {
 					generatedData+=d.getSumOfGeneratedData();
 					
 					if(d.getStopTime()>highestStationStoptime)
 						highestStationStoptime=d.getStopTime();
 				}
-				if((a.stopTime-highestStationStoptime)>timeout) {
-					timeout=(a.stopTime-highestStationStoptime);
+				if((a.getStopTime()-highestStationStoptime)>timeout) {
+					timeout=(a.getStopTime()-highestStationStoptime);
 					
 				}
-				System.out.println(a.name+" stations: " + a.stations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-				System.out.println(a.providers);
+				System.out.println(a.getName()+" stations: " + a.getStations().size()+ " cost:"+a.getInstance().calculateCloudCost(a.getSumOfWorkTime()));
+				System.out.println(a.getProviders());
 			}
 			System.out.println();
 		}

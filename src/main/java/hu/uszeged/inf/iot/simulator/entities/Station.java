@@ -121,7 +121,7 @@ public class Station extends Device{
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
-					cloudRepository = app.cloud.iaas.repositories.get(0);
+					cloudRepository = app.getCloud().getIaas().repositories.get(0);
 				}
 			};
 		}
@@ -151,13 +151,7 @@ public class Station extends Device{
 			this.startCommunicate();
 		}
 		if(!this.app.isSubscribed()) {
-			try {
-				this.app.restartApplication();
-			} catch (VMManagementException e) {
-				e.printStackTrace();
-			} catch (NetworkException e) {
-				e.printStackTrace();
-			}
+			this.app.restartApplication();
 		}
 	}
 
@@ -210,10 +204,11 @@ public class Station extends Device{
 		@Override
 		public void conComplete() {
 			dn.getLocalRepository().deregisterObject(this.so);
-			// TODO: fix this "cheat"
-			//app.cloud.iaas.repositories.get(0).deregisterObject(this.so);
-			app.sumOfArrivedData+=this.so.size;
-			
+			app.setSumOfArrivedData((app.getSumOfArrivedData() + this.so.size));
+			StorageObject newObject = new StorageObject(app.getFinalStorageObject().id,(app.getFinalStorageObject().size+this.so.size),false);
+			cloudRepository.deregisterObject(app.getFinalStorageObject().id);
+			app.setFinalStorageObject((newObject));
+			cloudRepository.registerObject(app.getFinalStorageObject());
 		}
 
 		/**
