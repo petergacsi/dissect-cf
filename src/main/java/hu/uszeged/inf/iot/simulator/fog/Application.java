@@ -354,14 +354,21 @@ public class Application extends Timed {
 			}
 		}else {
 			try {
-				VirtualMachine vm =this.getCloud().getIaas().requestVM(this.getInstance().getVa(), this.getInstance().getArc(),this.getCloud().getIaas().repositories.get(0), 1)[0];
-				if(vm!=null) {
-					VmCollector vmc = new VmCollector(vm);
-					vmc.id=(BROKER);
-					this.getVmlist().add(vmc);
-					this.brokerVm=vmc;
-			 }
-
+				for (PhysicalMachine pm : this.getCloud().getIaas().machines) {
+					if (pm.isReHostableRequest(this.getInstance().getArc()) && pm.getState().equals(PhysicalMachine.State.RUNNING)) {
+						VirtualMachine vm = pm.requestVM(this.getInstance().getVa(), this.getInstance().getArc(),
+								this.getCloud().getIaas().repositories.get(0), 1)[0];
+						if(vm!=null) {
+							VmCollector vmc = new VmCollector(vm);
+							vmc.pm=pm;
+							vmc.id=(BROKER);
+							this.getVmlist().add(vmc);
+							this.brokerVm=vmc;
+							return;
+						}
+						
+					}
+				}		
 			} catch (Exception e) {
 				e.printStackTrace();
 			}			
@@ -521,7 +528,7 @@ public class Application extends Timed {
 	 * If the application isn't running but it should it will be restarted.
 	 */
 	public void restartApplication() {
-		System.out.println(this.getName()+" application has been restarted!");
+		System.out.println(this.getName()+" application has been restarted at: "+Timed.getFireCount());
 		subscribe(this.freq);
 		this.startBroker();
 	}
