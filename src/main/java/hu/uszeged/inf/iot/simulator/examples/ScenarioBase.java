@@ -31,6 +31,11 @@ import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.fog.Cloud;
 import hu.uszeged.inf.iot.simulator.fog.Application.VmCollector;
 
+/**
+ * This helper class manages the building of the path string to XML file readers, and loging the most important
+ * natures of the simulation (price,amount of data,virtual machines, tasks, time line, etc.)
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public abstract class ScenarioBase {
 	final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
 			append(File.separator).
@@ -40,6 +45,10 @@ public abstract class ScenarioBase {
 			append(File.separator).
 			toString();
 	
+	/**
+	 * The logger function prints the informations to the screen. 
+	 * @param t The real length of the simulation ( should use for this the System.nanoTime() function ).
+	 */
 	 static void printInformation(long t) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
