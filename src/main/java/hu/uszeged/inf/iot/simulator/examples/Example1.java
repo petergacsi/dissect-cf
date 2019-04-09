@@ -11,11 +11,11 @@ import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 public class Example1 {
 
 	public static void main(String[] args) throws Exception {
-		
+			
 		String instancefile = ScenarioBase.resourcePath+"Instance.xml";
 		String providerfile = ScenarioBase.resourcePath+"Pricing.xml";
 		String appfile = ScenarioBase.resourcePath+"Application.xml";
-		
+
 		String cloudfile1 = ScenarioBase.resourcePath+"LPDS-1.xml";
 		String cloudfile2 = ScenarioBase.resourcePath+"LPDS-2.xml";
 		String cloudfile3 = ScenarioBase.resourcePath+"LPDS-3.xml";

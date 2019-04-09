@@ -24,11 +24,29 @@
 
 package hu.uszeged.inf.iot.simulator.providers;
 
+import java.util.ArrayList;
+
+import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public class BluemixProvider extends Provider{
 	
-	
+	public static class Bluemix{
+		double mbto;
+		double mbfrom;
+		double cost;
+		
+		@Override
+		public String toString() {
+			return "Bluemix [mbto=" + mbto + ", mbfrom=" + mbfrom + ", cost=" + cost + "]";
+		}
+
+		public Bluemix(double mbto, double mbfrom, double cost) {
+			this.mbto=mbto;
+			this.mbfrom=mbfrom;
+			this.cost=cost;
+		}
+	}
 	@Override
 	public String toString() {
 		return  "[BLUEMIX=" + BLUEMIX +" "+this.getFrequency()+"]";
@@ -42,18 +60,27 @@ public class BluemixProvider extends Provider{
 		this.app=app;
 	}
 	
+	public BluemixProvider(ArrayList<Bluemix> bmList,Application app) {
+		super(app);
+		this.bmList=bmList;
+		this.startProvider();
+	}
 	
 	public void tick(long fires) {		
+		
 		if(this.bmList.size()!=0){
-			double tmp= (double) this.app.getSumOfProcessedData() / (double)1048576; // 1 MB
+			double tmp= (double) this.app.getSumOfProcessedData() / 1048576; // 1 MB
 			double cost=0.0;
+			
  			for(Bluemix bm : this.bmList){
-				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {
+
+				if (tmp >= bm.mbto && tmp <= bm.mbfrom) {
 					cost = bm.cost;
+					
 				}
+			
 			}
- 			
-			this.BLUEMIX=tmp*cost;
+ 			this.BLUEMIX=tmp*cost;
 		}
 		if(this.shouldStop) {
 			unsubscribe();

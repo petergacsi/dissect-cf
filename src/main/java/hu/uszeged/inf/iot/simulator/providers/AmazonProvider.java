@@ -40,6 +40,14 @@ public class AmazonProvider extends Provider{
 		this.app=app;
 	}
 	
+	public AmazonProvider(double blockPrice, long messageCount, long blockSize,Application app) {
+		super(app);
+		this.blockPrice=blockPrice;
+		this.messageCount=messageCount;
+		this.blockSize=blockSize;
+		this.startProvider();
+	}
+	
 	
 	public void tick(long fires) {		
 		if(this.blockPrice>0 && this.blockSize>0){

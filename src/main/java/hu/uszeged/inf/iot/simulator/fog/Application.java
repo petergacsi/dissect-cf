@@ -298,7 +298,7 @@ public class Application extends Timed {
 	 * @param cloud Reference for the IaaS resources.
 	 * @param instance It contains the cloud pricing and the VM parameters.
 	 * @param name The id of the cloud.
-	 * @param noi The number of instruction which is processed in case of fully task.
+	 * @param noi The number of instruction which is processed in case of fully task. Set it to -1 to use default value.
 	 */
 	public Application(final long freq, long tasksize, String cloud, String instance, String name,double noi) {
 		if(noi>0) {

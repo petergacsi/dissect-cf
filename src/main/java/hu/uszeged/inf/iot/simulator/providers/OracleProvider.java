@@ -42,6 +42,17 @@ public class OracleProvider extends Provider {
 		this.app=app;
 	}
 	
+	public OracleProvider(long oracleFreq,double devicepricePerMonth,long messagesPerMonthPerDevice,
+	double amDevicepricePerMonth,long amMessagesPerMonthPerDevice,Application app) {
+		super(app);
+		this.devicepricePerMonth=devicepricePerMonth;
+		this.messagesPerMonthPerDevice=messagesPerMonthPerDevice;
+		this.amDevicepricePerMonth=amDevicepricePerMonth;
+		this.amMessagesPerMonthPerDevice=amMessagesPerMonthPerDevice;
+		this.oracleFreq=oracleFreq;
+		this.startProvider();
+	}
+	
 	public void tick(long fires) {
 
 		if(this.amMessagesPerMonthPerDevice>0){

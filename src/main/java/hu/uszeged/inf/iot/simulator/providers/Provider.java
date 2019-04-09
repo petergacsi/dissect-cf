@@ -33,6 +33,7 @@ import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.providers.BluemixProvider.Bluemix;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
 /**
@@ -61,22 +62,7 @@ public abstract class Provider extends Timed{
 	public long messagesPerDay;
 	public long messagesizePerKB;
 		
-	public static class Bluemix{
-		double mbto;
-		double mbfrom;
-		double cost;
-		
-		@Override
-		public String toString() {
-			return "Bluemix [mbto=" + mbto + ", mbfrom=" + mbfrom + ", cost=" + cost + "]";
-		}
-
-		public Bluemix(double mbto, double mbfrom, double cost) {
-			this.mbto=mbto;
-			this.mbfrom=mbfrom;
-			this.cost=cost;
-		}
-	}
+	
 	
 	public static void loadProvider(String providerfile){
 		Provider.PROVIDERFILE=providerfile;
@@ -87,10 +73,13 @@ public abstract class Provider extends Timed{
 			app.getProviders().add(new AzureProvider(app));
 		}
 	}
-
+	
+	Provider(Application app){
+		this.app=app;
+		this.app.getProviders().add(this);
+	}
 	Provider(){
 		bmList = new ArrayList<Bluemix>();
-		
 		try {
 			ProvidersModel.loadProviderXML(Provider.PROVIDERFILE,this);
 		} catch (ParserConfigurationException e) {

@@ -37,6 +37,14 @@ public class AzureProvider extends Provider{
 		return "[AZURE=" + AZURE + " "+this.getFrequency()+"]";
 	}
 
+	public AzureProvider(long azureFreq,double pricePerMonth,long messagesPerDay,long messagesizePerKB,Application app) {
+		super(app);
+		this.azureFreq=azureFreq;
+		this.pricePerMonth=pricePerMonth;
+		this.messagesPerDay=messagesPerDay;
+		this.messagesizePerKB=messagesizePerKB;
+		this.startProvider();
+	}
 
 	public AzureProvider(Application app) {
 		super();
@@ -63,6 +71,7 @@ public class AzureProvider extends Provider{
 			usedMessage= msg;
 			
 			if(msg<=this.messagesPerDay){
+				System.out.println(Timed.getFireCount()+ " "+this.getFrequency());
 				long month = Timed.getFireCount()/this.getFrequency();
 				if(month==0){
 					month=1;
