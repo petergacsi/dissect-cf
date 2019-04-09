@@ -36,6 +36,9 @@ import org.xml.sax.SAXException;
 import hu.uszeged.inf.iot.simulator.providers.BluemixProvider.Bluemix;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
 
+/** This class is a helper class for creating objects from XML files using Java DOM XML Parser.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class ProvidersModel{
 	
 	public static void loadProviderXML(String providerfile,Provider p)throws ParserConfigurationException, SAXException, IOException {

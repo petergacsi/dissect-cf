@@ -29,8 +29,19 @@ import java.util.ArrayList;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 
+/**
+ * This class represents the Bluemix IoT provider which 
+ * follows the “pay as you go” approach. Bluemix only charges 
+ * after the MiB of data exchanged.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class BluemixProvider extends Provider{
 	
+	/**
+	 * Helper class for managing Bluemix intervalls with its cost.
+	 * @author Andras Markus (markusa@inf.u-szeged.hu)
+	 *
+	 */
 	public static class Bluemix{
 		double mbto;
 		double mbfrom;

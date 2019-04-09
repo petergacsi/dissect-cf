@@ -26,7 +26,6 @@ package hu.uszeged.inf.xml.model;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -36,7 +35,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-
+/** This class is a helper class for creating objects from XML files using JAXB.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 @XmlRootElement( name = "instance" )
 @XmlAccessorType(XmlAccessType.PROPERTY) 
 public class InstanceModel {

@@ -37,7 +37,7 @@ import hu.uszeged.inf.iot.simulator.providers.BluemixProvider.Bluemix;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
 /**
- * This class lets to create many IoT providers which can calculate the costs based on many possible parameters.
+ * This class lets to create IoT providers which can calculate the costs based on many possible parameters.
  * @author Andras Markus (markusa@inf.u-szeged.hu)
  *
  */

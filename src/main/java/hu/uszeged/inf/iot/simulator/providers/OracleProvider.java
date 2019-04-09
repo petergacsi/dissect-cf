@@ -28,20 +28,45 @@ import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.entities.Station;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 
+/**
+ * This class represents the Oracle IoT provider which has a restriction on how many messages
+ *  can a device deliver per month. In case, the number of messages sent by a device is more than the device’s category permits, an additional
+price will be charged according to a predefined price per thousand of messages.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class OracleProvider extends Provider {
+	
+	/**
+	 * The final cost of Oracle.
+	 */
 	double ORACLE;
 	
+	/**
+	 * Helper variable to calculate the daily message limit.
+	 */
 	@Override
 	public String toString() {
 		return "[ORACLE=" + ORACLE + " "+	this.getFrequency()+"]";
 	}
 
-
+	/**
+	 * This constructor should be used only in case of XML files.
+	 * @param app The application which is monitored by this provider.
+	 */
 	public OracleProvider(Application app) {
 		super();
 		this.app=app;
 	}
 	
+	/**
+	 * Constructor which helps create provider like Oracle without XML files.
+	 * @param oracleFreq The frequency of the provider, it should be a month in ms.
+	 * @param devicepricePerMonth The device price per month.
+	 * @param messagesPerMonthPerDevice The allowed number of messages for one device.
+	 * @param amDevicepricePerMonth Additional device price.
+	 * @param amMessagesPerMonthPerDevice Additional number of messages for one device.
+	 * @param app The application which is monitored by this provider.
+	 */
 	public OracleProvider(long oracleFreq,double devicepricePerMonth,long messagesPerMonthPerDevice,
 	double amDevicepricePerMonth,long amMessagesPerMonthPerDevice,Application app) {
 		super(app);
@@ -53,6 +78,9 @@ public class OracleProvider extends Provider {
 		this.startProvider();
 	}
 	
+	/**
+	 * This method calculates the costs based on the frequency of the class.
+	 */
 	public void tick(long fires) {
 
 		if(this.amMessagesPerMonthPerDevice>0){
@@ -88,7 +116,9 @@ public class OracleProvider extends Provider {
 		}
 	}
 
-
+	/**
+	 * This method starts the work of the provider with the subscription.
+	 */
 	@Override
 	public void startProvider() {
 		subscribe(oracleFreq);

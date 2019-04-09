@@ -29,6 +29,9 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/** This class is a helper class for creating objects from XML files using JAXB.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 @XmlRootElement( name = "shutdown" )
 @XmlAccessorType(XmlAccessType.PROPERTY) 
 public class ShutdownModel{
@@ -67,5 +70,4 @@ public class ShutdownModel{
 		this.to = to;
 	}
 
-    
 }

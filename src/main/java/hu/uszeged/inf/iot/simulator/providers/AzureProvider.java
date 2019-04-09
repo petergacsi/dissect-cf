@@ -28,30 +28,62 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 
+/**
+ * This class represents the Azure IoT provider which calculates its cost based a monthly price,
+ * but it has a restriction for message sizes and the total messages allowed per day.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class AzureProvider extends Provider{
+	/**
+	 * The final cost of Azure.
+	 */
 	double AZURE;
+	
+	/**
+	 * Helper variable to calculate the daily message limit.
+	 */
 	private long usedMessage;
 
+	/**
+	 * ToString method, useful for debugging.
+	 */
 	@Override
 	public String toString() {
 		return "[AZURE=" + AZURE + " "+this.getFrequency()+"]";
 	}
 
+	/**
+	 * Constructor which helps create provider like Azure without XML files.
+	 * @param azureFreq The frequency of the provider, it should be a day in ms.
+	 * @param pricePerMonth The monthly price.
+	 * @param messagesPerDay The message limit per day.
+	 * @param messagesizePerKB The message size limit.
+	 * @param app The application which is monitored by this provider.
+	 */
 	public AzureProvider(long azureFreq,double pricePerMonth,long messagesPerDay,long messagesizePerKB,Application app) {
 		super(app);
 		this.azureFreq=azureFreq;
 		this.pricePerMonth=pricePerMonth;
 		this.messagesPerDay=messagesPerDay;
 		this.messagesizePerKB=messagesizePerKB;
+		this.usedMessage=0;
 		this.startProvider();
 	}
 
+	/**
+	 * This constructor should be used only in case of XML files.
+	 * @param app The application which is monitored by this provider.
+	 */
 	public AzureProvider(Application app) {
 		super();
 		this.usedMessage=0;
 		this.app=app;
 	}
 	
+	/**
+	 * This method calculates the average file size if the stations generate files with different size.
+	 * @return It returns with the average file size.
+	 */
 	public long avarageFileSize() {
 		long tmp=0;
 		for(Device s : this.app.getStations()) {
@@ -60,6 +92,9 @@ public class AzureProvider extends Provider{
 		return tmp/this.app.getStations().size();
 	}
 	
+	/**
+	 * This method calculates the costs based on the frequency of the class.
+	 */
 	public void tick(long fires) {
 		if(this.app.isSubscribed()==false) {
 			unsubscribe();
@@ -71,7 +106,6 @@ public class AzureProvider extends Provider{
 			usedMessage= msg;
 			
 			if(msg<=this.messagesPerDay){
-				System.out.println(Timed.getFireCount()+ " "+this.getFrequency());
 				long month = Timed.getFireCount()/this.getFrequency();
 				if(month==0){
 					month=1;
@@ -90,7 +124,9 @@ public class AzureProvider extends Provider{
 		}
 	}
 
-
+	/**
+	 * This method starts the work of the provider with the subscription.
+	 */
 	@Override
 	public void startProvider() {
 		subscribe(this.azureFreq);

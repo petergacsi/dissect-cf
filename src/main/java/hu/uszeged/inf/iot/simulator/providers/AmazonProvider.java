@@ -26,6 +26,12 @@ package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.uszeged.inf.iot.simulator.fog.Application;
 
+/**
+ * This class represents the Amazon IoT provider. The price is based on the delivery cost
+ * (the number of messages delivered by AWS IoT to devices or applications) and 
+ * a message is a 512-byte block of data. 
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class AmazonProvider extends Provider{
 	double AMAZON;
 	
