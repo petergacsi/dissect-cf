@@ -39,10 +39,15 @@ import hu.uszeged.inf.xml.model.ProvidersModel;
 /**
  * This class lets to create IoT providers which can calculate the costs based on many possible parameters.
  * @author Andras Markus (markusa@inf.u-szeged.hu)
- *
  */
 public abstract class Provider extends Timed{
+		
+	/**
+	 * The path of the provider file.
+	 */
 	public static String PROVIDERFILE;
+	
+	// These variables are detailed in the corresponding provider.
 	public ArrayList<Bluemix> bmList;
 	Application app;
 	public boolean shouldStop;
@@ -63,7 +68,10 @@ public abstract class Provider extends Timed{
 	public long messagesizePerKB;
 		
 	
-	
+	/**
+	 * This method generates all 4 providers for the all applications.
+	 * @param providerfile The path of the provider file.
+	 */
 	public static void loadProvider(String providerfile){
 		Provider.PROVIDERFILE=providerfile;
 		for(Application app: Application.getApplications()) {
@@ -74,10 +82,18 @@ public abstract class Provider extends Timed{
 		}
 	}
 	
+	/**
+	 * This constructor connects the application with the provider.
+	 * @param app The application which is monitored by this provider.
+	 */
 	Provider(Application app){
 		this.app=app;
 		this.app.getProviders().add(this);
 	}
+	
+	/**
+	 * Default constructor supports the provider generation from XML file.
+	 */
 	Provider(){
 		bmList = new ArrayList<Bluemix>();
 		try {
@@ -92,8 +108,14 @@ public abstract class Provider extends Timed{
 		this.startProvider();
 	}
 
+	/**
+	 * The method needs to be override to start the actual provider.
+	 */
 	public abstract void startProvider();
 	
+	/**
+	 * It's for the cost calculation. Needs to override.
+	 */
 	@Override
 	public void tick(long fires) {
 	}

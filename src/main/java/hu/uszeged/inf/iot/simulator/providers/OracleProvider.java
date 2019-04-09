@@ -31,7 +31,7 @@ import hu.uszeged.inf.iot.simulator.fog.Application;
 /**
  * This class represents the Oracle IoT provider which has a restriction on how many messages
  *  can a device deliver per month. In case, the number of messages sent by a device is more than the device’s category permits, an additional
-price will be charged according to a predefined price per thousand of messages.
+ *  price will be charged according to a predefined price per thousand of messages.
  * @author Andras Markus (markusa@inf.u-szeged.hu)
  */
 public class OracleProvider extends Provider {
