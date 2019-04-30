@@ -6,12 +6,12 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
-public class FogDevice extends ComputingAppliance{
+public class FogAppliance extends ComputingAppliance{
 	public Application parentApp;
 	
 
-	public FogDevice(String loadfile, String name) throws IOException, SAXException, ParserConfigurationException {
-		super(loadfile, name);
+	public FogAppliance(String loadfile, String name, double x, double y) throws IOException, SAXException, ParserConfigurationException {
+		super(loadfile, name, x, y);
 		
 	}
 	

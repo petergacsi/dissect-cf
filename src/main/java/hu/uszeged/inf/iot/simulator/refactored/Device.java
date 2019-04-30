@@ -25,6 +25,10 @@ public abstract class Device extends Timed {
 	public long stopTime;
 	protected long filesize;
 	
+	
+	public double x;
+	public double y;
+	
 
 	public long getStopTime() {
 		return stopTime;
@@ -56,6 +60,17 @@ public abstract class Device extends Timed {
 	public void setMessageCount(int messageCount) {
 		this.messageCount = messageCount;
 	}
+	
+	
+	public double calculateDistance(Application app) {
+		double result = Math.sqrt(
+				Math.pow((this.x - app.computingDevice.x),2) + 
+				Math.pow((this.y - app.computingDevice.y),2)
+				);
+		return result;
+	}
+	
+	
 	
    public static class DeviceNetwork {
 	  Repository localRepository;

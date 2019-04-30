@@ -9,8 +9,8 @@ import hu.uszeged.inf.iot.simulator.refactored.Station;
 import hu.uszeged.inf.iot.simulator.refactored.Device.DeviceNetwork;
 import hu.uszeged.inf.iot.simulator.refactored.ScenarioBase;
 import hu.uszeged.inf.iot.simulator.refactored.Application;
-import hu.uszeged.inf.iot.simulator.refactored.CloudDevice;
-import hu.uszeged.inf.iot.simulator.refactored.FogDevice;
+import hu.uszeged.inf.iot.simulator.refactored.CloudAppliance;
+import hu.uszeged.inf.iot.simulator.refactored.FogAppliance;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 
 public class ExampleWithGWs {
@@ -21,17 +21,17 @@ public static void main(String[] args) throws Exception {
 		String cloudfile=ScenarioBase.resourcePath+"LPDSCloud.xml"; 
 		
 		//Root, Level 0 Cloud
-		ComputingAppliance c = new CloudDevice(cloudfile,"cloud1");
+		ComputingAppliance c = new CloudAppliance(cloudfile,"cloud1");
 		
 		//Level 1 FogDevices
-		FogDevice f1 = new FogDevice(fogfile,"fog1");
-		FogDevice f2 = new FogDevice(fogfile,"fog2");
+		FogAppliance f1 = new FogAppliance(fogfile,"fog1");
+		FogAppliance f2 = new FogAppliance(fogfile,"fog2");
 		
 		//Level 2 Leaf devices, Gateways
-		FogDevice f1_1 = new FogDevice(fogfile,"fog1_1");
-		FogDevice f1_2 = new FogDevice(fogfile,"fog1_2");
+		FogAppliance f1_1 = new FogAppliance(fogfile,"fog1_1");
+		FogAppliance f1_2 = new FogAppliance(fogfile,"fog1_2");
 		
-		FogDevice f2_1 = new FogDevice(fogfile, "fog2_1");
+		FogAppliance f2_1 = new FogAppliance(fogfile, "fog2_1");
 		
 		
 		

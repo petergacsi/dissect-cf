@@ -51,12 +51,12 @@ public abstract class Application extends Timed {
 	//need to store all applications?
 
 	public static ArrayList<FogApp> fogApplications = new ArrayList<FogApp>();
-	public static ArrayList<GateWayApp> gateWayApplications = new ArrayList<GateWayApp>();
+	//public static ArrayList<GateWayApp> gateWayApplications = new ArrayList<GateWayApp>();
 	protected long tasksize;
 	
 	
 	public ComputingAppliance computingDevice;
-	public List<FogDevice> childComputingDevice;
+	public List<FogAppliance> childComputingDevice;
 	
 	public String name;
 	public Instance instance;
@@ -114,9 +114,9 @@ public abstract class Application extends Timed {
 	
 	
 	//create a relation between app and its devices
-		public void makeRelationBetweenDevices(List<FogDevice> listOfChildDevices) {
+		public void makeRelationBetweenDevices(List<FogAppliance> listOfChildDevices) {
 			this.childComputingDevice = listOfChildDevices;
-			for (FogDevice computingAppliance : childComputingDevice) {
+			for (FogAppliance computingAppliance : childComputingDevice) {
 				computingAppliance.addParentApp(this);
 			}
 		}
@@ -262,6 +262,30 @@ public abstract class Application extends Timed {
 		subscribe(this.freq);
 		this.startBroker();
 	}
+	
+	
+	public double calculateDistance(Application app, Application other) {
+		double result = Math.sqrt(
+				Math.pow((other.computingDevice.x - app.computingDevice.x),2) + 
+				Math.pow((other.computingDevice.y - app.computingDevice.y),2)
+				);
+		return result;
+	}
+	
+	//query the nearby devices, returns the closest
+	public Application getNearestComputingAppliance(Application app1) {
+		double minDistance = Double.MAX_VALUE;
+		Application nearest = null;
+		for (Application application : Application.fogApplications) {
+			if (minDistance >= calculateDistance(app1, application) ) {
+				minDistance = calculateDistance(app1, application);
+				nearest = application;
+			}
+		}
+		return nearest;
+	}
+	
+	
 	
 		
 	public abstract void tick(long fires);

@@ -23,7 +23,9 @@ public class GateWayApp extends FogApp{
 	public GateWayApp(long freq, long tasksize, String cloud, String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
 		super(freq, tasksize, cloud,  instance,  name,  type,  noi ,  computingAppliance);
 		this.ownStations = new ArrayList<Device>();
-		Application.gateWayApplications.add(this);
+		
+		//TODO ez a installationStrategy-ben változott
+		//Application.gateWayApplications.add(this);
 	}
 	
 	public void addStation(Device s) {

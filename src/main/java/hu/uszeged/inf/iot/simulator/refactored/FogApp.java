@@ -23,11 +23,12 @@ public class FogApp extends Application {
 	
 	//Station connect only to FogDevice(FogApp)
 	
-	public FogDevice fogDevice;
+	public FogAppliance fogDevice;
+	public List<Device> ownStations = new ArrayList<Device>(); 
 
 	public FogApp(long freq, long tasksize, String cloud, String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
 		super(freq, tasksize, cloud, instance, name, type, noi, computingAppliance);
-		this.fogDevice = (FogDevice) super.computingDevice;
+		this.fogDevice = (FogAppliance) super.computingDevice;
 		
 		//the "gateWay" devices(this FogApp which is in the Devcie) store a list of station reference
 		
@@ -72,6 +73,7 @@ public class FogApp extends Application {
 					double ratio = ((double)unprocessedData/this.tasksize);
 										
 					if(ratio>2) {
+						
 						if(this.getParentDeviceOfApp()!=null) {
 							try {
 								if(this.fogDevice.parentApp.isSubscribed()) {
@@ -104,6 +106,14 @@ public class FogApp extends Application {
 								e.printStackTrace();
 							}
 						}
+						
+						
+						//Application nearestApp = getNearestComputingAppliance(this);
+						
+						
+						
+						
+						
 					}
 					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
 					this.generateAndAddVM();
@@ -183,7 +193,8 @@ public class FogApp extends Application {
 
 	@Override
 	public String toString() {
-		return " fogDevice=" + fogDevice.name +"]";
+		
+		return "fogDevice=" + fogDevice.name + " " + this.computingDevice.x + " " +  this.computingDevice.y +  " stations: " + this.ownStations.size();
 	}
 	
 }

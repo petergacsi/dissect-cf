@@ -28,13 +28,19 @@ public class ComputingAppliance {
 	//A unique identifier
 	public String name;
 	
+	public double x;
+	public double y;
 	
-	public ComputingAppliance(String loadfile, String name) throws IOException, SAXException, ParserConfigurationException {
+	
+	public ComputingAppliance(String loadfile, String name, double x, double y) throws IOException, SAXException, ParserConfigurationException {
 		if (loadfile != null) {
 			//Cloudloader is in charge for create the appropiate machines
 			this.iaas = CloudLoader.loadNodes(loadfile);
 			this.name = name;
 			this.applications = new ArrayList<Application>();
+			
+			this.x = x;
+			this.y = y;
 			
 			//store all device in a list for logging purpose
 			ComputingAppliance.allComputingDevice.add(this);
@@ -50,6 +56,14 @@ public class ComputingAppliance {
 		return group;
 	}*/
 
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
+	}
 
 	@Override
 	public String toString() {

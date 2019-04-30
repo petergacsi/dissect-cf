@@ -17,12 +17,14 @@ public abstract class installionStrategy{
 	public void install(final Device s) {
 	}
 		
-	public void makeRelationBetweenStationsAndApp(Device s, GateWayApp app) {
+	public void makeRelationBetweenStationsAndApp(Device s, FogApp app) {
 		//Set a reference to the parentApp
 		s.setApp(app);
-		//Store the station in GateWayApp.ownStation member
+		//Store the station in FogApp.ownStation member
 		app.ownStations.add(s);
 	}
+	
+	
 }
 
 
@@ -38,10 +40,10 @@ class RandomStrategy extends installionStrategy{
 	@Override
 	public void install(Device s) {
 		Random randomGenerator = new Random();
-		int rnd = randomGenerator.nextInt(Application.gateWayApplications.size());
+		int rnd = randomGenerator.nextInt(Application.fogApplications.size());
 		
 		//connect the Stations with the FogApps
-		makeRelationBetweenStationsAndApp(s, Application.gateWayApplications.get(rnd));
+		makeRelationBetweenStationsAndApp(s, Application.fogApplications.get(rnd));
 		
 		Device.lmap.put(s.getDn().repoName, Device.latency);
 		Device.lmap.put(s.app.computingDevice.iaas.repositories.get(0).getName(), Device.latency);
@@ -62,6 +64,111 @@ class RandomStrategy extends installionStrategy{
 	}
 }
 
+//DistanceStrategy always install station to the nearest fogApp
+class DistanceStrategy extends installionStrategy {
+	
+	
+	public DistanceStrategy(Device d) {
+		this.install(d);
+	}
+	
+	public Application getNearestDevice(Device d) {
+		double minDistance = Double.MAX_VALUE;
+		//TODO change later
+		Application nearestApplication = null;
+		for (Application app : Application.fogApplications) {
+			if (minDistance >= d.calculateDistance(app) ) {
+				minDistance = d.calculateDistance(app);
+				nearestApplication = app;
+			}
+		}
+		return nearestApplication;
+	}
+	
+	@Override
+	public void install(Device s) {
+		FogApp nearestApp = (FogApp) getNearestDevice(s);
+		
+		//connect the Stations with the FogApps
+		makeRelationBetweenStationsAndApp(s, nearestApp);
+		
+		Device.lmap.put(s.getDn().repoName, Device.latency);
+		Device.lmap.put(s.app.computingDevice.iaas.repositories.get(0).getName(), Device.latency);
+		
+		if(!s.app.isSubscribed()) {
+			try {
+				s.app.restartApplication();
+				
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}	
+	
+}
+
+//Not fully working
+//need a valid ratio that depends on network capabilities
+class DistancePerInBandWidthStrategy extends installionStrategy {
+	
+	public DistancePerInBandWidthStrategy(Device d) {
+		this.install(d);
+	}
+	
+	
+	
+	
+	public Application getDeviceWithBetterDistancePerInBWRatio (Device d) {
+		double maxRatio = Double.MIN_VALUE;
+		Application deviceWithBetterRatio = null;
+		for (Application app : Application.fogApplications) {
+			//TODO rethink the ratio
+			//.getInput returns max incoming network data but we need other properties (latency)
+			double ratio = (d.calculateDistance(app) / app.computingDevice.iaas.repositories.get(0).getInputbw());
+			System.out.println(ratio + " " + app.computingDevice.iaas.repositories.get(0).getInputbw());
+			if (maxRatio <= ratio) {
+				maxRatio = ratio;
+				deviceWithBetterRatio = app;
+			}
+		}
+		
+		return deviceWithBetterRatio;
+	}
+	
+	@Override
+	public void install(Device s) {
+		FogApp appWithBetterRatio = (FogApp) getDeviceWithBetterDistancePerInBWRatio(s);
+		
+		//connect the Stations with the FogApps
+		makeRelationBetweenStationsAndApp(s, appWithBetterRatio);
+		
+		Device.lmap.put(s.getDn().repoName, Device.latency);
+		Device.lmap.put(s.app.computingDevice.iaas.repositories.get(0).getName(), Device.latency);
+		
+		if(!s.app.isSubscribed()) {
+			try {
+				s.app.restartApplication();
+				
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+	}	
+	
+}
+
+
+
 class CostStrategy extends installionStrategy{
 
 	public CostStrategy(Device d) {
@@ -71,18 +178,18 @@ class CostStrategy extends installionStrategy{
 	public void install(Device s) {
 		 double min=Integer.MAX_VALUE-1.0;
 		 int choosen=-1;
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			if(Application.gateWayApplications.get(i).instance.pricePerTick<min){
-				min = Application.gateWayApplications.get(i).instance.pricePerTick;
+		for(int i=0;i<Application.fogApplications.size();++i){
+			if(Application.fogApplications.get(i).instance.pricePerTick<min){
+				min = Application.fogApplications.get(i).instance.pricePerTick;
 				choosen = i;
 			}
 		}
 		
-		makeRelationBetweenStationsAndApp(s, Application.gateWayApplications.get(choosen));
+		makeRelationBetweenStationsAndApp(s, Application.fogApplications.get(choosen));
 	
 		/*
-		s.setApp(Application.gateWayApplications.get(choosen));
-		Application.gateWayApplications.get(choosen).ownStations.add(s);
+		s.setApp(Application.fogApplications.get(choosen));
+		Application.fogApplications.get(choosen).ownStations.add(s);
 		*/
 		
 		Device.lmap.put(s.getDn().repoName, Device.latency);
@@ -118,19 +225,19 @@ class RuntimeStrategy extends installionStrategy{
 			protected void eventAction() {
 				double min = Double.MAX_VALUE-1.0;
 				int choosen = -1;
-				for(int i=0;i< Application.gateWayApplications.size();i++ ){
-					double loadRatio = (Application.gateWayApplications.get(i).ownStations.size())/(Application.gateWayApplications.get(i).computingDevice.iaas.machines.size());
+				for(int i=0;i< Application.fogApplications.size();i++ ){
+					double loadRatio = (Application.fogApplications.get(i).ownStations.size())/(Application.fogApplications.get(i).computingDevice.iaas.machines.size());
 					if(loadRatio<min){
 						min=loadRatio;
 						choosen = i;
 					}
 				}
 				
-				makeRelationBetweenStationsAndApp(s, Application.gateWayApplications.get(choosen));
+				makeRelationBetweenStationsAndApp(s, Application.fogApplications.get(choosen));
 				
 				/*
-				s.setApp(Application.gateWayApplications.get(choosen));
-				Application.gateWayApplications.get(choosen).ownStations.add(s);
+				s.setApp(Application.fogApplications.get(choosen));
+				Application.fogApplications.get(choosen).ownStations.add(s);
 				*/
 				
 				Device.lmap.put(s.getDn().repoName, Device.latency);
@@ -170,10 +277,10 @@ class FuzzyStrategy extends installionStrategy{
 			protected void eventAction() {
 				int rsIdx = fuzzyDecision(d);
 				
-				makeRelationBetweenStationsAndApp(s, Application.gateWayApplications.get(rsIdx));
+				makeRelationBetweenStationsAndApp(s, Application.fogApplications.get(rsIdx));
 				/*
-				s.setApp(Application.gateWayApplications.get(rsIdx));
-				Application.gateWayApplications.get(rsIdx);
+				s.setApp(Application.fogApplications.get(rsIdx));
+				Application.fogApplications.get(rsIdx);
 				*/
 				
 				Device.lmap.put(d.getDn().repoName, Device.latency);
@@ -231,8 +338,8 @@ private int fuzzyDecision(Device s) {
 		//System.out.println("test");
 		Sigmoid sig = new Sigmoid(Double.valueOf(-1.0/96.0), Double.valueOf(15));
 		Vector<Double> price = new Vector<Double>();
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			price.add(kappa.getAt(sig.getat(Application.gateWayApplications.get(i).instance.pricePerTick*1000000000)));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			price.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).instance.pricePerTick*1000000000)));
 			//System.out.println(Application.applications.get(i).instance.pricePerTick*1000000000);
 			//System.out.println("Cost: " + Application.applications.get(i).getCurrentCostofApp());
 			//System.out.println("Load: " + Application.applications.get(i).getLoadOfCloud());
@@ -244,8 +351,8 @@ private int fuzzyDecision(Device s) {
 		//System.out.println(price);
 		double minprice = Double.MAX_VALUE;
 		double maxprice= Double.MIN_VALUE;
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			double currentprice = Application.gateWayApplications.get(i).getCurrentCostofApp();
+		for(int i=0;i<Application.fogApplications.size();++i){
+			double currentprice = Application.fogApplications.get(i).getCurrentCostofApp();
 			if(currentprice > maxprice)
 				maxprice = currentprice;
 			if(currentprice < minprice)
@@ -256,8 +363,8 @@ private int fuzzyDecision(Device s) {
 		Vector<Double> currentprice = new Vector<Double>();
 		//System.out.println("test");
 		sig = new Sigmoid(Double.valueOf(-1.0), Double.valueOf((maxprice-minprice)/2.0));
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			currentprice.add(kappa.getAt(sig.getat(Application.gateWayApplications.get(i).getCurrentCostofApp())));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			currentprice.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).getCurrentCostofApp())));
 		}
 		
 	
@@ -266,8 +373,8 @@ private int fuzzyDecision(Device s) {
 		
 		double minworkload = Double.MAX_VALUE;
 		double maxworkload= Double.MIN_VALUE;
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			double workload = Application.gateWayApplications.get(i).getLoadOfCloud();
+		for(int i=0;i<Application.fogApplications.size();++i){
+			double workload = Application.fogApplications.get(i).getLoadOfCloud();
 			if(workload > maxworkload)
 				maxworkload = workload;
 			if(workload < minworkload)
@@ -277,8 +384,8 @@ private int fuzzyDecision(Device s) {
 		Vector<Double> workload = new Vector<Double>();
 		//System.out.println("test");
 		sig = new Sigmoid(Double.valueOf(-1.0), Double.valueOf(maxworkload));
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			workload.add(kappa.getAt(sig.getat(Application.gateWayApplications.get(i).getLoadOfCloud())));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			workload.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).getLoadOfCloud())));
 			//temp2.add(Application.applications.get(i).getLoadOfCloud());
 		}
 		//System.out.println(temp2);
@@ -287,30 +394,30 @@ private int fuzzyDecision(Device s) {
 		
 		Vector<Double> numberofvm = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(-1.0/8.0),Double.valueOf(3));
-		for(int i=0;i<Application.gateWayApplications.size();++i){			
-			numberofvm.add(kappa.getAt(sig.getat(Double.valueOf(Application.gateWayApplications.get(i).vmlist.size()))));
+		for(int i=0;i<Application.fogApplications.size();++i){			
+			numberofvm.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).vmlist.size()))));
 			//temp2.add((double)Application.applications.get(i).vmlist.size());
 		}
 		//System.out.println(temp2);
 		//System.out.println(numberofvm);
 		
 		double sum_stations = 0.0;
-		for(int i=0;i<Application.gateWayApplications.size();++i){			
-			sum_stations += Application.gateWayApplications.get(i).ownStations.size();
+		for(int i=0;i<Application.fogApplications.size();++i){			
+			sum_stations += Application.fogApplications.get(i).ownStations.size();
 		}
 		
 		Vector<Double> numberofstation = new Vector<Double>();
-		sig = new Sigmoid(Double.valueOf(-0.125),Double.valueOf(sum_stations/(Application.gateWayApplications.size())));
-		for(int i=0;i<Application.gateWayApplications.size();++i){		
-			numberofstation.add(kappa.getAt(sig.getat(Double.valueOf(Application.gateWayApplications.get(i).ownStations.size()))));
+		sig = new Sigmoid(Double.valueOf(-0.125),Double.valueOf(sum_stations/(Application.fogApplications.size())));
+		for(int i=0;i<Application.fogApplications.size();++i){		
+			numberofstation.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).ownStations.size()))));
 			//temp2.add((double)Application.applications.get(i).stations.size());
 		}
 		
 		Vector<Double> numberofActiveStation = new Vector<Double>();
-		for(int i=0;i<Application.gateWayApplications.size();++i){		
+		for(int i=0;i<Application.fogApplications.size();++i){		
 			double sum = 0.0;
-			for(int j=0;j<Application.gateWayApplications.get(i).ownStations.size();j++) {
-				Station stat = (Station) Application.gateWayApplications.get(i).ownStations.get(j);
+			for(int j=0;j<Application.fogApplications.get(i).ownStations.size();j++) {
+				Station stat = (Station) Application.fogApplications.get(i).ownStations.get(j);
 				long time = Timed.getFireCount();
 				if(stat.startTime >= time && stat.stopTime >= time)
 					sum +=1;
@@ -336,15 +443,15 @@ private int fuzzyDecision(Device s) {
 		
 		Vector<Double> preferVM = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/32),Double.valueOf(3));
-		for(int i=0;i<Application.gateWayApplications.size();++i){
-			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.gateWayApplications.get(i).instance.arc.getRequiredCPUs()))));
+		for(int i=0;i<Application.fogApplications.size();++i){
+			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.arc.getRequiredCPUs()))));
 		}
 		//System.out.println(preferVM);
 		
 		Vector<Double> preferVMMem = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/256.0),Double.valueOf(350.0));
-		for(int i=0;i<Application.gateWayApplications.size();++i){	
-			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.gateWayApplications.get(i).instance.arc.getRequiredMemory() / 10000000))));
+		for(int i=0;i<Application.fogApplications.size();++i){	
+			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.arc.getRequiredMemory() / 10000000))));
 		}
 		//System.out.println(preferVMMem);
 		
@@ -365,7 +472,7 @@ private int fuzzyDecision(Device s) {
 			score.add(FuzzyIndicators.getAggregation(temp)*100);
 		}
 		Vector<Integer> finaldecision = new Vector<Integer>();
-		for(int i=0;i<Application.gateWayApplications.size();++i){
+		for(int i=0;i<Application.fogApplications.size();++i){
 			finaldecision.add(i);	
 		}
 		for(int i=0;i<score.size();++i){

@@ -38,8 +38,8 @@ public abstract class ScenarioBase {
 								+ vmcl.installed+" restarted: "+vmcl.restarted);
 				}
 				
-				if (a instanceof GateWayApp) {
-				GateWayApp app = (GateWayApp) a;
+				if (a instanceof FogApp) {
+				FogApp app = (FogApp) a;
 				
 				
 				for(Device d : app.ownStations) {

@@ -14,6 +14,7 @@ import hu.uszeged.inf.xml.model.DeviceModel;
 
 public class Station extends Device{
 	
+
 	public int sensorNum;
 	private long freq;
 	private String strategy;
@@ -25,8 +26,18 @@ public class Station extends Device{
 	}
 	
 
+	
+	@Override
+	public String toString() {
+		return "Station x=" + x + ", y=" + y + " ";
+	}
+	
+	
+	
+	
+	
 	public Station(DeviceNetwork dn, long startTime,long stopTime,long filesize, String strategy,int sensorNum,
-			long freq,double ratio)  {
+			long freq,double ratio, double x, double y)  {
 		long delay = Math.abs(SeedSyncer.centralRnd.nextLong()%20)*60*1000;
 		this.startTime=startTime+delay;
 		this.stopTime=stopTime+delay;
@@ -35,10 +46,18 @@ public class Station extends Device{
 		this.dn=dn;
 		this.sensorNum=sensorNum;
 		this.freq=freq;
-		this.sumOfGeneratedData=0;				
+		this.sumOfGeneratedData=0;	
+		
+		this.x = x;
+		this.y = y;
+		
 		installionProcess(this);
 		this.startMeter();
 		this.setMessageCount(0);
+		
+		//System.out.println("X coord: " + this.x);
+		//System.out.println("Y coord: " + this.y);
+		
 	}
 
 	private void startCommunicate() throws NetworkException {
@@ -97,7 +116,7 @@ public class Station extends Device{
 			}
 	}
 
-	public static void loadDevice(String stationfile) throws Exception {
+	/*public static void loadDevice(String stationfile) throws Exception {
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			for(int i=0;i<dm.number;i++){
 				DeviceNetwork dn = new DeviceNetwork(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,dm.name+i,null,null);
@@ -105,7 +124,7 @@ public class Station extends Device{
 			}
 			
 		}
-	}
+	}*/
 
 	public  void installionProcess(final Station s) {
 		
@@ -113,6 +132,10 @@ public class Station extends Device{
 				new RuntimeStrategy(this);
 			}else if(this.strategy.equals("random")){
 				new RandomStrategy(this);
+			}else if(this.strategy.equals("distance")){
+				new DistanceStrategy(this);
+			}else if(this.strategy.equals("ratio")) {
+				new DistancePerInBandWidthStrategy(this);
 			}else if(this.strategy.equals("cost")) {
 				new CostStrategy(this);
 			}else if(this.strategy.equals("fuzzy")){
