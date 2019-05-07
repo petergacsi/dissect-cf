@@ -26,7 +26,7 @@ package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Device;
-import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.system.Application;
 
 /**
  * This class represents the Azure IoT provider which calculates its cost based a monthly price,
@@ -89,6 +89,9 @@ public class AzureProvider extends Provider{
 		for(Device s : this.app.getStations()) {
 			tmp+=s.getFilesize();
 		}
+		if(this.app.getStations().size()==0) {
+			return 0;
+		}
 		return tmp/this.app.getStations().size();
 	}
 	
@@ -101,23 +104,28 @@ public class AzureProvider extends Provider{
 		}
 		
 		if(this.messagesPerDay>0 && this.avarageFileSize()<=(this.messagesizePerKB*1024)){
-			long totalMassages=this.app.getSumOfProcessedData() / this.avarageFileSize();
-			long msg = totalMassages - usedMessage;
-			usedMessage= msg;
-			
-			if(msg<=this.messagesPerDay){
-				long month = Timed.getFireCount()/this.getFrequency();
-				if(month==0){
-					month=1;
-					this.AZURE=this.pricePerMonth*month;
-				}else if(Timed.getFireCount()%(this.getFrequency())!=0){
-					this.AZURE=this.pricePerMonth*(month+1);
-				}else{
-					this.AZURE=this.pricePerMonth*month;
-				}
-			}else{
+			if(this.avarageFileSize()==0) {
 				this.AZURE=-1;
+			}else {
+				long totalMassages=this.app.getSumOfProcessedData() / this.avarageFileSize();
+				long msg = totalMassages - usedMessage;
+				usedMessage= msg;
+				
+				if(msg<=this.messagesPerDay){
+					long month = Timed.getFireCount()/this.getFrequency();
+					if(month==0){
+						month=1;
+						this.AZURE=this.pricePerMonth*month;
+					}else if(Timed.getFireCount()%(this.getFrequency())!=0){
+						this.AZURE=this.pricePerMonth*(month+1);
+					}else{
+						this.AZURE=this.pricePerMonth*month;
+					}
+				}else{
+					this.AZURE=-1;
+				}
 			}
+			
 		}
 		if(this.shouldStop) {
 			unsubscribe();

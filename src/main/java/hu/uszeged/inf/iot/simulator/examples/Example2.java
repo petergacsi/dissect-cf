@@ -7,12 +7,12 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.uszeged.inf.iot.simulator.entities.Device.DeviceNetwork;
 import hu.uszeged.inf.iot.simulator.entities.Station;
-import hu.uszeged.inf.iot.simulator.fog.Application;
-import hu.uszeged.inf.iot.simulator.fog.Cloud;
 import hu.uszeged.inf.iot.simulator.providers.AmazonProvider;
 import hu.uszeged.inf.iot.simulator.providers.AzureProvider;
 import hu.uszeged.inf.iot.simulator.providers.BluemixProvider;
 import hu.uszeged.inf.iot.simulator.providers.BluemixProvider.Bluemix;
+import hu.uszeged.inf.iot.simulator.system.Application;
+import hu.uszeged.inf.iot.simulator.system.Cloud;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.OracleProvider;
 

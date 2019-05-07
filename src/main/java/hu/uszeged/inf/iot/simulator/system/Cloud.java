@@ -22,7 +22,7 @@
  *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
  */
 
-package hu.uszeged.inf.iot.simulator.fog;
+package hu.uszeged.inf.iot.simulator.system;
 
 import java.io.IOException;
 import java.util.ArrayList;

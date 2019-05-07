@@ -2,10 +2,10 @@ package hu.uszeged.inf.iot.simulator.examples;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Station;
-import hu.uszeged.inf.iot.simulator.fog.Application;
-import hu.uszeged.inf.iot.simulator.fog.Cloud;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
+import hu.uszeged.inf.iot.simulator.system.Application;
+import hu.uszeged.inf.iot.simulator.system.Cloud;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 
 public class Example1 {
@@ -31,12 +31,12 @@ public class Example1 {
 		
 		// Set up the clouds
 		new Cloud(cloudfile1,"cloud1");
-		new Cloud(cloudfile1,"cloud2");
-		new Cloud(cloudfile1 ,"cloud3");
+		new Cloud(cloudfile2,"cloud2");
+		new Cloud(cloudfile3 ,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(devices1);
+		Station.loadDevice(devices4);
 		Provider.loadProvider(providerfile); 
 		
 		// Start the simulation

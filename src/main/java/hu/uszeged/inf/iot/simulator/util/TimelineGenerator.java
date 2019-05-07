@@ -30,8 +30,8 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import hu.uszeged.inf.iot.simulator.fog.Application;
-import hu.uszeged.inf.iot.simulator.fog.Cloud;
+import hu.uszeged.inf.iot.simulator.system.Application;
+import hu.uszeged.inf.iot.simulator.system.Cloud;
 
 /** This class is a helper class for visualizing the simulation ( clouds, virtual machines and tasks).
  * More information: https://developers.google.com/chart/interactive/docs/gallery/timeline

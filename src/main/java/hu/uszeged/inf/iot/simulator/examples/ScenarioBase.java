@@ -27,9 +27,9 @@ package hu.uszeged.inf.iot.simulator.examples;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import hu.uszeged.inf.iot.simulator.entities.Device;
-import hu.uszeged.inf.iot.simulator.fog.Application;
-import hu.uszeged.inf.iot.simulator.fog.Cloud;
-import hu.uszeged.inf.iot.simulator.fog.Application.VmCollector;
+import hu.uszeged.inf.iot.simulator.system.Application;
+import hu.uszeged.inf.iot.simulator.system.Cloud;
+import hu.uszeged.inf.iot.simulator.system.Application.VmCollector;
 
 /**
  * This helper class manages the building of the path string to XML file readers, and loging the most important

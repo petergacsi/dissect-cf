@@ -30,10 +30,10 @@ import java.util.Random;
 import java.util.Vector;
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.pliant.FuzzyIndicators;
 import hu.uszeged.inf.iot.simulator.pliant.Kappa;
 import hu.uszeged.inf.iot.simulator.pliant.Sigmoid;
+import hu.uszeged.inf.iot.simulator.system.Application;
 
 /**
  * The goal of this class to pair a device to an application. Four default strategy has been implemented, 

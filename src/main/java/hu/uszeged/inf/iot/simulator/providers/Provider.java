@@ -32,8 +32,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
-import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.providers.BluemixProvider.Bluemix;
+import hu.uszeged.inf.iot.simulator.system.Application;
 import hu.uszeged.inf.xml.model.ProvidersModel;
 
 /**

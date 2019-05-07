@@ -36,7 +36,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
-import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.system.Application;
 import hu.uszeged.inf.xml.model.DeviceModel;
 
 /**

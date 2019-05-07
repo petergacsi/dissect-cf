@@ -26,7 +26,7 @@ package hu.uszeged.inf.iot.simulator.providers;
 
 import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.entities.Station;
-import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.system.Application;
 
 /**
  * This class represents the Oracle IoT provider which has a restriction on how many messages

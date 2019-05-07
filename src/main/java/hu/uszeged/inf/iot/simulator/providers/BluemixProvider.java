@@ -26,7 +26,7 @@ package hu.uszeged.inf.iot.simulator.providers;
 
 import java.util.ArrayList;
 
-import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.system.Application;
 
 /**
  * This class represents the Bluemix IoT provider which 
@@ -119,7 +119,7 @@ public class BluemixProvider extends Provider{
 			
  			for(Bluemix bm : this.bmList){
 
-				if (tmp >= bm.mbto && tmp <= bm.mbfrom) {
+				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {
 					cost = bm.cost;
 					
 				}

@@ -24,7 +24,7 @@
 
 package hu.uszeged.inf.iot.simulator.providers;
 
-import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.system.Application;
 
 /**
  * This class represents the Amazon IoT provider. The price is based on the delivery cost
