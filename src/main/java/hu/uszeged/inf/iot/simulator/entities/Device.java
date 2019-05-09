@@ -152,10 +152,10 @@ public abstract class Device extends Timed {
 		 */
 		public DeviceNetwork(long maxinbw, long maxoutbw, long diskbw, long repoSize,String repoName,Map<String, PowerState> storageTransitions,Map<String, PowerState> networkTransitions) {
 			if(storageTransitions==null) {
-				storageTransitions=defaultStorageTransitions();
+				storageTransitions=defaultTransitions("storage");
 			}
 			if(networkTransitions==null) {
-				networkTransitions=defaultNetworkTransitions();
+				networkTransitions=defaultTransitions("network");
 			}
 			localRepository = new Repository(repoSize, repoName, maxinbw, maxoutbw, diskbw, lmap, storageTransitions, networkTransitions);
 			try {
@@ -224,9 +224,10 @@ public abstract class Device extends Timed {
 	}
 	
 	/**
-	 * Default representative storage power behavior.
+	 * Default representative storage/network power behavior.
+	 * @param type Type of the default power behavior ( storage/network).
 	 */
-	private static Map<String, PowerState> defaultStorageTransitions(){
+	private static Map<String, PowerState> defaultTransitions(String type){
 		double minpower = 20;
 		double idlepower = 200;
 		double maxpower = 300;
@@ -245,32 +246,12 @@ public abstract class Device extends Timed {
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		}
-		return transitions.get(PowerTransitionGenerator.PowerStateKind.storage);
-	}
-
-	/**
-	 * Default representative network power behavior.
-	 */
-	private static Map<String, PowerState> defaultNetworkTransitions(){
-		double minpower = 20;
-		double idlepower = 200;
-		double maxpower = 300;
-		double diskDivider = 10;
-		double netDivider = 20;
-		EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions = null;
-		try {
-			transitions = PowerTransitionGenerator
-					.generateTransitions(minpower, idlepower, maxpower, diskDivider, netDivider);
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
+		if(type.equals("storage")) {
+			return transitions.get(PowerTransitionGenerator.PowerStateKind.storage);
+		}else if(type.equals("network")){
+			return transitions.get(PowerTransitionGenerator.PowerStateKind.network);
 		}
-		return transitions.get(PowerTransitionGenerator.PowerStateKind.network);
+		return null;
 	}
 
 }
