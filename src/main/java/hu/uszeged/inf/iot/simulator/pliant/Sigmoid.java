@@ -1,8 +1,32 @@
+/*
+ *  ========================================================================
+ *  DIScrete event baSed Energy Consumption simulaTor 
+ *    					             for Clouds and Federations (DISSECT-CF)
+ *  ========================================================================
+ *  
+ *  This file is part of DISSECT-CF.
+ *  
+ *  DISSECT-CF is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or (at
+ *  your option) any later version.
+ *  
+ *  DISSECT-CF is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ *  General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  (C) Copyright 2019, Jozsef Daniel Dombi (dombijd@inf.u-szeged.hu)
+ */
+
 package hu.uszeged.inf.iot.simulator.pliant;
 
 import java.util.Vector;
 
-public class Sigmoid implements INormalizer {
+public class Sigmoid<E> implements INormalizer{
 	
 	public Sigmoid()
 	{
@@ -17,7 +41,7 @@ public class Sigmoid implements INormalizer {
 	}
 	
 
-	public Vector normalizeincremental(Vector source_vector) {		
+	public Vector<Double> normalizeincremental(Vector<?> source_vector) {		
 		
 		Vector<Double> result = new Vector<Double>(source_vector.size());
 		
@@ -25,24 +49,24 @@ public class Sigmoid implements INormalizer {
 		{
 			Double value = null;
 			if(source_vector.get(i) instanceof Double)
-				value = new Double((Double)source_vector.get(i));
+				value = (Double)source_vector.get(i);
 			if(source_vector.get(i) instanceof Long)
-				value = new Double((Long)source_vector.get(i));			
+				value = (Double)source_vector.get(i);			
 			result.add(getat(value));
 		}
 		return result;
 	}
 
-	public Vector normalizedecremental(Vector source_vector) {
+	public Vector<Double> normalizedecremental(Vector<?> source_vector) {
 		Vector<Double> result = new Vector<Double>(source_vector.size());
 		
 		for(int i=0;i<source_vector.size();i++)
 		{
 			Double value = null;
 			if(source_vector.get(i) instanceof Double)
-				value = new Double((Double)source_vector.get(i));
+				value = (Double)source_vector.get(i);
 			if(source_vector.get(i) instanceof Long)
-				value = new Double((Long)source_vector.get(i));			
+				value = (Double)source_vector.get(i);			
 			result.add(getat((-1)*value));
 		}
 		return result;

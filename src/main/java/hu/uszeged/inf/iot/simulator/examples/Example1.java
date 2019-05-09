@@ -1,42 +1,42 @@
 package hu.uszeged.inf.iot.simulator.examples;
 
-import java.io.File;
-
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.entities.Station;
-import hu.uszeged.inf.iot.simulator.fog.Application;
-import hu.uszeged.inf.iot.simulator.fog.Cloud;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
+import hu.uszeged.inf.iot.simulator.system.Application;
+import hu.uszeged.inf.iot.simulator.system.Cloud;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 
 public class Example1 {
 
 	public static void main(String[] args) throws Exception {
+			
+		String instancefile = ScenarioBase.resourcePath+"Instance.xml";
+		String providerfile = ScenarioBase.resourcePath+"Pricing.xml";
+		String appfile = ScenarioBase.resourcePath+"Application.xml";
+
+		String cloudfile1 = ScenarioBase.resourcePath+"LPDS-1.xml";
+		String cloudfile2 = ScenarioBase.resourcePath+"LPDS-2.xml";
+		String cloudfile3 = ScenarioBase.resourcePath+"LPDS-3.xml";
 		
+		// 1. scenario
+		String devices1 = ScenarioBase.resourcePath+"Devices-1.xml";
 		
-		String CScloudfile=ScenarioBase.resourcePath+"/resources_cscs/LPDSCloud.xml"; // this one should use in scenario_1
-		String CSstationfile=ScenarioBase.resourcePath+"/resources_cscs/WeatherStationL.xml"; // this one should use in scenario_1
+		// 2-3. scenario
+		String devices23 = ScenarioBase.resourcePath+"Devices-2-3.xml";
 		
-		String appfile=ScenarioBase.resourcePath+"NEWApplication.xml";
-		String instancefile=ScenarioBase.resourcePath+"NEWInstance.xml";
-		String providerfile=ScenarioBase.resourcePath+"Pricing.xml";
-		
-		/*
-		String cloudfile=ScenarioBase.resourcePath+"LPDSCloud.xml"; // this one should use in scenario_2
-		String cloudfile3=ScenarioBase.resourcePath+"LPDSCloud3.xml"; // this one should use in scenario_3
-		String stationfile=ScenarioBase.resourcePath+"wsF.xml"; // this one should use in scenario_2-3
-		String newScen=ScenarioBase.resourcePath+"/resources_cscs/new.xml"; // this one should use in scenario_4
-		*/
+		// 4. scenario
+		String devices4= ScenarioBase.resourcePath+"Devices-4.xml";
 		
 		// Set up the clouds
-		new Cloud(CScloudfile,"cloud1");
-		new Cloud(CScloudfile,"cloud2");
-		new Cloud(CScloudfile ,"cloud3");
+		new Cloud(cloudfile1,"cloud1");
+		new Cloud(cloudfile2,"cloud2");
+		new Cloud(cloudfile3 ,"cloud3");
 		// Load the virtual machine instances, the applications and finally the devices
 		Instance.loadInstance(instancefile);
 		Application.loadApplication(appfile);
-		Station.loadDevice(CSstationfile);
+		Station.loadDevice(devices4);
 		Provider.loadProvider(providerfile); 
 		
 		// Start the simulation

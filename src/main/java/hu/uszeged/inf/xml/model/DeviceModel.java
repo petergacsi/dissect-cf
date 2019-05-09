@@ -1,8 +1,31 @@
+/*
+ *  ========================================================================
+ *  DIScrete event baSed Energy Consumption simulaTor 
+ *    					             for Clouds and Federations (DISSECT-CF)
+ *  ========================================================================
+ *  
+ *  This file is part of DISSECT-CF.
+ *  
+ *  DISSECT-CF is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or (at
+ *  your option) any later version.
+ *  
+ *  DISSECT-CF is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ *  General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
+ */
+
 package hu.uszeged.inf.xml.model;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -12,6 +35,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/** This class is a helper class for creating objects from XML files using JAXB.
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 @XmlRootElement( name = "device" )
 @XmlAccessorType(XmlAccessType.PROPERTY) 
 public class DeviceModel {
@@ -27,18 +53,9 @@ public class DeviceModel {
 	public long maxoutbw;
 	public long diskbw;
 	public long reposize;
-	public double ratio;
 	public String strategy;
 	public ShutdownModel sm;
 		
-		
-		
-		@Override
-		public String toString() {
-			return "DeviceModel [name=" + name + ", number=" + number + ", freq=" + freq + ", sensor=" + sensor
-					+ ", filesize=" + filesize + ", starttime=" + starttime + ", stoptime=" + stoptime + ", maxinbw="
-					+ maxinbw + ", maxoutbw=" + maxoutbw + ", diskbw=" + diskbw + ", reposize=" + reposize + ", ratio=" + ratio + ", strategy=" + strategy + ", sm=" + sm + "]";
-		}
 
 		@XmlElement( name = "name" )
 		public void setName(String name) {
@@ -80,12 +97,7 @@ public class DeviceModel {
 		public void setReposize(long reposize) {
 			this.reposize = reposize;
 		}
-		
-		@XmlElement( name = "ratio" )
-		public void setRatio(double ratio) {
-			this.ratio = ratio;
-		}
-		
+				
 		@XmlElement( name = "strategy" )
 		public void setStrategy(String strategy) {
 			this.strategy = strategy;

@@ -8,7 +8,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="bluemix-medium">		
@@ -18,7 +18,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="bluemix-large">		
@@ -28,7 +28,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="azure-small">		
@@ -38,7 +38,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="azure-medium">		
@@ -48,7 +48,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="azure-large">		
@@ -58,7 +58,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="amazon-small">		
@@ -68,7 +68,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="amazon-medium">		
@@ -78,7 +78,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 	
 	<instance name="amazon-large">		
@@ -88,7 +88,7 @@
 			<core-processing-power>0.001</core-processing-power>
 			<startup-process>100</startup-process>
 			<network-load>0</network-load>
-			<req-disk>1000000</req-disk>
+			<req-disk>10000000000</req-disk>
 	</instance>
 
 </instances>
