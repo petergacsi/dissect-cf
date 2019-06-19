@@ -16,20 +16,13 @@ import hu.uszeged.inf.xml.model.ApplicationModel;
 
 public class CloudApp extends Application{
 
-	public CloudApp(long freq, long tasksize, String cloud, String instance, String name, String type, double noi, ComputingAppliance computingAppliance) {
-		super(freq, tasksize, cloud, instance, name, type, noi, computingAppliance);
+	public CloudApp(long freq, long tasksize, String instance, String name, String type, double noi, ComputingAppliance computingAppliance) {
+		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
 		// TODO Auto-generated constructor stub
 	}
 
 	
-	
-	// TODO kipróbálni
-	@Override
-	public void loadApplication(String appfile) throws JAXBException {
-		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
-			new CloudApp(am.freq, am.tasksize, am.cloud, am.instance, am.name,"fog",0, null);
-		}
-	}
+
 
 	@Override
 	public void tick(long fires) {
@@ -50,6 +43,11 @@ public class CloudApp extends Application{
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
+					
+					if (ratio > 2) {
+						this.handleDataTransderToNeighbourAppliance(unprocessedData);
+						
+					}
 					
 					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
 					this.generateAndAddVM();

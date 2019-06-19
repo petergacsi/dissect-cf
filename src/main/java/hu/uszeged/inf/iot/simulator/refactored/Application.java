@@ -2,8 +2,7 @@ package hu.uszeged.inf.iot.simulator.refactored;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.JAXBException;
+import java.util.Random;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
@@ -11,6 +10,9 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocatio
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
+import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
+import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
@@ -45,18 +47,19 @@ public abstract class Application extends Timed {
 			this.restarted=0;
 		}
 	}
+	
+	
 	public static double defaultNoi = 2400;
 	public ArrayList<TimelineCollector> timelineList = new ArrayList<TimelineCollector>();
 	
 	//need to store all applications?
-
-	public static ArrayList<FogApp> fogApplications = new ArrayList<FogApp>();
-	//public static ArrayList<GateWayApp> gateWayApplications = new ArrayList<GateWayApp>();
+	public static List<Application> applications = new ArrayList<Application>();
+	public static List<FogApp> fogApplications = new ArrayList<FogApp>();
 	protected long tasksize;
 	
 	
 	public ComputingAppliance computingDevice;
-	public List<FogAppliance> childComputingDevice;
+	public List<ComputingAppliance> childComputingDevice;
 	
 	public String name;
 	public Instance instance;
@@ -70,14 +73,16 @@ public abstract class Application extends Timed {
 	public long sumOfArrivedData;
 	protected long freq;
 	protected VmCollector broker;
-	protected String type;
+	public String type;
 	
-	public abstract void loadApplication(String appfile) throws JAXBException;
+	public boolean incomingData;
+	
 
-	public Application(final long freq, long tasksize, String cloud, String instance, String name, String type,double noi ,ComputingAppliance computingAppliance) {
+	public Application(final long freq, long tasksize, String instance, String name, String type,double noi ,ComputingAppliance computingAppliance) {
 		if(noi>0) {
 			defaultNoi=noi;
 		}
+		
 		this.vmlist = new ArrayList<VmCollector>();
 		this.tasksize = tasksize;
 		//this.allWorkTime=0;
@@ -88,11 +93,23 @@ public abstract class Application extends Timed {
 		this.computingDevice = computingAppliance;
 		this.computingDevice.applications.add(this);
 		
-		if (cloud != null) {
-			this.freq=freq;
-			subscribe(freq);
+		
+		this.childComputingDevice = new ArrayList<ComputingAppliance>();
+		
+		
+		Application.applications.add(this);
+		
+		if (type != null) {
+		this.freq=freq;
+		subscribe(freq);
 		}
+		
+		/*this.freq = freq;
+		subscribe(freq);*/
+		
+		
 		this.instance = Instance.instances.get(instance);
+		
 		this.type=type;
 	
 		
@@ -110,18 +127,96 @@ public abstract class Application extends Timed {
 		this.currentTask = 0;
 		this.sumOfArrivedData=0;
 		
+		this.incomingData = false;
+		
 	}
 	
+	public static void makeAllReleations() {
+		for (Application app : applications) {
+			app.makeRelationBetweenDevices();
+		}
+	}
 	
 	//create a relation between app and its devices
-		public void makeRelationBetweenDevices(List<FogAppliance> listOfChildDevices) {
-			this.childComputingDevice = listOfChildDevices;
-			for (FogAppliance computingAppliance : childComputingDevice) {
+	public void makeRelationBetweenDevices() {
+		//this.childComputingDevice = listOfChildDevices;
+		for (ComputingAppliance computingAppliance : this.childComputingDevice) {
 				computingAppliance.addParentApp(this);
-			}
 		}
+	}
 	
 
+	
+	public ComputingAppliance getARandomNeighbourAppliance() {
+		Random ran = new Random();
+		if (this.computingDevice.neighbours.size() == 0) {
+			return null;
+		}
+		int randomIndex = ran.nextInt(this.computingDevice.neighbours.size());
+		return this.computingDevice.neighbours.get(randomIndex);
+	}
+	
+	public Application getARandomApplication(ComputingAppliance ca) {
+		for (Application application: ca.applications) {
+			if (application.isSubscribed()) {
+				return application;
+			}
+		}
+		Random ran = new Random();
+		int randomIndex = ran.nextInt(ca.applications.size());
+		return ca.applications.get(randomIndex);
+		
+	}
+		
+	public void initiateDataTransferToNeighbourAppliance(long unprocessedData,ComputingAppliance ca, Application application) throws NetworkException {
+		
+		final Application app = application;
+		app.incomingData = true;
+		
+		if(!app.isSubscribed()) {
+			try {
+				app.restartApplication();
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.sumOfArrivedData-=unprocessedData;					
+		final long unprocessed = unprocessedData;
+		NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
+				this.computingDevice.iaas.repositories.get(0), ca.iaas.repositories.get(0), new ConsumptionEvent() {
+
+					@Override
+					public void conComplete() {
+						app.sumOfArrivedData +=  unprocessed;
+					}
+
+					@Override
+					public void conCancelled(ResourceConsumption problematic) {
+						
+					}
+			
+		});
+	}
+	
+	public void handleDataTransderToNeighbourAppliance(long unprocessedData) {
+		ComputingAppliance ca = this.getARandomNeighbourAppliance();
+		if (ca != null) {
+			Application app = this.getARandomApplication(ca);
+			try {
+				System.out.println();
+				this.initiateDataTransferToNeighbourAppliance(unprocessedData, ca, app);
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+		
+		
 	private void startBroker() throws VMManagementException, NetworkException {
 		if(this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.arc)) {
 			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.arc, false,
@@ -258,7 +353,7 @@ public abstract class Application extends Timed {
 	}
 	
 	public void restartApplication() throws VMManagementException, NetworkException {
-		System.out.println(this.name+" application has been restarted!");
+		//System.out.println("\n" +  this.name+" application has been restarted!");
 		subscribe(this.freq);
 		this.startBroker();
 	}
@@ -273,17 +368,17 @@ public abstract class Application extends Timed {
 	}
 	
 	//query the nearby devices, returns the closest
-	public Application getNearestComputingAppliance(Application app1) {
-		double minDistance = Double.MAX_VALUE;
-		Application nearest = null;
-		for (Application application : Application.fogApplications) {
-			if (minDistance >= calculateDistance(app1, application) ) {
-				minDistance = calculateDistance(app1, application);
-				nearest = application;
-			}
-		}
-		return nearest;
-	}
+//	public Application getNearestComputingAppliance(Application app1) {
+//		double minDistance = Double.MAX_VALUE;
+//		Application nearest = null;
+//		for (Application application : Application.fogApplications) {
+//			if (minDistance >= calculateDistance(app1, application) ) {
+//				minDistance = calculateDistance(app1, application);
+//				nearest = application;
+//			}
+//		}
+//		return nearest;
+//	}
 	
 	
 	
