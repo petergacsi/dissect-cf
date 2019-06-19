@@ -2,8 +2,7 @@ package hu.uszeged.inf.iot.simulator.refactored;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.bind.JAXBException;
+import java.util.Random;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
@@ -17,20 +16,16 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
-import hu.uszeged.inf.xml.model.ApplicationModel;
 
 public class FogApp extends Application {
 	
-	//Station connect only to FogDevice(FogApp)
 	
-	public FogAppliance fogDevice;
+	public ComputingAppliance fogDevice;
 	public List<Device> ownStations = new ArrayList<Device>(); 
 
-	public FogApp(long freq, long tasksize, String cloud, String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
-		super(freq, tasksize, cloud, instance, name, type, noi, computingAppliance);
-		this.fogDevice = (FogAppliance) super.computingDevice;
-		
-		//the "gateWay" devices(this FogApp which is in the Devcie) store a list of station reference
+	public FogApp(long freq, long tasksize,  String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
+		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
+		this.fogDevice =  super.computingDevice;
 		
 		
 		//need to add fogApps to a list for installation strategy
@@ -38,27 +33,59 @@ public class FogApp extends Application {
 		
 	}
 
-	//TODO kipróbálni
-	@Override
-	public void loadApplication(String appfile) throws JAXBException {
-		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
-			new FogApp(am.freq, am.tasksize, am.cloud, am.instance, am.name,"fog",0, null);
-		}
-	}
+	
 	
 	public ComputingAppliance getParentDeviceOfApp() {
 		return fogDevice.parentApp.computingDevice;
 	}
 	
 	//add this app to a specific station => InstallationStrategy
+	public void initiateDataTransferUp(long unprocessedData) throws NetworkException {
+		System.out.println("\nSending data from " + this.name + " to: " + this.fogDevice.parentApp.name  );
+		if (!this.fogDevice.parentApp.isSubscribed()) {
+			try {
+				this.fogDevice.parentApp.restartApplication();
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.sumOfArrivedData-=unprocessedData;					
+		final long unprocessed = unprocessedData;
+		NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
+				this.fogDevice.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0), new ConsumptionEvent() {
+
+					@Override
+					public void conComplete() {
+						fogDevice.parentApp.sumOfArrivedData +=  unprocessed;
+					}
+
+					@Override
+					public void conCancelled(ResourceConsumption problematic) {
+						
+					}
+			
+		});
+	}
+	
+//	private boolean checkStationState() { 
+//		for (Device s : this.ownStations) {
+//			if (s.isSubscribed()) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
+	
 	
 	
 
 	@Override
 	public void tick(long fires) {
-		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 
+		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 		if (unprocessedData > 0) {
+
 			System.out.print(Timed.getFireCount()+" unprocessed data: "+unprocessedData+ " "+this.name+" ");
 			long processedData = 0;
 
@@ -74,42 +101,26 @@ public class FogApp extends Application {
 										
 					if(ratio>2) {
 						
-						if(this.getParentDeviceOfApp()!=null) {
+						Random rng = new Random();
+						int randomChoice = rng.nextInt(2);
+						if (randomChoice == 0) {
 							try {
-								if(this.fogDevice.parentApp.isSubscribed()) {
-									this.sumOfArrivedData-=unprocessedData;					
-									final long unprocessed = unprocessedData;
-									NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
-											this.fogDevice.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0), new ConsumptionEvent() {
-
-												@Override
-												public void conComplete() {
-													fogDevice.parentApp.sumOfArrivedData +=  unprocessed;
-												}
-
-												@Override
-												public void conCancelled(ResourceConsumption problematic) {
-													
-												}
-										
-									});
-								} else {
-									try {
-										this.fogDevice.parentApp.restartApplication();
-									} catch (VMManagementException e) {
-										// TODO Auto-generated catch block
-										e.printStackTrace();
-									}
-								}
-								
+								this.initiateDataTransferUp(unprocessedData);
 							} catch (NetworkException e) {
+								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+						} else {
+							this.handleDataTransderToNeighbourAppliance(unprocessedData);
+							
 						}
 						
-						
-						//Application nearestApp = getNearestComputingAppliance(this);
-						
+//						try {
+//							this.initiateDataTransferUp(unprocessedData);
+//						} catch (NetworkException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
 						
 						
 						
@@ -155,11 +166,24 @@ public class FogApp extends Application {
 				}
 			}
 			System.out.println(" load(%): "+this.getLoadOfCloud());
-		}
+		} 
+		
+		
+		
 		this.countVmRunningTime();
 		this.turnoffVM();
+		
+//		if (this.ownStations.isEmpty()) {
+//				if (this.sumOfArrivedData == this.sumOfProcessedData) {
+//					this.incomingData = false;
+//				}
+//		}
 
-		if (this.currentTask == 0) {
+//		if ((this.currentTask == 0 && this.incomingData == false)|
+//		( (!this.ownStations.isEmpty()) && this.checkStationState() && this.currentTask == 0 ) ) {
+		if (currentTask == 0) {
+			
+			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			unsubscribe();
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {
@@ -194,7 +218,7 @@ public class FogApp extends Application {
 	@Override
 	public String toString() {
 		
-		return "fogDevice=" + fogDevice.name + " " + this.computingDevice.x + " " +  this.computingDevice.y +  " stations: " + this.ownStations.size();
+		return "fogApp=" + fogDevice.name + " " + this.computingDevice.x + " " +  this.computingDevice.y +  " stations: " + this.ownStations.size();
 	}
 	
 }
