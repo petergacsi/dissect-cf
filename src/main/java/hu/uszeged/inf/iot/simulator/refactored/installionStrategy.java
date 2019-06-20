@@ -179,8 +179,8 @@ class CostStrategy extends installionStrategy{
 		 double min=Integer.MAX_VALUE-1.0;
 		 int choosen=-1;
 		for(int i=0;i<Application.fogApplications.size();++i){
-			if(Application.fogApplications.get(i).instance.pricePerTick<min){
-				min = Application.fogApplications.get(i).instance.pricePerTick;
+			if(Application.fogApplications.get(i).instance.getPricePerTick()<min){
+				min = Application.fogApplications.get(i).instance.getPricePerTick();
 				choosen = i;
 			}
 		}
@@ -339,7 +339,7 @@ private int fuzzyDecision(Device s) {
 		Sigmoid sig = new Sigmoid(Double.valueOf(-1.0/96.0), Double.valueOf(15));
 		Vector<Double> price = new Vector<Double>();
 		for(int i=0;i<Application.fogApplications.size();++i){
-			price.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).instance.pricePerTick*1000000000)));
+			price.add(kappa.getAt(sig.getat(Application.fogApplications.get(i).instance.getPricePerTick()*1000000000)));
 			//System.out.println(Application.applications.get(i).instance.pricePerTick*1000000000);
 			//System.out.println("Cost: " + Application.applications.get(i).getCurrentCostofApp());
 			//System.out.println("Load: " + Application.applications.get(i).getLoadOfCloud());
@@ -444,14 +444,14 @@ private int fuzzyDecision(Device s) {
 		Vector<Double> preferVM = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/32),Double.valueOf(3));
 		for(int i=0;i<Application.fogApplications.size();++i){
-			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.arc.getRequiredCPUs()))));
+			preferVM.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.getArc().getRequiredCPUs()))));
 		}
 		//System.out.println(preferVM);
 		
 		Vector<Double> preferVMMem = new Vector<Double>();
 		sig = new Sigmoid(Double.valueOf(1.0/256.0),Double.valueOf(350.0));
 		for(int i=0;i<Application.fogApplications.size();++i){	
-			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.arc.getRequiredMemory() / 10000000))));
+			preferVMMem.add(kappa.getAt(sig.getat(Double.valueOf(Application.fogApplications.get(i).instance.getArc().getRequiredMemory() / 10000000))));
 		}
 		//System.out.println(preferVMMem);
 		

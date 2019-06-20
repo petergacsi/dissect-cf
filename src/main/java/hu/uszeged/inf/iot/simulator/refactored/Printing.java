@@ -19,12 +19,7 @@ public class Printing {
 		String CSstationfile=ScenarioBase.resourcePath+"/fog_extension_example/WeatherStation.xml";
 
 		
-		try {
-			Instance.loadInstance(instancefile);
-		} catch (JAXBException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		Instance.loadInstance(instancefile);
 		
 		
 		try {

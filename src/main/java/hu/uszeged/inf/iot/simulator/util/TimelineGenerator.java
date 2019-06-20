@@ -1,3 +1,27 @@
+/*
+ *  ========================================================================
+ *  DIScrete event baSed Energy Consumption simulaTor 
+ *    					             for Clouds and Federations (DISSECT-CF)
+ *  ========================================================================
+ *  
+ *  This file is part of DISSECT-CF.
+ *  
+ *  DISSECT-CF is free software: you can redistribute it and/or modify it
+ *  under the terms of the GNU Lesser General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or (at
+ *  your option) any later version.
+ *  
+ *  DISSECT-CF is distributed in the hope that it will be useful, but
+ *  WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
+ *  General Public License for more details.
+ *  
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
+ *  
+ *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
+ */
+
 package hu.uszeged.inf.iot.simulator.util;
 
 import java.io.FileNotFoundException;
@@ -6,10 +30,14 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import hu.uszeged.inf.iot.simulator.fog.Application;
-import hu.uszeged.inf.iot.simulator.fog.Cloud;
+import hu.uszeged.inf.iot.simulator.system.Application;
+import hu.uszeged.inf.iot.simulator.system.Cloud;
 
-public class TimelineGenerator {
+/** This class is a helper class for visualizing the simulation ( clouds, virtual machines and tasks).
+ * More information: https://developers.google.com/chart/interactive/docs/gallery/timeline
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
+public abstract class TimelineGenerator {
 
 	public static void generate() throws FileNotFoundException, UnsupportedEncodingException {
 		Calendar cal = Calendar.getInstance();
@@ -30,10 +58,10 @@ public class TimelineGenerator {
 		writer.println("dataTable.addColumn({ type: 'date', id: 'End' });");
 		writer.println("dataTable.addRows([");
 		
-		for (Cloud c : Cloud.clouds.values()) {
-			for (Application a : c.applications) {
+		for (Cloud c : Cloud.getClouds().values()) {
+			for (Application a : c.getApplications()) {
 				for(TimelineCollector tc : a.timelineList) {
-					writer.println("[ '"+a.name+"', '"+tc.vmId+"', new Date(0,0,0,0,0,0,"+tc.start +"), new Date(0,0,0,0,0,0,"+tc.stop+")],");
+					writer.println("[ '"+a.getName()+"', '"+tc.vmId+"', new Date(0,0,0,0,0,0,"+tc.start +"), new Date(0,0,0,0,0,0,"+tc.stop+")],");
 				}
 			}
 		}

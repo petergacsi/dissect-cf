@@ -108,12 +108,12 @@ public abstract class Application extends Timed {
 		subscribe(freq);*/
 		
 		
-		this.instance = Instance.instances.get(instance);
+		this.instance = Instance.getInstances().get(instance);
 		
 		this.type=type;
 	
 		
-		this.computingDevice.iaas.repositories.get(0).registerObject(this.instance.va);
+		this.computingDevice.iaas.repositories.get(0).registerObject(this.instance.getVa());
 		try {
 			this.startBroker();
 		} catch (VMManagementException e) {
@@ -218,8 +218,8 @@ public abstract class Application extends Timed {
 		
 		
 	private void startBroker() throws VMManagementException, NetworkException {
-		if(this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.arc)) {
-			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.arc, false,
+		if(this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.getArc())) {
+			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.getArc(), false,
 					PhysicalMachine.defaultAllocLen);
 			this.broker.restarted++;		
 			this.broker.vm.switchOn(ra, null);
@@ -229,7 +229,7 @@ public abstract class Application extends Timed {
 			}
 		}else {
 			try {
-				VirtualMachine vm =this.computingDevice.iaas.requestVM(this.instance.va, this.instance.arc,this.computingDevice.iaas.repositories.get(0), 1)[0];
+				VirtualMachine vm =this.computingDevice.iaas.requestVM(this.instance.getVa(), this.instance.getArc(),this.computingDevice.iaas.repositories.get(0), 1)[0];
 				if(vm!=null) {
 					VmCollector vmc = new VmCollector(vm);
 					vmc.id="broker";
@@ -260,8 +260,8 @@ public abstract class Application extends Timed {
 		try {
 			if (this.turnonVM() == false) {
 				for (PhysicalMachine pm : this.computingDevice.iaas.machines) {
-					if (pm.isReHostableRequest(this.instance.arc)) {
-						VirtualMachine vm = pm.requestVM(this.instance.va, this.instance.arc,
+					if (pm.isReHostableRequest(this.instance.getArc())) {
+						VirtualMachine vm = pm.requestVM(this.instance.getVa(), this.instance.getArc(),
 								this.computingDevice.iaas.repositories.get(0), 1)[0];
 						if(vm!=null) {
 							VmCollector vmc = new VmCollector(vm);
@@ -283,9 +283,9 @@ public abstract class Application extends Timed {
 
 	protected boolean turnonVM() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
-			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isReHostableRequest(this.instance.arc)){
+			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isReHostableRequest(this.instance.getArc())){
 				try {
-					ResourceAllocation ra = this.vmlist.get(i).pm.allocateResources(this.instance.arc, false,
+					ResourceAllocation ra = this.vmlist.get(i).pm.allocateResources(this.instance.getArc(), false,
 							PhysicalMachine.defaultAllocLen);
 					this.vmlist.get(i).restarted++;		
 					this.vmlist.get(i).vm.switchOn(ra, null);	
