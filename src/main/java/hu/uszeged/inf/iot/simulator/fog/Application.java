@@ -70,6 +70,7 @@ public class Application extends Timed {
 	private long freq;
 	private VmCollector broker;
 	private String type;
+	
 	public static void loadApplication(String appfile) throws JAXBException {
 		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
 			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name,"fog",0);
