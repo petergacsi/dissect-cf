@@ -10,7 +10,9 @@ import hu.uszeged.inf.iot.simulator.refactored.ComputingAppliance;;
 public abstract class ScenarioBase {
 	final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
 			append(File.separator).
-			append("target").
+			append("src").
+			append(File.separator).
+			append("main").
 			append(File.separator).
 			append("resources").
 			append(File.separator).
