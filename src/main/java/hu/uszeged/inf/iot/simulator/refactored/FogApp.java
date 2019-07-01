@@ -41,41 +41,49 @@ public class FogApp extends Application {
 	
 	//add this app to a specific station => InstallationStrategy
 	public void initiateDataTransferUp(long unprocessedData) throws NetworkException {
-		System.out.println("\nSending data from " + this.name + " to: " + this.fogDevice.parentApp.name  );
-		if (!this.fogDevice.parentApp.isSubscribed()) {
+		System.out.println("\nSending data from " + this.name + " to: " + this.fogDevice.parentApp.name);
+		
+		if (this.fogDevice.parentApp.isSubscribed()) {
+			this.fogDevice.parentApp.incomingData++;
+			this.sumOfArrivedData -= unprocessedData;
+			final long unprocessed = unprocessedData;
+			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
+					this.fogDevice.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0),
+					new ConsumptionEvent() {
+
+						@Override
+						public void conComplete() {
+							fogDevice.parentApp.sumOfArrivedData += unprocessed;
+							fogDevice.parentApp.incomingData--;
+						}
+
+						@Override
+						public void conCancelled(ResourceConsumption problematic) {
+
+						}
+
+					});
+		} else {
 			try {
+				this.fogDevice.parentApp.incomingData++;
 				this.fogDevice.parentApp.restartApplication();
+				new BrokerCheck(this, this.fogDevice.parentApp, this.fogDevice, unprocessedData, (this.freq/2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		this.sumOfArrivedData-=unprocessedData;					
-		final long unprocessed = unprocessedData;
-		NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
-				this.fogDevice.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0), new ConsumptionEvent() {
 
-					@Override
-					public void conComplete() {
-						fogDevice.parentApp.sumOfArrivedData +=  unprocessed;
-					}
-
-					@Override
-					public void conCancelled(ResourceConsumption problematic) {
-						
-					}
-			
-		});
 	}
 	
-//	private boolean checkStationState() { 
-//		for (Device s : this.ownStations) {
-//			if (s.isSubscribed()) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
+	private boolean checkStationState() { 
+		for (Device s : this.ownStations) {
+			if (s.isSubscribed()) {
+				return false;
+			}
+		}
+		return true;
+	}
 	
 	
 	
@@ -99,38 +107,37 @@ public class FogApp extends Application {
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
 										
-					if(ratio>2) {
+					if(ratio>5) {
 						
 						Random rng = new Random();
-						int randomChoice = rng.nextInt(2);
-						if (randomChoice == 0) {
+						int choice = rng.nextInt(2);
+						
+						if (choice == 1) {
+							this.handleDataTransderToNeighbourAppliance(unprocessedData);
+						} else {
 							try {
 								this.initiateDataTransferUp(unprocessedData);
 							} catch (NetworkException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						} else {
-							this.handleDataTransderToNeighbourAppliance(unprocessedData);
-							
 						}
 						
-//						try {
-//							this.initiateDataTransferUp(unprocessedData);
-//						} catch (NetworkException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
 						
-						
-						
+//							this.handleDataTransderToNeighbourAppliance(unprocessedData);
+//							try {
+//								this.initiateDataTransferUp(unprocessedData);
+//							} catch (NetworkException e) {
+//								// TODO Auto-generated catch block
+//								e.printStackTrace();
+//							}
 						
 					}
-					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
+					
+					System.out.print("data/VM: " + ratio + " unprocessed after exit: " + unprocessedData + " decision:");
 					this.generateAndAddVM();
-					
-					break;
-					
+
+					break;			
 					
 					
 				} else {
@@ -174,14 +181,28 @@ public class FogApp extends Application {
 		this.turnoffVM();
 		
 //		if (this.ownStations.isEmpty()) {
-//				if (this.sumOfArrivedData == this.sumOfProcessedData) {
+//				if (this.sumOfArrivedData > this.sumOfProcessedData) {
+//					System.out.println(this.name + " van hátra adat");
+//				} else if
+//					(this.sumOfArrivedData == 0 && this.sumOfProcessedData == 0) {
+//					System.out.println(this.name + " nem kapott adatot");
+//				} else {
+//					System.out.println(this.name + " flag: false");
 //					this.incomingData = false;
 //				}
 //		}
+		
+//		if (this.ownStations.isEmpty()) {
+//			if ((this.sumOfArrivedData == this.sumOfProcessedData) && this.sumOfArrivedData !=0 && this.sumOfProcessedData != 0) {
+//				this.incomingData = false;
+//			}
+//		}
+		
+		
 
-//		if ((this.currentTask == 0 && this.incomingData == false)|
-//		( (!this.ownStations.isEmpty()) && this.checkStationState() && this.currentTask == 0 ) ) {
-		if (currentTask == 0) {
+		if ((this.currentTask == 0 && this.incomingData == 0 && unprocessedData == 0)|
+		( (!this.ownStations.isEmpty()) && this.checkStationState() && this.currentTask == 0 && unprocessedData == 0) ) {
+//		if (currentTask == 0) {
 			
 			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			unsubscribe();
