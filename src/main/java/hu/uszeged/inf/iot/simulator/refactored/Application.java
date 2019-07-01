@@ -75,7 +75,8 @@ public abstract class Application extends Timed {
 	protected VmCollector broker;
 	public String type;
 	
-	public boolean incomingData;
+	public int incomingData;
+	
 	
 
 	public Application(final long freq, long tasksize, String instance, String name, String type,double noi ,ComputingAppliance computingAppliance) {
@@ -127,7 +128,7 @@ public abstract class Application extends Timed {
 		this.currentTask = 0;
 		this.sumOfArrivedData=0;
 		
-		this.incomingData = false;
+		this.incomingData = 0;
 		
 	}
 	
@@ -168,35 +169,44 @@ public abstract class Application extends Timed {
 		
 	}
 		
-	public void initiateDataTransferToNeighbourAppliance(long unprocessedData,ComputingAppliance ca, Application application) throws NetworkException {
-		
+	public void initiateDataTransferToNeighbourAppliance(long unprocessedData, ComputingAppliance ca,
+			Application application) throws NetworkException {
+
 		final Application app = application;
-		app.incomingData = true;
 		
-		if(!app.isSubscribed()) {
+		
+
+		if (app.isSubscribed()) {
+			app.incomingData++;
+			this.sumOfArrivedData -= unprocessedData;
+			final long unprocessed = unprocessedData;
+			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
+					this.computingDevice.iaas.repositories.get(0), ca.iaas.repositories.get(0), new ConsumptionEvent() {
+
+						@Override
+						public void conComplete() {
+							app.sumOfArrivedData += unprocessed;
+							app.incomingData--;
+						}
+
+						@Override
+						public void conCancelled(ResourceConsumption problematic) {
+
+						}
+
+					});
+
+		} else {
 			try {
+				
+				app.incomingData++;
 				app.restartApplication();
+				new BrokerCheck(this, app, ca, unprocessedData , (this.freq / 2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		this.sumOfArrivedData-=unprocessedData;					
-		final long unprocessed = unprocessedData;
-		NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
-				this.computingDevice.iaas.repositories.get(0), ca.iaas.repositories.get(0), new ConsumptionEvent() {
-
-					@Override
-					public void conComplete() {
-						app.sumOfArrivedData +=  unprocessed;
-					}
-
-					@Override
-					public void conCancelled(ResourceConsumption problematic) {
-						
-					}
-			
-		});
 	}
 	
 	public void handleDataTransderToNeighbourAppliance(long unprocessedData) {
@@ -204,7 +214,7 @@ public abstract class Application extends Timed {
 		if (ca != null) {
 			Application app = this.getARandomApplication(ca);
 			try {
-				System.out.println();
+				//System.out.println("Ide küldtük: " +  app.name);
 				this.initiateDataTransferToNeighbourAppliance(unprocessedData, ca, app);
 			} catch (NetworkException e) {
 				// TODO Auto-generated catch block
@@ -353,7 +363,7 @@ public abstract class Application extends Timed {
 	}
 	
 	public void restartApplication() throws VMManagementException, NetworkException {
-		//System.out.println("\n" +  this.name+" application has been restarted!");
+		System.out.println("\n" +  this.name+" application has been restarted!");
 		subscribe(this.freq);
 		this.startBroker();
 	}
