@@ -44,10 +44,10 @@ public class CloudApp extends Application{
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
 					
-					if (ratio > 2) {
-						this.handleDataTransderToNeighbourAppliance(unprocessedData);
-						
-					}
+//					if (ratio > 2) {
+//						this.handleDataTransderToNeighbourAppliance(unprocessedData);
+//						
+//					}
 					
 					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
 					this.generateAndAddVM();
@@ -90,8 +90,9 @@ public class CloudApp extends Application{
 		this.countVmRunningTime();
 		this.turnoffVM();
 		
-		if (this.currentTask == 0) {
+		if (this.currentTask == 0 && this.incomingData == 0 && unprocessedData == 0) {
 			unsubscribe();
+			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {
 					p.shouldStop=true;
