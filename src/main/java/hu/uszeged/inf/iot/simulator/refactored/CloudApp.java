@@ -90,7 +90,7 @@ public class CloudApp extends Application{
 		this.countVmRunningTime();
 		this.turnoffVM();
 		
-		if (this.currentTask == 0 && this.incomingData == 0 && unprocessedData == 0) {
+		if (this.currentTask == 0 && this.incomingData == 0) {
 			unsubscribe();
 			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			for(Provider p : this.providers) {

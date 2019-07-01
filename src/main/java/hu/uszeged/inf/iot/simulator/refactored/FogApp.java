@@ -67,7 +67,7 @@ public class FogApp extends Application {
 			try {
 				this.fogDevice.parentApp.incomingData++;
 				this.fogDevice.parentApp.restartApplication();
-				new BrokerCheck(this, this.fogDevice.parentApp, this.fogDevice, unprocessedData, (this.freq/2));
+				new BrokerCheck(this, this.fogDevice.parentApp, this.fogDevice, unprocessedData, (this.fogDevice.parentApp.freq/2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -107,31 +107,37 @@ public class FogApp extends Application {
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
 										
-					if(ratio>5) {
-						
-						Random rng = new Random();
-						int choice = rng.nextInt(2);
-						
-						if (choice == 1) {
-							this.handleDataTransderToNeighbourAppliance(unprocessedData);
-						} else {
-							try {
-								this.initiateDataTransferUp(unprocessedData);
-							} catch (NetworkException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						
-						
+					if (ratio > 5) {
+
+						//Felfele vagy szomszédnak
+//						Random rng = new Random();
+//						int choice = rng.nextInt(2);
+//
+//						if (choice == 1) {
 //							this.handleDataTransderToNeighbourAppliance(unprocessedData);
+//						} else {
 //							try {
 //								this.initiateDataTransferUp(unprocessedData);
 //							} catch (NetworkException e) {
 //								// TODO Auto-generated catch block
 //								e.printStackTrace();
 //							}
+//						}
 						
+						
+						//Csak felfele
+						try {
+							this.initiateDataTransferUp(unprocessedData);
+						} catch (NetworkException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						
+						//Csak szomszédnak
+//					this.handleDataTransderToNeighbourAppliance(unprocessedData);
+						
+
 					}
 					
 					System.out.print("data/VM: " + ratio + " unprocessed after exit: " + unprocessedData + " decision:");
@@ -179,29 +185,10 @@ public class FogApp extends Application {
 		
 		this.countVmRunningTime();
 		this.turnoffVM();
-		
-//		if (this.ownStations.isEmpty()) {
-//				if (this.sumOfArrivedData > this.sumOfProcessedData) {
-//					System.out.println(this.name + " van hátra adat");
-//				} else if
-//					(this.sumOfArrivedData == 0 && this.sumOfProcessedData == 0) {
-//					System.out.println(this.name + " nem kapott adatot");
-//				} else {
-//					System.out.println(this.name + " flag: false");
-//					this.incomingData = false;
-//				}
-//		}
-		
-//		if (this.ownStations.isEmpty()) {
-//			if ((this.sumOfArrivedData == this.sumOfProcessedData) && this.sumOfArrivedData !=0 && this.sumOfProcessedData != 0) {
-//				this.incomingData = false;
-//			}
-//		}
-		
-		
+				
 
 		if ((this.currentTask == 0 && this.incomingData == 0 && unprocessedData == 0)|
-		( (!this.ownStations.isEmpty()) && this.checkStationState() && this.currentTask == 0 && unprocessedData == 0) ) {
+		( (!this.ownStations.isEmpty()) && this.checkStationState() && this.currentTask == 0) ) {
 //		if (currentTask == 0) {
 			
 			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
