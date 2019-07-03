@@ -31,7 +31,6 @@ public class CloudApp extends Application{
 		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 
 		if (unprocessedData > 0) {
-			System.out.print(Timed.getFireCount()+" unprocessed data: "+unprocessedData+ " "+this.name+" ");
 			long processedData = 0;
 
 			while (unprocessedData != processedData) { 
@@ -80,9 +79,6 @@ public class CloudApp extends Application{
 									}
 								});
 						this.sumOfProcessedData += this.allocatedData; 
-						if(this.sumOfArrivedData<this.sumOfProcessedData) {
-							System.out.println(Timed.getFireCount());System.exit(0);
-						}
 					} catch (NetworkException e) {
 						e.printStackTrace();
 					}
@@ -95,7 +91,7 @@ public class CloudApp extends Application{
 		
 		if (this.currentTask == 0 && this.incomingData == 0 && this.sumOfProcessedData==this.sumOfArrivedData) {
 			unsubscribe();
-			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
+			//System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {
 					p.shouldStop=true;

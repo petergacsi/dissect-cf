@@ -40,7 +40,6 @@ public class FogApp extends Application {
 	
 	//add this app to a specific station => InstallationStrategy
 	public void initiateDataTransferUp(long unprocessedData) throws NetworkException {
-		System.out.println("\nSending data from " + this.name + " to: " + this.fogDevice.parentApp.name);
 		
 		
 		this.fogDevice.parentApp.incomingData++;
@@ -68,7 +67,7 @@ public class FogApp extends Application {
 			try {
 				
 				this.fogDevice.parentApp.restartApplication();
-				new BrokerCheck(this, this.fogDevice.parentApp,unprocessedData, (this.fogDevice.parentApp.freq/3));
+				new BrokerCheck(this, this.fogDevice.parentApp,unprocessedData, (this.fogDevice.parentApp.freq/2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -95,7 +94,6 @@ public class FogApp extends Application {
 		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 		if (unprocessedData > 0) {
 
-			System.out.print(Timed.getFireCount()+" unprocessed data: "+unprocessedData+ " "+this.name+" "+this.sumOfProcessedData+" "+this.sumOfArrivedData);
 			long processedData = 0;
 
 			while (unprocessedData != processedData) { 
@@ -110,7 +108,7 @@ public class FogApp extends Application {
 										
 					if (ratio > 5) {
 
-						//Felfele vagy szomszédnak
+						//Felfele vagy szomszï¿½dnak
 //						Random rng = new Random();
 //						int choice = rng.nextInt(2);
 //
@@ -135,7 +133,7 @@ public class FogApp extends Application {
 						}
 						
 						
-						//Csak szomszédnak
+						//Csak szomszï¿½dnak
 //					this.handleDataTransderToNeighbourAppliance(unprocessedData);
 						
 
@@ -174,10 +172,6 @@ public class FogApp extends Application {
 									}
 								});
 						this.sumOfProcessedData += this.allocatedData; 
-						if(this.sumOfArrivedData<this.sumOfProcessedData) {
-							System.out.println(Timed.getFireCount());System.exit(0);
-						}
-						System.out.println();
 					} catch (NetworkException e) {
 						e.printStackTrace();
 					}
@@ -196,7 +190,7 @@ public class FogApp extends Application {
 				this.sumOfProcessedData==this.sumOfArrivedData && this.checkStationState()) {
 //		if (currentTask == 0) {
 			
-			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
+			//System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			unsubscribe();
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {
