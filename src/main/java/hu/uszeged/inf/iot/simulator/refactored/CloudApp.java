@@ -80,6 +80,9 @@ public class CloudApp extends Application{
 									}
 								});
 						this.sumOfProcessedData += this.allocatedData; 
+						if(this.sumOfArrivedData<this.sumOfProcessedData) {
+							System.out.println(Timed.getFireCount());System.exit(0);
+						}
 					} catch (NetworkException e) {
 						e.printStackTrace();
 					}
@@ -90,7 +93,7 @@ public class CloudApp extends Application{
 		this.countVmRunningTime();
 		this.turnoffVM();
 		
-		if (this.currentTask == 0 && this.incomingData == 0) {
+		if (this.currentTask == 0 && this.incomingData == 0 && this.sumOfProcessedData==this.sumOfArrivedData) {
 			unsubscribe();
 			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			for(Provider p : this.providers) {

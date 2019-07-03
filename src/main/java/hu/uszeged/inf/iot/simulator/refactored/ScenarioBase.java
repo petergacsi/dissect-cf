@@ -21,7 +21,7 @@ public abstract class ScenarioBase {
 	 static void printInformation(long t) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
-		long generatedData=0,processedData=0;
+		long generatedData=0,processedData=0,arrivedData=0;
 		int usedVM = 0;
 		int tasks = 0;
 		long timeout=Long.MIN_VALUE;
@@ -32,6 +32,7 @@ public abstract class ScenarioBase {
 				System.out.println(a.name);
 				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
 				processedData+=a.sumOfProcessedData;
+				arrivedData+=a.sumOfArrivedData;
 				usedVM+=a.vmlist.size();
 				
 				for (VmCollector vmcl : a.vmlist) {
@@ -74,7 +75,7 @@ public abstract class ScenarioBase {
 			System.out.println();
 		}
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
-		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
+		System.out.println("Generated/processed/arrived data: " + generatedData + "/" + processedData+ "/"+arrivedData);
 		System.out.println("Cost: "+totalCost);
 		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));

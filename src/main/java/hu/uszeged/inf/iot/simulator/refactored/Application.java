@@ -174,8 +174,7 @@ public abstract class Application extends Timed {
 
 		final Application app = application;
 		
-		
-
+	
 		if (app.isSubscribed()) {
 			app.incomingData++;
 			this.sumOfArrivedData -= unprocessedData;
@@ -201,7 +200,7 @@ public abstract class Application extends Timed {
 				
 				app.incomingData++;
 				app.restartApplication();
-				new BrokerCheck(this, app, ca, unprocessedData , (app.freq / 2));
+				new BrokerCheck(this, app, unprocessedData , (app.freq / 2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -363,7 +362,7 @@ public abstract class Application extends Timed {
 	}
 	
 	public void restartApplication() throws VMManagementException, NetworkException {
-		System.out.println("\n" +  this.name+" application has been restarted!");
+		System.out.println("\n" +  this.name+" application has been restarted at "+Timed.getFireCount());
 		subscribe(this.freq);
 		this.startBroker();
 	}
