@@ -25,17 +25,17 @@ public class FogApp extends Application {
 
 	public FogApp(long freq, long tasksize,  String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
 		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
-		this.fogDevice =  super.computingDevice;
+		this.fogDevice =  super.computingAppliance;
 		
 		//need to add fogApps to a list for installation strategy
-		Application.fogApplications.add(this);
+		//Application.fogApplications.add(this);
 		
 	}
 
 	
 	
 	public ComputingAppliance getParentDeviceOfApp() {
-		return fogDevice.parentApp.computingDevice;
+		return fogDevice.parentApp.computingAppliance;
 	}
 	
 	//add this app to a specific station => InstallationStrategy
@@ -109,32 +109,32 @@ public class FogApp extends Application {
 					if (ratio > 5) {
 
 						//Felfele vagy szomsz�dnak
-//						Random rng = new Random();
-//						int choice = rng.nextInt(2);
-//
-//						if (choice == 1) {
-//							this.handleDataTransderToNeighbourAppliance(unprocessedData);
-//						} else {
-//							try {
-//								this.initiateDataTransferUp(unprocessedData);
-//							} catch (NetworkException e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-//						}
-						
-						
-						//Csak felfele
-						try {
-							this.initiateDataTransferUp(unprocessedData-processedData);
-						} catch (NetworkException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						Random rng = new Random();
+						int choice = rng.nextInt(2);
+
+						if (choice == 1) {
+							this.handleDataTransderToNeighbourAppliance(unprocessedData);
+						} else {
+							try {
+								this.initiateDataTransferUp(unprocessedData);
+							} catch (NetworkException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 						
 						
+						//Csak felfele
+//						try {
+//							this.initiateDataTransferUp(unprocessedData-processedData);
+//						} catch (NetworkException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+						
+						
 						//Csak szomsz�dnak
-//					this.handleDataTransderToNeighbourAppliance(unprocessedData);
+//					this.handleDataTransderToNeighbourAppliance(unprocessedData-processedData);
 						
 
 					}
@@ -186,11 +186,12 @@ public class FogApp extends Application {
 		this.turnoffVM();
 				
 
-		if (this.currentTask == 0 && this.incomingData == 0 &&
-				this.sumOfProcessedData==this.sumOfArrivedData && this.checkStationState()) {
-//		if (currentTask == 0) {
+		if ( (this.currentTask == 0 && this.incomingData == 0 &&
+				this.sumOfProcessedData==this.sumOfArrivedData && this.checkStationState() )
+				 ) {
+//		
 			
-			//System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
+			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
 			unsubscribe();
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {
@@ -225,7 +226,7 @@ public class FogApp extends Application {
 	@Override
 	public String toString() {
 		
-		return "fogApp=" + fogDevice.name + " " + this.computingDevice.x + " " +  this.computingDevice.y +  " stations: " + this.ownStations.size();
+		return "fogApp=" + fogDevice.name + " " + this.computingAppliance.x + " " +  this.computingAppliance.y +  " stations: " + this.ownStations.size();
 	}
 	
 }

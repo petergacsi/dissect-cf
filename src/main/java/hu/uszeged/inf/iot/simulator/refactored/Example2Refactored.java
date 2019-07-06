@@ -51,14 +51,14 @@ public static void main(String[] args) throws Exception {
 		
 		
 			//Stations and their parent FogApps
-		for (FogApp fogApp : Application.fogApplications) {
-			System.out.println(fogApp);
-			for (Device d : fogApp.ownStations) {
-				System.out.print(d);
-			}
-			System.out.println("");
-		}
-		System.out.println();
+//		for (FogApp fogApp : Application.fogApplications) {
+//			System.out.println(fogApp);
+//			for (Device d : fogApp.ownStations) {
+//				System.out.print(d);
+//			}
+//			System.out.println("");
+//		}
+//		System.out.println();
 		
 		
 		// TODO: IoT pricing set-up

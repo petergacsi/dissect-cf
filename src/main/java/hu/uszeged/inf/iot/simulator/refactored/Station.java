@@ -75,7 +75,7 @@ public class Station extends Device{
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
-					cloudRepository = app.computingDevice.iaas.repositories.get(0);
+					cloudRepository = app.computingAppliance.iaas.repositories.get(0);
 				}
 			};
 		}

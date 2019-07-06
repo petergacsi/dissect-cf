@@ -98,9 +98,9 @@ public class CloudApp extends Application{
 				}
 			}
 			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
-			if(!this.computingDevice.iaas.repositories.get(0).registerObject(so)){
-				this.computingDevice.iaas.repositories.get(0).deregisterObject(so);
-				this.computingDevice.iaas.repositories.get(0).registerObject(so);
+			if(!this.computingAppliance.iaas.repositories.get(0).registerObject(so)){
+				this.computingAppliance.iaas.repositories.get(0).deregisterObject(so);
+				this.computingAppliance.iaas.repositories.get(0).registerObject(so);
 			}
 			
 			for (VmCollector vmcl : this.vmlist) {

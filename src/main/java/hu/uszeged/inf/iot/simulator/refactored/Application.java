@@ -54,11 +54,11 @@ public abstract class Application extends Timed {
 	
 	//need to store all applications?
 	public static List<Application> applications = new ArrayList<Application>();
-	public static List<FogApp> fogApplications = new ArrayList<FogApp>();
+	//public static List<FogApp> fogApplications = new ArrayList<FogApp>();
 	protected long tasksize;
 	
 	
-	public ComputingAppliance computingDevice;
+	public ComputingAppliance computingAppliance;
 	public List<ComputingAppliance> childComputingDevice;
 	
 	public String name;
@@ -91,8 +91,8 @@ public abstract class Application extends Timed {
 		this.name = name;
 		
 		//create relation between a device and its apps
-		this.computingDevice = computingAppliance;
-		this.computingDevice.applications.add(this);
+		this.computingAppliance = computingAppliance;
+		this.computingAppliance.applications.add(this);
 		
 		
 		this.childComputingDevice = new ArrayList<ComputingAppliance>();
@@ -114,7 +114,7 @@ public abstract class Application extends Timed {
 		this.type=type;
 	
 		
-		this.computingDevice.iaas.repositories.get(0).registerObject(this.instance.getVa());
+		this.computingAppliance.iaas.repositories.get(0).registerObject(this.instance.getVa());
 		try {
 			this.startBroker();
 		} catch (VMManagementException e) {
@@ -146,15 +146,24 @@ public abstract class Application extends Timed {
 		}
 	}
 	
+	public static List<FogApp> getFogApplications(){
+		List<FogApp> fogApplications = new ArrayList<FogApp>(); 
+		for (Application app : applications) {
+			if (app.type.equals("FogApp")) {
+				fogApplications.add((FogApp)app);
+			}
+		}
+		return fogApplications;
+	}
 
 	
 	public ComputingAppliance getARandomNeighbourAppliance() {
 		Random ran = new Random();
-		if (this.computingDevice.neighbours.size() == 0) {
+		if (this.computingAppliance.neighbours.size() == 0) {
 			return null;
 		}
-		int randomIndex = ran.nextInt(this.computingDevice.neighbours.size());
-		return this.computingDevice.neighbours.get(randomIndex);
+		int randomIndex = ran.nextInt(this.computingAppliance.neighbours.size());
+		return this.computingAppliance.neighbours.get(randomIndex);
 	}
 	
 	public Application getARandomApplication(ComputingAppliance ca) {
@@ -174,13 +183,12 @@ public abstract class Application extends Timed {
 
 		final Application app = application;
 		
-	
+		app.incomingData++;
+		this.sumOfArrivedData -= unprocessedData;
 		if (app.isSubscribed()) {
-			app.incomingData++;
-			this.sumOfArrivedData -= unprocessedData;
 			final long unprocessed = unprocessedData;
 			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
-					this.computingDevice.iaas.repositories.get(0), ca.iaas.repositories.get(0), new ConsumptionEvent() {
+					this.computingAppliance.iaas.repositories.get(0), ca.iaas.repositories.get(0), new ConsumptionEvent() {
 
 						@Override
 						public void conComplete() {
@@ -198,7 +206,7 @@ public abstract class Application extends Timed {
 		} else {
 			try {
 				
-				app.incomingData++;
+			
 				app.restartApplication();
 				new BrokerCheck(this, app, unprocessedData , (app.freq / 2));
 			} catch (VMManagementException e) {
@@ -238,7 +246,7 @@ public abstract class Application extends Timed {
 			}
 		}else {
 			try {
-				VirtualMachine vm =this.computingDevice.iaas.requestVM(this.instance.getVa(), this.instance.getArc(),this.computingDevice.iaas.repositories.get(0), 1)[0];
+				VirtualMachine vm =this.computingAppliance.iaas.requestVM(this.instance.getVa(), this.instance.getArc(),this.computingAppliance.iaas.repositories.get(0), 1)[0];
 				if(vm!=null) {
 					VmCollector vmc = new VmCollector(vm);
 					vmc.id="broker";
@@ -268,10 +276,10 @@ public abstract class Application extends Timed {
 		
 		try {
 			if (this.turnonVM() == false) {
-				for (PhysicalMachine pm : this.computingDevice.iaas.machines) {
+				for (PhysicalMachine pm : this.computingAppliance.iaas.machines) {
 					if (pm.isReHostableRequest(this.instance.getArc())) {
 						VirtualMachine vm = pm.requestVM(this.instance.getVa(), this.instance.getArc(),
-								this.computingDevice.iaas.repositories.get(0), 1)[0];
+								this.computingAppliance.iaas.repositories.get(0), 1)[0];
 						if(vm!=null) {
 							VmCollector vmc = new VmCollector(vm);
 							vmc.pm=pm;
@@ -326,7 +334,7 @@ public abstract class Application extends Timed {
 
 	public double getLoadOfCloud(){
 		double usedCPU=0.0;
-		for(VirtualMachine vm : this.computingDevice.iaas.listVMs()) {
+		for(VirtualMachine vm : this.computingAppliance.iaas.listVMs()) {
 			if(vm.getResourceAllocation() == null) {
 				usedCPU+=0.0;
 			}else {
@@ -341,7 +349,7 @@ public abstract class Application extends Timed {
 		}
 		System.out.println(t+"/"+this.cloud.iaas.getRunningCapacities().getRequiredCPUs()+"/" +this.cloud.iaas.getCapacities().getRequiredCPUs());
 		*/
-		return (usedCPU / this.computingDevice.iaas.getRunningCapacities().getRequiredCPUs())*100;
+		return (usedCPU / this.computingAppliance.iaas.getRunningCapacities().getRequiredCPUs())*100;
 	}
 	
 	
@@ -370,8 +378,8 @@ public abstract class Application extends Timed {
 	
 	public double calculateDistance(Application app, Application other) {
 		double result = Math.sqrt(
-				Math.pow((other.computingDevice.x - app.computingDevice.x),2) + 
-				Math.pow((other.computingDevice.y - app.computingDevice.y),2)
+				Math.pow((other.computingAppliance.x - app.computingAppliance.x),2) + 
+				Math.pow((other.computingAppliance.y - app.computingAppliance.y),2)
 				);
 		return result;
 	}
@@ -396,7 +404,7 @@ public abstract class Application extends Timed {
 
 	@Override
 	public String toString() {
-		return "Application [computingDevice=" + computingDevice + ", name=" + name + "]";
+		return "Application [computingAppliance=" + computingAppliance + ", name=" + name + "]";
 	}
 	
 	

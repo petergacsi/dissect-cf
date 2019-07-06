@@ -25,7 +25,7 @@ public abstract class ScenarioBase {
 		int usedVM = 0;
 		int tasks = 0;
 		long timeout=Long.MIN_VALUE;
-		for (ComputingAppliance c : ComputingAppliance.allComputingDevice) {
+		for (ComputingAppliance c : ComputingAppliance.allComputingAppliance) {
 			System.out.println("computingAppliance: " + c.name);
 			long highestStationStoptime=Long.MIN_VALUE;
 			for (Application a : c.applications) {

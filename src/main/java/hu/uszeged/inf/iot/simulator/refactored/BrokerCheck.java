@@ -31,7 +31,7 @@ public class BrokerCheck extends DeferredEvent {
 			try {
 				
 				NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
-						fromApp.computingDevice.iaas.repositories.get(0), toApp.computingDevice.iaas.repositories.get(0), new ConsumptionEvent() {
+						fromApp.computingAppliance.iaas.repositories.get(0), toApp.computingAppliance.iaas.repositories.get(0), new ConsumptionEvent() {
 
 							@Override
 							public void conComplete() {

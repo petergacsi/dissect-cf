@@ -64,8 +64,8 @@ public abstract class Device extends Timed {
 	
 	public double calculateDistance(Application app) {
 		double result = Math.sqrt(
-				Math.pow((this.x - app.computingDevice.x),2) + 
-				Math.pow((this.y - app.computingDevice.y),2)
+				Math.pow((this.x - app.computingAppliance.x),2) + 
+				Math.pow((this.y - app.computingAppliance.y),2)
 				);
 		return result;
 	}

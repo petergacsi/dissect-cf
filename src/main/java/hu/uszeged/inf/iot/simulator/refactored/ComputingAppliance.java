@@ -20,7 +20,7 @@ public class ComputingAppliance {
 	public Application parentApp;
 	
 	//we need every device for logging, so we need a list of all ComputingAppliance
-	public static List<ComputingAppliance> allComputingDevice = new ArrayList<ComputingAppliance>();
+	public static List<ComputingAppliance> allComputingAppliance = new ArrayList<ComputingAppliance>();
 	
 	//Every device have computing capacity
 	public IaaSService iaas;
@@ -128,7 +128,7 @@ public class ComputingAppliance {
 			this.y = y;
 			
 			//store all device in a list for logging purpose
-			ComputingAppliance.allComputingDevice.add(this);
+			ComputingAppliance.allComputingAppliance.add(this);
 		}
 	}
 	
@@ -140,14 +140,14 @@ public class ComputingAppliance {
 			this.x = 0;
 			this.y = 0;
 			this.applications = new ArrayList<Application>();
-			ComputingAppliance.allComputingDevice.add(this);
+			ComputingAppliance.allComputingAppliance.add(this);
 		}
 	}
 	
 	
 	public static ComputingAppliance getComputingApplianceByName(String name) {
 		ComputingAppliance appliance = null;
-		for (ComputingAppliance ca : allComputingDevice) {
+		for (ComputingAppliance ca : allComputingAppliance) {
 			if (ca.name.equals(name)) {
 				appliance = ca;
 			}
