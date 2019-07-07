@@ -106,17 +106,17 @@ public class FogApp extends Application {
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
 										
-					if (ratio > 5) {
+					if (ratio > 8) {
 
 						//Felfele vagy szomsz�dnak
 						Random rng = new Random();
 						int choice = rng.nextInt(2);
 
 						if (choice == 1) {
-							this.handleDataTransderToNeighbourAppliance(unprocessedData);
+							this.handleDataTransderToNeighbourAppliance(unprocessedData-processedData);
 						} else {
 							try {
-								this.initiateDataTransferUp(unprocessedData);
+								this.initiateDataTransferUp(unprocessedData-processedData);
 							} catch (NetworkException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <devices>
- 	<device starttime="0" stoptime="86400000" number="4000" filesize="50">
+ 	<device starttime="0" stoptime="86400000" number="5000" filesize="50">
       <name>test1</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -9,7 +9,7 @@
       <diskbw>1000</diskbw>
       <reposize>60000</reposize>
       <ratio>1</ratio>
-      <strategy>distance</strategy>
+      <strategy>random</strategy>
 	  <xCoord>10</xCoord>
 	  <yCoord>5</yCoord>
       <shutdown>
@@ -19,7 +19,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="4000" filesize="50">
+	<device starttime="0" stoptime="86400000" number="4500" filesize="50">
       <name>test1</name>
       <freq>60000</freq>
       <sensor>5</sensor>

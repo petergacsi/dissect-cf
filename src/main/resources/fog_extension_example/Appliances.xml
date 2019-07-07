@@ -15,8 +15,33 @@
 			</application>
 		</applications>
 		<neighbourAppliances>
+			<device>
+				<deviceName>cloud2</deviceName>
+			</device>	
 		</neighbourAppliances>
 	</appliance>
+	
+	<appliance>
+		<name>cloud2</name>
+		<xcoord>13</xcoord>
+		<ycoord>16</ycoord>
+		<parentApp></parentApp>
+		<applications>
+			<application tasksize="2500000">
+				<type>CloudApp</type>
+				<name>CloudApp-2</name>
+				<parentDevice>cloud2</parentDevice>
+				<freq>300000</freq>
+				<instance>amazon-medium</instance>
+			</application>
+		</applications>
+		<neighbourAppliances>
+			<device>
+				<deviceName>cloud1</deviceName>
+			</device>	
+		</neighbourAppliances>
+	</appliance>
+	
 	
 	<appliance>
 		<name>fog1</name>
@@ -27,6 +52,13 @@
 			<application tasksize="1000000">
 				<type>FogApp</type>
 				<name>fogApp-1</name>
+				<parentDevice>fog1</parentDevice>
+				<freq>300000</freq>
+				<instance>bluemix-small</instance>
+			</application>
+			<application tasksize="1000000">
+				<type>FogApp</type>
+				<name>fogApp-11</name>
 				<parentDevice>fog1</parentDevice>
 				<freq>300000</freq>
 				<instance>bluemix-small</instance>
