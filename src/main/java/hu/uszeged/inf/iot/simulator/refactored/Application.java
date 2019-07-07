@@ -59,7 +59,7 @@ public abstract class Application extends Timed {
 	
 	
 	public ComputingAppliance computingAppliance;
-	public List<ComputingAppliance> childComputingDevice;
+	//public List<ComputingAppliance> childComputingDevice;
 	
 	public String name;
 	public Instance instance;
@@ -95,7 +95,7 @@ public abstract class Application extends Timed {
 		this.computingAppliance.applications.add(this);
 		
 		
-		this.childComputingDevice = new ArrayList<ComputingAppliance>();
+//		this.childComputingDevice = new ArrayList<ComputingAppliance>();
 		
 		
 		Application.applications.add(this);
@@ -132,18 +132,27 @@ public abstract class Application extends Timed {
 		
 	}
 	
-	public static void makeAllReleations() {
-		for (Application app : applications) {
-			app.makeRelationBetweenDevices();
-		}
-	}
+//	public static void makeAllReleations() {
+//		for (Application app : applications) {
+//			app.makeRelationBetweenDevices();
+//		}
+//	}
 	
 	//create a relation between app and its devices
-	public void makeRelationBetweenDevices() {
-		//this.childComputingDevice = listOfChildDevices;
-		for (ComputingAppliance computingAppliance : this.childComputingDevice) {
-				computingAppliance.addParentApp(this);
+//	public void makeRelationBetweenDevices() {
+//		//this.childComputingDevice = listOfChildDevices;
+//		for (ComputingAppliance computingAppliance : this.childComputingDevice) {
+//				computingAppliance.addParentApp(this);
+//		}
+//	}
+	
+	public static Application getApplicationsByName(String name) {
+		for (Application app : applications) {
+			if (app.name.equals(name)) {
+				return app;
+			}
 		}
+		return null;
 	}
 	
 	public static List<FogApp> getFogApplications(){

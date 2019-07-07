@@ -22,7 +22,7 @@ public class ApplicationModel {
 		public long tasksize;
 		public String type;
 		public String parentDevice;
-		public ArrayList<ComputingDevice> childDevice;
+		//public ArrayList<ComputingDevice> childDevice;
 		public String instance;
 		public String provider;
 		public long freq;
@@ -53,22 +53,22 @@ public class ApplicationModel {
 			this.parentDevice = parentDevice;
 		}
 		
-		public ArrayList<ComputingDevice> getChildDevices(){
-			return childDevice;
-		}
-		
-		@XmlElementWrapper( name = "childDevices")
-		@XmlElement(name = "device")
-		public void setChildDevices(ArrayList<ComputingDevice> childDevices) {
-			this.childDevice = childDevices;
-		}
-		
-		public void add( ComputingDevice childDevice) {
-			if (this.childDevice == null) {
-				this.childDevice = new ArrayList<ComputingDevice>();
-			}
-			this.childDevice.add(childDevice);
-		}
+//		public ArrayList<ComputingDevice> getChildDevices(){
+//			return childDevice;
+//		}
+//		
+//		@XmlElementWrapper( name = "childDevices")
+//		@XmlElement(name = "device")
+//		public void setChildDevices(ArrayList<ComputingDevice> childDevices) {
+//			this.childDevice = childDevices;
+//		}
+//		
+//		public void add( ComputingDevice childDevice) {
+//			if (this.childDevice == null) {
+//				this.childDevice = new ArrayList<ComputingDevice>();
+//			}
+//			this.childDevice.add(childDevice);
+//		}
 		
 		@XmlElement( name = "instance" )
 		public void setInstance(String instance) {

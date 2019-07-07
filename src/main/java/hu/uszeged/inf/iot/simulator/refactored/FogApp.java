@@ -20,12 +20,12 @@ import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
 public class FogApp extends Application {
 	
 	
-	public ComputingAppliance fogDevice;
+	
 	public List<Device> ownStations = new ArrayList<Device>(); 
 
 	public FogApp(long freq, long tasksize,  String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
 		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
-		this.fogDevice =  super.computingAppliance;
+		
 		
 		//need to add fogApps to a list for installation strategy
 		//Application.fogApplications.add(this);
@@ -35,26 +35,26 @@ public class FogApp extends Application {
 	
 	
 	public ComputingAppliance getParentDeviceOfApp() {
-		return fogDevice.parentApp.computingAppliance;
+		return computingAppliance.parentApp.computingAppliance;
 	}
 	
 	//add this app to a specific station => InstallationStrategy
 	public void initiateDataTransferUp(long unprocessedData) throws NetworkException {
 		
 		
-		this.fogDevice.parentApp.incomingData++;
+		this.computingAppliance.parentApp.incomingData++;
 		this.sumOfArrivedData -= unprocessedData;
-		if (this.fogDevice.parentApp.isSubscribed()) {
+		if (this.computingAppliance.parentApp.isSubscribed()) {
 
 			final long unprocessed = unprocessedData;
 			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
-					this.fogDevice.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0),
+					this.computingAppliance.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0),
 					new ConsumptionEvent() {
 
 						@Override
 						public void conComplete() {
-							fogDevice.parentApp.sumOfArrivedData += unprocessed;
-							fogDevice.parentApp.incomingData--;
+							computingAppliance.parentApp.sumOfArrivedData += unprocessed;
+							computingAppliance.parentApp.incomingData--;
 							
 						}
 
@@ -66,8 +66,8 @@ public class FogApp extends Application {
 		} else {
 			try {
 				
-				this.fogDevice.parentApp.restartApplication();
-				new BrokerCheck(this, this.fogDevice.parentApp,unprocessedData, (this.fogDevice.parentApp.freq/2));
+				this.computingAppliance.parentApp.restartApplication();
+				new BrokerCheck(this, this.computingAppliance.parentApp,unprocessedData, (this.computingAppliance.parentApp.freq/2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -199,9 +199,9 @@ public class FogApp extends Application {
 				}
 			}
 			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
-			if(!this.fogDevice.iaas.repositories.get(0).registerObject(so)){
-				this.fogDevice.iaas.repositories.get(0).deregisterObject(so);
-				this.fogDevice.iaas.repositories.get(0).registerObject(so);
+			if(!this.computingAppliance.iaas.repositories.get(0).registerObject(so)){
+				this.computingAppliance.iaas.repositories.get(0).deregisterObject(so);
+				this.computingAppliance.iaas.repositories.get(0).registerObject(so);
 			}
 			
 			for (VmCollector vmcl : this.vmlist) {
@@ -226,7 +226,7 @@ public class FogApp extends Application {
 	@Override
 	public String toString() {
 		
-		return "fogApp=" + fogDevice.name + " " + this.computingAppliance.x + " " +  this.computingAppliance.y +  " stations: " + this.ownStations.size();
+		return "fogApp=" + computingAppliance.name + " " + this.computingAppliance.x + " " +  this.computingAppliance.y +  " stations: " + this.ownStations.size();
 	}
 	
 }

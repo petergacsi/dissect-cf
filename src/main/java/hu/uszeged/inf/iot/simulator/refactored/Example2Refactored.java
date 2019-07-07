@@ -27,7 +27,7 @@ public static void main(String[] args) throws Exception {
 		Instance.loadInstance(instancefile);
 		ComputingAppliance.loadAppliances(appliancefile, fogfile);
 		
-		Application.makeAllReleations();
+//		Application.makeAllReleations();
 		Station.loadDevice(CSstationfile);
 		
 		System.out.println("");
@@ -36,21 +36,21 @@ public static void main(String[] args) throws Exception {
 		
 		
 		
-		System.out.println();
-		//Print out the topology
-			//Devices and their apps
-		for (Application app : Application.applications)
-			//throws null
-			for (ComputingAppliance computingAppliance : app.childComputingDevice) {
-				System.out.println(computingAppliance);
-				System.out.println(computingAppliance.neighbours);
-				System.out.println("ParentApp: " + computingAppliance.parentApp.name);
-			}
-		
-		
-		
-		
-			//Stations and their parent FogApps
+//		System.out.println();
+//		Print out the topology
+//			//Devices and their apps
+//		for (Application app : Application.applications)
+//			//throws null
+//			for (ComputingAppliance computingAppliance : app.childComputingDevice) {
+//				System.out.println(computingAppliance);
+//				System.out.println(computingAppliance.neighbours);
+//				System.out.println("ParentApp: " + computingAppliance.parentApp.name);
+//			}
+//		
+//		
+//		
+//		
+//			Stations and their parent FogApps
 //		for (FogApp fogApp : Application.fogApplications) {
 //			System.out.println(fogApp);
 //			for (Device d : fogApp.ownStations) {

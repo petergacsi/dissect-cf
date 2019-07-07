@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <devices>
- 	<device starttime="0" stoptime="86400000" number="3000" filesize="50">
+ 	<device starttime="0" stoptime="86400000" number="4000" filesize="50">
       <name>test1</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -19,7 +19,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="3000" filesize="50">
+	<device starttime="0" stoptime="86400000" number="4000" filesize="50">
       <name>test1</name>
       <freq>60000</freq>
       <sensor>5</sensor>

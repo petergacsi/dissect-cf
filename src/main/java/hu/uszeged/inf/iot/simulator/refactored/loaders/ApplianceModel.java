@@ -23,6 +23,7 @@ public class ApplianceModel {
 	public String name;
 	public double xcoord;
 	public double ycoord;
+	public String parentApp;
 	public ArrayList<ApplicationModel> applications;
 	public ArrayList<ComputingDevice> neighbourAppliances; 
 	
@@ -49,6 +50,10 @@ public class ApplianceModel {
 		this.ycoord = ycoord;
 	}
 	
+	@XmlElement(name = "parentApp")
+	public void setParentApp(String parentApp) {
+		this.parentApp = parentApp;
+	}
 	
 	//to read applications from xml
 	//-----

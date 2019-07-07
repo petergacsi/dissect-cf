@@ -44,7 +44,7 @@ public class ComputingAppliance {
 			
 			//if there is no appliance with the given name, we create it with all the members initialized
 			if (getComputingApplianceByName(applianceModel.name) == null) {
-				ComputingAppliance ca = new ComputingAppliance(iaasLoader, applianceModel.name, applianceModel.xcoord, applianceModel.ycoord);
+				ComputingAppliance ca = new ComputingAppliance(iaasLoader, applianceModel.name, applianceModel.xcoord, applianceModel.ycoord, Application.getApplicationsByName(applianceModel.parentApp));
 				//populate the applications member from xml
 				createApplications(applianceModel, iaasLoader, ca);
 				
@@ -59,6 +59,7 @@ public class ComputingAppliance {
 				ComputingAppliance ca = getComputingApplianceByName(applianceModel.name);
 				ca.setX(applianceModel.xcoord);
 				ca.setY(applianceModel.ycoord);
+				ca.setParentApp(Application.getApplicationsByName(applianceModel.parentApp));
 				
 				//populate the applications member from xml
 				createApplications(applianceModel, iaasLoader, ca);
@@ -80,25 +81,25 @@ public class ComputingAppliance {
 			//type of app is CloudApp
 			if (am.type.equals("CloudApp")) {
 				CloudApp cloudapp = new CloudApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
-				for (ComputingDevice cd : am.childDevice) {
-					if (getComputingApplianceByName(cd.deviceName) == null) {
-						cloudapp.childComputingDevice.add(new ComputingAppliance(iaasLoader ,cd.deviceName));
-					} else {
-						cloudapp.childComputingDevice.add(getComputingApplianceByName(cd.deviceName));
-					}
-					
-				}
+//				for (ComputingDevice cd : am.childDevice) {
+//					if (getComputingApplianceByName(cd.deviceName) == null) {
+//						cloudapp.childComputingDevice.add(new ComputingAppliance(iaasLoader ,cd.deviceName));
+//					} else {
+//						cloudapp.childComputingDevice.add(getComputingApplianceByName(cd.deviceName));
+//					}
+//					
+//				}
 			
 			//type of the app is FogApp
 			} else {
 				FogApp fogapp = new FogApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
-				for (ComputingDevice cd : am.childDevice) {
-					if (getComputingApplianceByName(cd.deviceName) == null) {
-						fogapp.childComputingDevice.add(new ComputingAppliance(iaasLoader ,cd.deviceName));
-					} else {
-						fogapp.childComputingDevice.add(getComputingApplianceByName(cd.deviceName));
-					}	
-				}	
+//				for (ComputingDevice cd : am.childDevice) {
+//					if (getComputingApplianceByName(cd.deviceName) == null) {
+//						fogapp.childComputingDevice.add(new ComputingAppliance(iaasLoader ,cd.deviceName));
+//					} else {
+//						fogapp.childComputingDevice.add(getComputingApplianceByName(cd.deviceName));
+//					}	
+//				}	
 			}
 		}
 	}
@@ -117,7 +118,7 @@ public class ComputingAppliance {
 	
 	
 	
-	public ComputingAppliance(String loadfile, String name, double x, double y) throws IOException, SAXException, ParserConfigurationException {
+	public ComputingAppliance(String loadfile, String name, double x, double y, Application parentApp) throws IOException, SAXException, ParserConfigurationException {
 		if (loadfile != null) {
 			//Cloudloader is in charge for create the appropiate machines
 			this.iaas = CloudLoader.loadNodes(loadfile);
@@ -126,6 +127,7 @@ public class ComputingAppliance {
 			
 			this.x = x;
 			this.y = y;
+			this.parentApp = parentApp;
 			
 			//store all device in a list for logging purpose
 			ComputingAppliance.allComputingAppliance.add(this);
@@ -180,8 +182,14 @@ public class ComputingAppliance {
 		this.applications = apps;
 	}
 	
+	public Application getParentApp() {
+		return parentApp;
+	}
 
-	
+	public void setParentApp(Application parentApp) {
+		this.parentApp = parentApp;
+	}
+
 	@Override
 	public String toString() {
 		String apps = "";
