@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.IaaSService;
 import hu.mta.sztaki.lpds.cloud.simulator.util.CloudLoader;
-import hu.uszeged.inf.iot.simulator.refactored.loaders.ApplianceModel;
-import hu.uszeged.inf.iot.simulator.refactored.loaders.ApplicationModel;
-import hu.uszeged.inf.iot.simulator.refactored.loaders.ComputingDevice;
+import hu.uszeged.inf.iot.simulator.loaders.ApplianceModel;
+import hu.uszeged.inf.iot.simulator.loaders.ApplicationModel;
+import hu.uszeged.inf.iot.simulator.loaders.ComputingDevice;
 
 public class ComputingAppliance {
 	
@@ -81,25 +81,12 @@ public class ComputingAppliance {
 			//type of app is CloudApp
 			if (am.type.equals("CloudApp")) {
 				CloudApp cloudapp = new CloudApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
-//				for (ComputingDevice cd : am.childDevice) {
-//					if (getComputingApplianceByName(cd.deviceName) == null) {
-//						cloudapp.childComputingDevice.add(new ComputingAppliance(iaasLoader ,cd.deviceName));
-//					} else {
-//						cloudapp.childComputingDevice.add(getComputingApplianceByName(cd.deviceName));
-//					}
-//					
-//				}
+				
 			
 			//type of the app is FogApp
 			} else {
 				FogApp fogapp = new FogApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
-//				for (ComputingDevice cd : am.childDevice) {
-//					if (getComputingApplianceByName(cd.deviceName) == null) {
-//						fogapp.childComputingDevice.add(new ComputingAppliance(iaasLoader ,cd.deviceName));
-//					} else {
-//						fogapp.childComputingDevice.add(getComputingApplianceByName(cd.deviceName));
-//					}	
-//				}	
+				
 			}
 		}
 	}

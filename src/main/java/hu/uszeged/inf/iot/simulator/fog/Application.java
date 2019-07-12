@@ -1,28 +1,24 @@
 package hu.uszeged.inf.iot.simulator.fog;
 
 import java.util.ArrayList;
-import javax.xml.bind.JAXBException;
+import java.util.List;
+import java.util.Random;
+
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.PhysicalMachine.ResourceAllocation;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine.StateChangeException;
-import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAdapter;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
-import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import hu.uszeged.inf.iot.simulator.entities.Device;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
-import hu.uszeged.inf.iot.simulator.system.Cloud;
-import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
-import hu.uszeged.inf.xml.model.ApplicationModel;
 
-public class Application extends Timed {
+public abstract class Application extends Timed {
 
 	public class VmCollector {
 		@Override
@@ -51,56 +47,74 @@ public class Application extends Timed {
 			this.restarted=0;
 		}
 	}
+	
+	
 	public static double defaultNoi = 2400;
 	public ArrayList<TimelineCollector> timelineList = new ArrayList<TimelineCollector>();
-	public static ArrayList<Application> cloudApplications = new ArrayList<Application>();
-	public static ArrayList<Application> fogApplications = new ArrayList<Application>();
-	private long tasksize;
-	public Cloud fog;
-	public ArrayList<Device> stations;
+	
+	//need to store all applications?
+	public static List<Application> applications = new ArrayList<Application>();
+	//public static List<FogApp> fogApplications = new ArrayList<FogApp>();
+	protected long tasksize;
+	
+	
+	public ComputingAppliance computingAppliance;
+	//public List<ComputingAppliance> childComputingDevice;
+	
 	public String name;
 	public Instance instance;
 	public ArrayList<Provider> providers;
 	public ArrayList<VmCollector> vmlist;
 	public long sumOfWorkTime;
 	public long sumOfProcessedData;
-	private long allocatedData;
-	private int currentTask;
+	protected long allocatedData;
+	protected int currentTask;
 	public long stopTime;
 	public long sumOfArrivedData;
-	private long freq;
-	private VmCollector broker;
-	private String type;
+	protected long freq;
+	protected VmCollector broker;
+	public String type;
 	
-	public static void loadApplication(String appfile) throws JAXBException {
-		for (ApplicationModel am : ApplicationModel.loadApplicationXML(appfile)) {
-			new Application(am.freq, am.tasksize, am.cloud, am.instance, am.name,"fog",0);
-		}
-	}
+	public int incomingData;
+	
+	
 
-	public Application(final long freq, long tasksize, String cloud, String instance, String name, String type,double noi) {
+	public Application(final long freq, long tasksize, String instance, String name, String type,double noi ,ComputingAppliance computingAppliance) {
 		if(noi>0) {
 			defaultNoi=noi;
 		}
+		
 		this.vmlist = new ArrayList<VmCollector>();
-		this.stations = new ArrayList<Device>();
 		this.tasksize = tasksize;
 		//this.allWorkTime=0;
-		//this.fog = Cloud.addApplication(this, cloud);
+		
 		this.name = name;
-		if (cloud != null) {
-			this.freq=freq;
-			subscribe(freq);
-		}
-		this.instance = Instance.getInstances().get(instance);
-		this.type=type;
-		if(type.equals("fog")) {
-			Application.fogApplications.add(this);
-		}else{
-			Application.cloudApplications.add(this);
+		
+		//create relation between a device and its apps
+		this.computingAppliance = computingAppliance;
+		this.computingAppliance.applications.add(this);
+		
+		
+//		this.childComputingDevice = new ArrayList<ComputingAppliance>();
+		
+		
+		Application.applications.add(this);
+		
+		if (type != null) {
+		this.freq=freq;
+		subscribe(freq);
 		}
 		
-		this.fog.getIaas().repositories.get(0).registerObject(this.instance.getVa());
+		/*this.freq = freq;
+		subscribe(freq);*/
+		
+		
+		this.instance = Instance.getInstances().get(instance);
+		
+		this.type=type;
+	
+		
+		this.computingAppliance.iaas.repositories.get(0).registerObject(this.instance.getVa());
 		try {
 			this.startBroker();
 		} catch (VMManagementException e) {
@@ -113,8 +127,109 @@ public class Application extends Timed {
 		this.sumOfProcessedData = 0;
 		this.currentTask = 0;
 		this.sumOfArrivedData=0;
+		
+		this.incomingData = 0;
+		
+	}
+	
+	
+	public static Application getApplicationsByName(String name) {
+		for (Application app : applications) {
+			if (app.name.equals(name)) {
+				return app;
+			}
+		}
+		return null;
+	}
+	
+	public static List<FogApp> getFogApplications(){
+		List<FogApp> fogApplications = new ArrayList<FogApp>(); 
+		for (Application app : applications) {
+			if (app.type.equals("FogApp")) {
+				fogApplications.add((FogApp)app);
+			}
+		}
+		return fogApplications;
 	}
 
+	
+	public ComputingAppliance getARandomNeighbourAppliance() {
+		Random ran = new Random();
+		if (this.computingAppliance.neighbours.size() == 0) {
+			return null;
+		}
+		int randomIndex = ran.nextInt(this.computingAppliance.neighbours.size());
+		return this.computingAppliance.neighbours.get(randomIndex);
+	}
+	
+	public Application getARandomApplication(ComputingAppliance ca) {
+		for (Application application: ca.applications) {
+			if (application.isSubscribed()) {
+				return application;
+			}
+		}
+		Random ran = new Random();
+		int randomIndex = ran.nextInt(ca.applications.size());
+		return ca.applications.get(randomIndex);
+		
+	}
+		
+	public void initiateDataTransferToNeighbourAppliance(long unprocessedData, ComputingAppliance ca,
+			Application application) throws NetworkException {
+
+		final Application app = application;
+		
+		app.incomingData++;
+		this.sumOfArrivedData -= unprocessedData;
+		if (app.isSubscribed()) {
+			final long unprocessed = unprocessedData;
+			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
+					this.computingAppliance.iaas.repositories.get(0), ca.iaas.repositories.get(0), new ConsumptionEvent() {
+
+						@Override
+						public void conComplete() {
+							app.sumOfArrivedData += unprocessed;
+							app.incomingData--;
+						}
+
+						@Override
+						public void conCancelled(ResourceConsumption problematic) {
+
+						}
+
+					});
+
+		} else {
+			try {
+				
+			
+				app.restartApplication();
+				new BrokerCheck(this, app, unprocessedData , (app.freq / 2));
+			} catch (VMManagementException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void handleDataTransderToNeighbourAppliance(long unprocessedData) {
+		ComputingAppliance ca = this.getARandomNeighbourAppliance();
+		if (ca != null) {
+			Application app = this.getARandomApplication(ca);
+			try {
+				//System.out.println("Ide küldtük: " +  app.name);
+				this.initiateDataTransferToNeighbourAppliance(unprocessedData, ca, app);
+			} catch (NetworkException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
+	}
+	
+		
+		
 	private void startBroker() throws VMManagementException, NetworkException {
 		if(this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.getArc())) {
 			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.getArc(), false,
@@ -127,7 +242,7 @@ public class Application extends Timed {
 			}
 		}else {
 			try {
-				VirtualMachine vm =this.fog.getIaas().requestVM(this.instance.getVa(), this.instance.getArc(),this.fog.getIaas().repositories.get(0), 1)[0];
+				VirtualMachine vm =this.computingAppliance.iaas.requestVM(this.instance.getVa(), this.instance.getArc(),this.computingAppliance.iaas.repositories.get(0), 1)[0];
 				if(vm!=null) {
 					VmCollector vmc = new VmCollector(vm);
 					vmc.id="broker";
@@ -142,7 +257,7 @@ public class Application extends Timed {
 		
 	}
 	
-	private VmCollector VmSearch() {
+	protected VmCollector VmSearch() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
 			if ((this.vmlist.get(i).isWorking == false
 					&& this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.RUNNING) && !this.vmlist.get(i).id.equals("broker"))) {
@@ -153,13 +268,14 @@ public class Application extends Timed {
 		return null;
 	}
 	
-	private boolean generateAndAddVM() {
+	protected boolean generateAndAddVM() {
+		
 		try {
 			if (this.turnonVM() == false) {
-				for (PhysicalMachine pm : this.fog.getIaas().machines) {
+				for (PhysicalMachine pm : this.computingAppliance.iaas.machines) {
 					if (pm.isReHostableRequest(this.instance.getArc())) {
 						VirtualMachine vm = pm.requestVM(this.instance.getVa(), this.instance.getArc(),
-								this.fog.getIaas().repositories.get(0), 1)[0];
+								this.computingAppliance.iaas.repositories.get(0), 1)[0];
 						if(vm!=null) {
 							VmCollector vmc = new VmCollector(vm);
 							vmc.pm=pm;
@@ -174,10 +290,11 @@ public class Application extends Timed {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return false;
 	}
 
-	private boolean turnonVM() {
+	protected boolean turnonVM() {
 		for (int i = 0; i < this.vmlist.size(); i++) {
 			if (this.vmlist.get(i).vm.getState().equals(VirtualMachine.State.SHUTDOWN) && this.vmlist.get(i).pm.isReHostableRequest(this.instance.getArc())){
 				try {
@@ -196,7 +313,7 @@ public class Application extends Timed {
 		return false;
 }
 	
-	private void turnoffVM() {
+	protected void turnoffVM() {
 		
 		for (VmCollector vmcl : this.vmlist) {
 			
@@ -213,7 +330,7 @@ public class Application extends Timed {
 
 	public double getLoadOfCloud(){
 		double usedCPU=0.0;
-		for(VirtualMachine vm : this.fog.getIaas().listVMs()) {
+		for(VirtualMachine vm : this.computingAppliance.iaas.listVMs()) {
 			if(vm.getResourceAllocation() == null) {
 				usedCPU+=0.0;
 			}else {
@@ -228,30 +345,17 @@ public class Application extends Timed {
 		}
 		System.out.println(t+"/"+this.cloud.iaas.getRunningCapacities().getRequiredCPUs()+"/" +this.cloud.iaas.getCapacities().getRequiredCPUs());
 		*/
-		return (usedCPU / this.fog.getIaas().getRunningCapacities().getRequiredCPUs())*100;
+		return (usedCPU / this.computingAppliance.iaas.getRunningCapacities().getRequiredCPUs())*100;
 	}
 	
 	
 	
-	public static void addStation(Device s, hu.uszeged.inf.iot.simulator.system.Application a) {
-		a.getStations().add(s);
-		s.setApp(a);
-	}
-	
-	private boolean checkStationState() { 
-		for (Device s : this.stations) {
-			if (s.isSubscribed()) {
-				return false;
-			}
-		}
-	return true;
-}
 	
 	public double getCurrentCostofApp() {
 		return this.instance.calculateCloudCost(this.sumOfWorkTime);
 	}
 	
-	private void countVmRunningTime() {
+	protected void countVmRunningTime() {
 		for (VmCollector vmc : this.vmlist) {
 			if ( vmc.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 				vmc.workingTime += (Timed.getFireCount() - vmc.lastWorked);
@@ -262,134 +366,31 @@ public class Application extends Timed {
 	}
 	
 	public void restartApplication() throws VMManagementException, NetworkException {
-		System.out.println(this.name+" application has been restarted!");
+		System.out.println("\n" +  this.name+" application has been restarted at "+Timed.getFireCount());
 		subscribe(this.freq);
 		this.startBroker();
 	}
 	
-		
-	public void tick(long fires) {
-		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
-
-		if (unprocessedData > 0) {
-			System.out.print(Timed.getFireCount()+" unprocessed data: "+unprocessedData+ " "+this.name+" ");
-			long processedData = 0;
-
-			while (unprocessedData != processedData) { 
-				if (unprocessedData - processedData > this.tasksize) {
-					this.allocatedData = this.tasksize; 
-				} else {
-					this.allocatedData = (unprocessedData - processedData);
-				}
-				final VmCollector vml = this.VmSearch();
-				if (vml == null) {
-					double ratio = ((double)unprocessedData/this.tasksize);
-										
-					if(ratio>2) {
-//						if(this.fog.cloud!=null) {
-//							try {
-//								if(this.fog.app.isSubscribed()) {
-//									this.sumOfArrivedData-=unprocessedData;
-//									final Fog foggy = (Fog) this.fog;
-//									final long unprocessed = unprocessedData;
-//									NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing, 
-//											this.fog.iaas.repositories.get(0), this.fog.cloud.iaas.repositories.get(0), new ConsumptionEvent() {
-//
-//												@Override
-//												public void conComplete() {
-//													foggy.app.sumOfArrivedData +=  unprocessed;
-//												}
-//
-//												@Override
-//												public void conCancelled(ResourceConsumption problematic) {
-//													
-//												}
-//										
-//									});
-//								}else {
-//									try {
-//										this.fog.app.restartApplication();
-//									} catch (VMManagementException e) {
-//										// TODO Auto-generated catch block
-//										e.printStackTrace();
-//									}
-//								}
-//								
-//							} catch (NetworkException e) {
-//								e.printStackTrace();
-//							}
-//						}
-					}
-					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
-					this.generateAndAddVM();
-					
-					break;
-					
-					
-					
-				} else {
-					try {
-						final double noi = this.allocatedData == this.tasksize ? defaultNoi : (double) (2400 * this.allocatedData / this.tasksize);
-						processedData += this.allocatedData;
-						vml.isWorking = true;
-						this.currentTask++;
-
-						vml.vm.newComputeTask(noi, ResourceConsumption.unlimitedProcessing,
-								new ConsumptionEventAdapter() {
-									long vmStartTime = Timed.getFireCount();
-									long allocatedDataTemp = allocatedData;
-									double noiTemp = noi;
-
-									@Override
-									public void conComplete() {
-										vml.isWorking = false;
-										vml.taskCounter++;
-										currentTask--;
-										stopTime=Timed.getFireCount();
-										timelineList.add(new TimelineCollector(vmStartTime,Timed.getFireCount(),vml.id));
-											System.out.println(name +" "+vml.id+ " started@ " + vmStartTime + " finished@ "
-													+ Timed.getFireCount() + " with " + allocatedDataTemp + " bytes, lasted "
-													+ (Timed.getFireCount() - vmStartTime) + " ,noi: " + noiTemp);
-
-									}
-								});
-						this.sumOfProcessedData += this.allocatedData; 
-					} catch (NetworkException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			System.out.println(" load(%): "+this.getLoadOfCloud());
-		}
-		this.countVmRunningTime();
-		this.turnoffVM();
-
-		if (this.currentTask == 0 && checkStationState()) {
-			unsubscribe();
-			for(Provider p : this.providers) {
-				if(p.isSubscribed()) {
-					p.shouldStop=true;
-				}
-			}
-			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
-			if(!this.fog.getIaas().repositories.get(0).registerObject(so)){
-				this.fog.getIaas().repositories.get(0).deregisterObject(so);
-				this.fog.getIaas().repositories.get(0).registerObject(so);
-			}
-			
-			for (VmCollector vmcl : this.vmlist) {
-				try {
-					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
-						if(vmcl.id.equals("broker")) {
-							vmcl.pm=vmcl.vm.getResourceAllocation().getHost();
-						}
-						vmcl.vm.switchoff(true);
-						
-					}
-				} catch (StateChangeException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+	
+	public double calculateDistance(Application app, Application other) {
+		double result = Math.sqrt(
+				Math.pow((other.computingAppliance.x - app.computingAppliance.x),2) + 
+				Math.pow((other.computingAppliance.y - app.computingAppliance.y),2)
+				);
+		return result;
 	}
+	
+			
+	public abstract void tick(long fires);
+
+	@Override
+	public String toString() {
+		return "Application [computingAppliance=" + computingAppliance + ", name=" + name + "]";
+	}
+	
+	
+	
+	
+	
+	
 }

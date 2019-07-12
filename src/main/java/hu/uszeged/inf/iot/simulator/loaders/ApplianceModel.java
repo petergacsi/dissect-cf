@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored.loaders;
+package hu.uszeged.inf.iot.simulator.loaders;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import hu.uszeged.inf.iot.simulator.refactored.ComputingAppliance;
+import hu.uszeged.inf.iot.simulator.fog.ComputingAppliance;
 
 @XmlRootElement( name = "appliance")
 @XmlAccessorType(XmlAccessType.PROPERTY)

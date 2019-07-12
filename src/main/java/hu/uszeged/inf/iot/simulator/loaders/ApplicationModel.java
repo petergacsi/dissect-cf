@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored.loaders;
+package hu.uszeged.inf.iot.simulator.loaders;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,7 +22,6 @@ public class ApplicationModel {
 		public long tasksize;
 		public String type;
 		public String parentDevice;
-		//public ArrayList<ComputingDevice> childDevice;
 		public String instance;
 		public String provider;
 		public long freq;
@@ -53,22 +52,6 @@ public class ApplicationModel {
 			this.parentDevice = parentDevice;
 		}
 		
-//		public ArrayList<ComputingDevice> getChildDevices(){
-//			return childDevice;
-//		}
-//		
-//		@XmlElementWrapper( name = "childDevices")
-//		@XmlElement(name = "device")
-//		public void setChildDevices(ArrayList<ComputingDevice> childDevices) {
-//			this.childDevice = childDevices;
-//		}
-//		
-//		public void add( ComputingDevice childDevice) {
-//			if (this.childDevice == null) {
-//				this.childDevice = new ArrayList<ComputingDevice>();
-//			}
-//			this.childDevice.add(childDevice);
-//		}
 		
 		@XmlElement( name = "instance" )
 		public void setInstance(String instance) {
@@ -90,7 +73,6 @@ public class ApplicationModel {
 				 JAXBContext jaxbContext = JAXBContext.newInstance( ApplicationsModel.class );
 				 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 				 ApplicationsModel app = (ApplicationsModel)jaxbUnmarshaller.unmarshal( file );
-				 // System.out.println( app );
 				 
 				 return app.applicationList;
 		}

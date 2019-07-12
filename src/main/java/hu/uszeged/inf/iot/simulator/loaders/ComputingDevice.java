@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored.loaders;
+package hu.uszeged.inf.iot.simulator.loaders;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

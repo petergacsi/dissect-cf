@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.util.Collections;
 import java.util.Random;
@@ -8,7 +8,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VMManager.VMManagementException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
-import hu.uszeged.inf.iot.simulator.refactored.Application;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.pliant.FuzzyIndicators;
 import hu.uszeged.inf.iot.simulator.pliant.Kappa;
 import hu.uszeged.inf.iot.simulator.pliant.Sigmoid;

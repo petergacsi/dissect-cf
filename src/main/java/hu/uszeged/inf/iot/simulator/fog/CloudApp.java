@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import javax.xml.bind.JAXBException;
 
@@ -9,8 +9,8 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ConsumptionEventAda
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
-import hu.uszeged.inf.iot.simulator.refactored.Application;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
 import hu.uszeged.inf.xml.model.ApplicationModel;
 

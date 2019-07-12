@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
-import hu.uszeged.inf.iot.simulator.refactored.Application;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 
 public abstract class Device extends Timed {
 	

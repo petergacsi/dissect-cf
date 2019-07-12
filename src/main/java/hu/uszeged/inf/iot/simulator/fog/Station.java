@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
@@ -8,9 +8,9 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.SeedSyncer;
+import hu.uszeged.inf.iot.simulator.loaders.DeviceModel;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
-import hu.uszeged.inf.iot.simulator.refactored.loaders.DeviceModel;
 
 public class Station extends Device{
 	
@@ -55,8 +55,6 @@ public class Station extends Device{
 		this.startMeter();
 		this.setMessageCount(0);
 		
-		//System.out.println("X coord: " + this.x);
-		//System.out.println("Y coord: " + this.y);
 		
 	}
 

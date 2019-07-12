@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import hu.mta.sztaki.lpds.cloud.simulator.io.*;
 

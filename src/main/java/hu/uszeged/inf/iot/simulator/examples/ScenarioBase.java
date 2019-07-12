@@ -1,92 +1,83 @@
-/*
- *  ========================================================================
- *  DIScrete event baSed Energy Consumption simulaTor 
- *    					             for Clouds and Federations (DISSECT-CF)
- *  ========================================================================
- *  
- *  This file is part of DISSECT-CF.
- *  
- *  DISSECT-CF is free software: you can redistribute it and/or modify it
- *  under the terms of the GNU Lesser General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or (at
- *  your option) any later version.
- *  
- *  DISSECT-CF is distributed in the hope that it will be useful, but
- *  WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser
- *  General Public License for more details.
- *  
- *  You should have received a copy of the GNU Lesser General Public License
- *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
- *  
- *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
- */
-
 package hu.uszeged.inf.iot.simulator.examples;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-import hu.uszeged.inf.iot.simulator.entities.Device;
-import hu.uszeged.inf.iot.simulator.system.Application;
-import hu.uszeged.inf.iot.simulator.system.Cloud;
-import hu.uszeged.inf.iot.simulator.system.Application.VmCollector;
 
-/**
- * This helper class manages the building of the path string to XML file readers, and loging the most important
- * natures of the simulation (price,amount of data,virtual machines, tasks, time line, etc.)
- * @author Andras Markus (markusa@inf.u-szeged.hu)
- */
+import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.fog.ComputingAppliance;
+import hu.uszeged.inf.iot.simulator.fog.Device;
+import hu.uszeged.inf.iot.simulator.fog.FogApp;
+import hu.uszeged.inf.iot.simulator.fog.Application.VmCollector;;
+
 public abstract class ScenarioBase {
 	final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
 			append(File.separator).
-			append("target").
+			append("src").
+			append(File.separator).
+			append("main").
 			append(File.separator).
 			append("resources").
 			append(File.separator).
 			toString();
 	
-	/**
-	 * The logger function prints the informations to the screen. 
-	 * @param t The real length of the simulation ( should use for this the System.nanoTime() function ).
-	 */
 	 static void printInformation(long t) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
-		long generatedData=0,processedData=0;
+		long generatedData=0,processedData=0,arrivedData=0;
 		int usedVM = 0;
 		int tasks = 0;
 		long timeout=Long.MIN_VALUE;
-		for (Cloud c : Cloud.getClouds().values()) {
-			System.out.println("cloud: " + c.getName());
+		for (ComputingAppliance c : ComputingAppliance.allComputingAppliance) {
+			System.out.println("computingAppliance: " + c.name);
 			long highestStationStoptime=Long.MIN_VALUE;
-			for (Application a : c.getApplications()) {
-				System.out.println(a.getName());
-				totalCost+=a.getInstance().calculateCloudCost(a.getSumOfWorkTime());
-				processedData+=a.getSumOfProcessedData();
-				usedVM+=a.getVmlist().size();
+			for (Application a : c.applications) {
+				System.out.println(a.name);
+				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
+				processedData+=a.sumOfProcessedData;
+				arrivedData+=a.sumOfArrivedData;
+				usedVM+=a.vmlist.size();
 				
-				for (VmCollector vmcl : a.getVmlist()) {
-						tasks += vmcl.getTaskCounter();
-						System.out.println(vmcl.getId() +" "+vmcl.getVm() + " tasks: " + vmcl.getTaskCounter() + " worktime: " + vmcl.getWorkingTime() + " installed at: "
-								+ vmcl.getInstalled()+" restarted: "+vmcl.getRestarted());
+				for (VmCollector vmcl : a.vmlist) {
+						tasks += vmcl.taskCounter;
+						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
+								+ vmcl.installed+" restarted: "+vmcl.restarted);
 				}
-				for(Device d : a.getStations()) {
-					generatedData+=d.getSumOfGeneratedData();
+				
+				if (a instanceof FogApp) {
+				FogApp app = (FogApp) a;
+				
+				
+				for(Device d : app.ownStations) {
+					generatedData+=d.sumOfGeneratedData;
 					
-					if(d.getStopTime()>highestStationStoptime)
-						highestStationStoptime=d.getStopTime();
+					if(d.stopTime>highestStationStoptime)
+						highestStationStoptime=d.stopTime;
 				}
-				if((a.getStopTime()-highestStationStoptime)>timeout) {
-					timeout=(a.getStopTime()-highestStationStoptime);
+				if((a.stopTime-highestStationStoptime)>timeout) {
+					timeout=(a.stopTime-highestStationStoptime);
 					
 				}
-				System.out.println(a.getName()+" stations: " + a.getStations().size()+ " cost:"+a.getInstance().calculateCloudCost(a.getSumOfWorkTime()));
-				System.out.println(a.getProviders());
+				System.out.println(a.name+" stations: " + app.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
+				
+				} else {
+					
+					System.out.println(a.name+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
+	
+					
+				}
+				
+				
+				
+				
+				
 			}
+			
+			
+			
 			System.out.println();
 		}
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
-		System.out.println("Generated/processed data: " + generatedData + "/" + processedData);
+		System.out.println("Generated/processed/arrived data: " + generatedData + "/" + processedData+ "/"+arrivedData);
 		System.out.println("Cost: "+totalCost);
 		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));

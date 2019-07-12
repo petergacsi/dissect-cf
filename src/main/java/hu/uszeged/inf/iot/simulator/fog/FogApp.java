@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.refactored;
+package hu.uszeged.inf.iot.simulator.fog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,7 +108,7 @@ public class FogApp extends Application {
 										
 					if (ratio > 8) {
 
-						//Felfele vagy szomsz�dnak
+						//upwards and neighbours
 						Random rng = new Random();
 						int choice = rng.nextInt(2);
 
@@ -124,7 +124,7 @@ public class FogApp extends Application {
 						}
 						
 						
-						//Csak felfele
+						//only upwards
 //						try {
 //							this.initiateDataTransferUp(unprocessedData-processedData);
 //						} catch (NetworkException e) {
@@ -133,7 +133,7 @@ public class FogApp extends Application {
 //						}
 						
 						
-						//Csak szomsz�dnak
+						//only to neighbour
 //					this.handleDataTransderToNeighbourAppliance(unprocessedData-processedData);
 						
 
