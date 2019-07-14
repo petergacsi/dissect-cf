@@ -188,10 +188,9 @@ public class FogApp extends Application {
 
 		if ( (this.currentTask == 0 && this.incomingData == 0 &&
 				this.sumOfProcessedData==this.sumOfArrivedData && this.checkStationState() )
-				 ) {
-//		
+				 ) {	
 			
-			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
+			
 			unsubscribe();
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {

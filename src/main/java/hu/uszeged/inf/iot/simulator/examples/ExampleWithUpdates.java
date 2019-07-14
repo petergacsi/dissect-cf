@@ -1,5 +1,8 @@
 package hu.uszeged.inf.iot.simulator.examples;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.uszeged.inf.iot.simulator.fog.ComputingAppliance;
 import hu.uszeged.inf.iot.simulator.fog.Station;
@@ -15,9 +18,12 @@ public static void main(String[] args) throws Exception {
 		String CSstationfile=ScenarioBase.resourcePath+"/fog_extension_example/WeatherStation.xml";
 		String instancefile=ScenarioBase.resourcePath+"/fog_extension_example/InstanceIOT.xml";
 		
-
+		Map<String, String> iaasloaders = new HashMap<String, String>();
+		iaasloaders.put("cloud", cloudfile);
+		iaasloaders.put("fog", fogfile);
+		
 		Instance.loadInstance(instancefile);
-		ComputingAppliance.loadAppliances(appliancefile, fogfile);
+		ComputingAppliance.loadAppliances(appliancefile, iaasloaders);
 		
 		Station.loadDevice(CSstationfile);
 		

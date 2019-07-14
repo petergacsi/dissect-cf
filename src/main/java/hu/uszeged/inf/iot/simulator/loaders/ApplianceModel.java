@@ -26,7 +26,7 @@ public class ApplianceModel {
 	public String parentApp;
 	public ArrayList<ApplicationModel> applications;
 	public ArrayList<ComputingDevice> neighbourAppliances; 
-	
+	public String file;
 	
 	@Override
 	public String toString() {
@@ -93,6 +93,11 @@ public class ApplianceModel {
 			this.neighbourAppliances = new ArrayList<ComputingDevice>();
 		}
 		this.neighbourAppliances.add(device);
+	}
+	
+	@XmlElement(name = "file")
+	public void setFile(String file) {
+		this.file = file;
 	}
 	
 	//-----

@@ -35,12 +35,6 @@
 			</application>
 		</applications>
 		<neighbourAppliances>
-			<device>
-				<deviceName>fog2</deviceName>
-			</device>
-			<device>
-				<deviceName>fog3</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	
@@ -59,9 +53,6 @@
 			</application>		
 		</applications>
 		<neighbourAppliances>
-			<device>
-				<deviceName>fog1</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	
@@ -80,9 +71,6 @@
 			</application>
 		</applications>
 		<neighbourAppliances>
-			<device>
-				<deviceName>fog1</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	
@@ -101,9 +89,6 @@
 			</application>
 		</applications>
 		<neighbourAppliances>
-			<device>
-				<deviceName>fog1</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	

@@ -2,7 +2,9 @@ package hu.uszeged.inf.iot.simulator.fog;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,20 +39,29 @@ public class ComputingAppliance {
 	public double x;
 	public double y;
 	
+	public static String getIaasLoader(Map<String, String> iaasLoaders, ApplianceModel applianceModel) {
+		String file = iaasLoaders.get(applianceModel.file);
+		if (file == null) {
+			file = iaasLoaders.get("cloud");
+		}
+		return file;
+	}
 	
 	//this method read the appliances its applications and negihbouring devices from xml
-	public static void loadAppliances(String appliancefile, String iaasLoader) throws JAXBException, IOException, SAXException, ParserConfigurationException {
+	public static void loadAppliances(String appliancefile, Map<String, String> iaasLoaders) throws JAXBException, IOException, SAXException, ParserConfigurationException {
+		
+	
 		for (ApplianceModel applianceModel : ApplianceModel.loadAppliancesXML(appliancefile)) {
 			
 			//if there is no appliance with the given name, we create it with all the members initialized
 			if (getComputingApplianceByName(applianceModel.name) == null) {
-				ComputingAppliance ca = new ComputingAppliance(iaasLoader, applianceModel.name, applianceModel.xcoord, applianceModel.ycoord, Application.getApplicationsByName(applianceModel.parentApp));
+				ComputingAppliance ca = new ComputingAppliance(getIaasLoader(iaasLoaders, applianceModel), applianceModel.name, applianceModel.xcoord, applianceModel.ycoord, Application.getApplicationsByName(applianceModel.parentApp));
 				//populate the applications member from xml
-				createApplications(applianceModel, iaasLoader, ca);
+				createApplications(applianceModel, getIaasLoader(iaasLoaders, applianceModel), ca);
 				
 				//populate the neighbours
 				for (ComputingDevice cd : applianceModel.neighbourAppliances) {
-					handleNullAppliancesWhenReading(cd.deviceName, ca, iaasLoader);
+					handleNullAppliancesWhenReading(cd.deviceName, ca, getIaasLoader(iaasLoaders, applianceModel));
 				}
 				
 			//if there is already an appliance with the given name we set its members from the xml
@@ -62,11 +73,11 @@ public class ComputingAppliance {
 				ca.setParentApp(Application.getApplicationsByName(applianceModel.parentApp));
 				
 				//populate the applications member from xml
-				createApplications(applianceModel, iaasLoader, ca);
+				createApplications(applianceModel, getIaasLoader(iaasLoaders, applianceModel), ca);
 				
 				//populate the neighbours
 				for (ComputingDevice cd : applianceModel.neighbourAppliances) {
-					handleNullAppliancesWhenReading(cd.deviceName, ca, iaasLoader);
+					handleNullAppliancesWhenReading(cd.deviceName, ca, getIaasLoader(iaasLoaders, applianceModel));
 				}
 				
 			}
