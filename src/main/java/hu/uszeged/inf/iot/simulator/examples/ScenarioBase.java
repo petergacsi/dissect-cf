@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import hu.uszeged.inf.iot.simulator.fog.Application;
+import hu.uszeged.inf.iot.simulator.fog.Application.VmCollector;
 import hu.uszeged.inf.iot.simulator.fog.ComputingAppliance;
 import hu.uszeged.inf.iot.simulator.fog.Device;
 import hu.uszeged.inf.iot.simulator.fog.FogApp;
-import hu.uszeged.inf.iot.simulator.fog.Application.VmCollector;;
+import hu.uszeged.inf.iot.simulator.fog.Station;;
 
 public abstract class ScenarioBase {
 	final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
@@ -17,6 +18,8 @@ public abstract class ScenarioBase {
 			append("main").
 			append(File.separator).
 			append("resources").
+			append(File.separator).
+			append("fog_extension").
 			append(File.separator).
 			toString();
 	
@@ -58,7 +61,9 @@ public abstract class ScenarioBase {
 					
 				}
 				System.out.println(a.name+" stations: " + app.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-				
+					for (Device s : ((FogApp) a).ownStations) {
+					System.out.print(" " + s.x + " " + s.y + " ");	
+					}
 				} else {
 					
 					System.out.println(a.name+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));

@@ -5,6 +5,7 @@
 		<xcoord>11</xcoord>
 		<ycoord>11</ycoord>
 		<parentApp></parentApp>
+		<file>cloud</file>
 		<applications>
 			<application tasksize="2500000">
 				<type>CloudApp</type>
@@ -25,6 +26,7 @@
 		<xcoord>8</xcoord>
 		<ycoord>6</ycoord>
 		<parentApp>CloudApp-1</parentApp>
+		<file>fog</file>
 		<applications>
 			<application tasksize="1000000">
 				<type>FogApp</type>
@@ -43,6 +45,7 @@
 		<xcoord>13</xcoord>
 		<ycoord>8</ycoord>
 		<parentApp>CloudApp-1</parentApp>
+		<file>fog</file>
 		<applications>
 			<application tasksize="2500000">
 				<type>FogApp</type>
@@ -61,6 +64,7 @@
 		<xcoord>7</xcoord>
 		<ycoord>8</ycoord>
 		<parentApp>CloudApp-1</parentApp>
+		<file>fog</file>
 		<applications>
 			<application tasksize="2500000">
 				<type>FogApp</type>
@@ -79,6 +83,7 @@
 		<xcoord>9</xcoord>
 		<ycoord>9</ycoord>
 		<parentApp>CloudApp-1</parentApp>
+		<file>fog</file>
 		<applications>
 			<application tasksize="2500000">
 				<type>FogApp</type>

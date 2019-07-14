@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<instances>
+
+	<instance name="bluemix-small">		
+			<ram>1073741824</ram>
+			<cpu-cores>1</cpu-cores>
+			<price-per-tick>0.0000000105</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+	<instance name="bluemix-medium">		
+			<ram>2147483648</ram>
+			<cpu-cores>4</cpu-cores>
+			<price-per-tick>0.0000000416</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+	<instance name="amazon-medium">		
+			<ram>4294967296</ram>
+			<cpu-cores>2</cpu-cores>
+			<price-per-tick>0.00000001155</price-per-tick>
+			<core-processing-power>0.001</core-processing-power>
+			<startup-process>100</startup-process>
+			<network-load>0</network-load>
+			<req-disk>1000000</req-disk>
+	</instance>
+	
+</instances>
