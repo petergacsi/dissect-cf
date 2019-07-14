@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<devices>
+ 	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+      <name>test1</name>
+      <freq>60000</freq>
+      <sensor>1</sensor>
+      <maxinbw>1000</maxinbw>
+      <maxoutbw>1000</maxoutbw>
+      <diskbw>1000</diskbw>
+      <reposize>60000</reposize>
+      <ratio>1</ratio>
+      <strategy>random</strategy>
+	  <xCoord>10</xCoord>
+	  <yCoord>5</yCoord>
+      <shutdown>
+      	<number>5</number>
+      	<from>2</from>
+      	<to>8</to>
+      </shutdown>
+	</device>
+	
+		
+	
+</devices>

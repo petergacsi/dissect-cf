@@ -8,9 +8,9 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.SeedSyncer;
-import hu.uszeged.inf.iot.simulator.loaders.DeviceModel;
 import hu.mta.sztaki.lpds.cloud.simulator.io.Repository;
 import hu.mta.sztaki.lpds.cloud.simulator.io.StorageObject;
+import hu.uszeged.inf.iot.simulator.loaders.DeviceModel;
 
 public class Station extends Device{
 	
