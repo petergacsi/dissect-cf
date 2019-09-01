@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<appliances>
+	<appliance>
+		<name>cloud1</name>
+		<xcoord>0</xcoord>
+		<ycoord>0</ycoord>
+		<parentApp></parentApp>
+		<file>cloud</file>
+		<applications>
+			<application tasksize="2500000">
+				<type>CloudApp</type>
+				<name>CloudApp-1</name>
+				<parentDevice>cloud1</parentDevice>
+				<freq>300000</freq>
+				<instance>a2.xlarge</instance>
+			</application>
+		</applications>
+		<neighbourAppliances>
+		</neighbourAppliances>
+	</appliance>
+	
+</appliances>

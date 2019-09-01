@@ -1,7 +1,5 @@
 package hu.uszeged.inf.iot.simulator.fog;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
@@ -18,29 +16,21 @@ import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
 
 public class FogApp extends Application {
-	
-	
-	
-	public List<Device> ownStations = new ArrayList<Device>(); 
 
-	public FogApp(long freq, long tasksize,  String instance, String name, String type, double noi , ComputingAppliance computingAppliance) {
-		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
-		
-		
-		//need to add fogApps to a list for installation strategy
-		//Application.fogApplications.add(this);
-		
+	public static double TRESHOLD_TO_SEND = 3;
+
+	public FogApp(long freq, long tasksize, String instance, String name, String type, double noi,
+			ComputingAppliance computingAppliance) {
+		super(freq, tasksize, instance, name, type, noi, computingAppliance);
+
 	}
 
-	
-	
 	public ComputingAppliance getParentDeviceOfApp() {
 		return computingAppliance.parentApp.computingAppliance;
 	}
-	
-	//add this app to a specific station => InstallationStrategy
+
 	public void initiateDataTransferUp(long unprocessedData) throws NetworkException {
-		
+
 		
 		this.computingAppliance.parentApp.incomingData++;
 		this.sumOfArrivedData -= unprocessedData;
@@ -48,14 +38,13 @@ public class FogApp extends Application {
 
 			final long unprocessed = unprocessedData;
 			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
-					this.computingAppliance.iaas.repositories.get(0), this.getParentDeviceOfApp().iaas.repositories.get(0),
-					new ConsumptionEvent() {
+					this.computingAppliance.iaas.repositories.get(0),
+					this.getParentDeviceOfApp().iaas.repositories.get(0), new ConsumptionEvent() {
 
 						@Override
 						public void conComplete() {
 							computingAppliance.parentApp.sumOfArrivedData += unprocessed;
 							computingAppliance.parentApp.incomingData--;
-							
 						}
 
 						@Override
@@ -65,9 +54,10 @@ public class FogApp extends Application {
 					});
 		} else {
 			try {
-				
+
 				this.computingAppliance.parentApp.restartApplication();
-				new BrokerCheck(this, this.computingAppliance.parentApp,unprocessedData, (this.computingAppliance.parentApp.freq/2));
+				new BrokerCheck(this, this.computingAppliance.parentApp, unprocessedData,
+						(this.computingAppliance.parentApp.freq / 2));
 			} catch (VMManagementException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -75,18 +65,15 @@ public class FogApp extends Application {
 		}
 
 	}
-	
-	private boolean checkStationState() { 
-		for (Device s : this.ownStations) {
-			if (s.isSubscribed()) {
-				return false;
-			}
-		}
-		return true;
-	}
-	
-	
-	
+
+//	private boolean checkStationState() {
+//		for (Device s : this.ownStations) {
+//			if (s.isSubscribed()) {
+//				return false;
+//			}
+//		}
+//		return true;
+//	}
 
 	@Override
 	public void tick(long fires) {
@@ -96,58 +83,45 @@ public class FogApp extends Application {
 
 			long processedData = 0;
 
-			while (unprocessedData != processedData) { 
+			while (unprocessedData != processedData) {
 				if (unprocessedData - processedData > this.tasksize) {
-					this.allocatedData = this.tasksize; 
+					this.allocatedData = this.tasksize;
 				} else {
 					this.allocatedData = (unprocessedData - processedData);
 				}
 				final VmCollector vml = this.VmSearch();
 				if (vml == null) {
-					double ratio = ((double)unprocessedData/this.tasksize);
-										
-					if (ratio > 8) {
+					double ratio = ((double) unprocessedData / this.tasksize);
 
-						//upwards and neighbours
+					if (ratio > TRESHOLD_TO_SEND) {
+
 						Random rng = new Random();
 						int choice = rng.nextInt(2);
 
-						if (choice == 1) {
-							this.handleDataTransderToNeighbourAppliance(unprocessedData-processedData);
-						} else {
+						ComputingAppliance ca = this.getARandomNeighbourAppliance();
+						if (choice == 1 && ca != null) {
+							this.handleDataTransferToNeighbourAppliance(unprocessedData - processedData, ca);
+						} 
+							else {
 							try {
-								this.initiateDataTransferUp(unprocessedData-processedData);
+								this.initiateDataTransferUp(unprocessedData - processedData);
 							} catch (NetworkException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
-						
-						
-						//only upwards
-//						try {
-//							this.initiateDataTransferUp(unprocessedData-processedData);
-//						} catch (NetworkException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-						
-						
-						//only to neighbour
-//					this.handleDataTransderToNeighbourAppliance(unprocessedData-processedData);
-						
 
 					}
-					
-					System.out.print("data/VM: " + ratio + " unprocessed after exit: " + unprocessedData + " decision:");
+
+					System.out
+							.print("data/VM: " + ratio + " unprocessed after exit: " + unprocessedData + " decision:");
 					this.generateAndAddVM();
 
-					break;			
-					
-					
+					break;
+
 				} else {
 					try {
-						final double noi = this.allocatedData == this.tasksize ? defaultNoi : (double) (2400 * this.allocatedData / this.tasksize);
+						final double noi = this.allocatedData == this.tasksize ? defaultNoi
+								: (double) (2400 * this.allocatedData / this.tasksize);
 						processedData += this.allocatedData;
 						vml.isWorking = true;
 						this.currentTask++;
@@ -163,69 +137,65 @@ public class FogApp extends Application {
 										vml.isWorking = false;
 										vml.taskCounter++;
 										currentTask--;
-										stopTime=Timed.getFireCount();
-										timelineList.add(new TimelineCollector(vmStartTime,Timed.getFireCount(),vml.id));
-											System.out.println(name +" "+vml.id + " started@ " + vmStartTime + " finished@ "
-													+ Timed.getFireCount() + " with " + allocatedDataTemp + " bytes, lasted "
-													+ (Timed.getFireCount() - vmStartTime) + " ,noi: " + noiTemp);
+										stopTime = Timed.getFireCount();
+										timelineList
+												.add(new TimelineCollector(vmStartTime, Timed.getFireCount(), vml.id));
+										System.out.println(name + " " + vml.id + " started@ " + vmStartTime
+												+ " finished@ " + Timed.getFireCount() + " with " + allocatedDataTemp
+												+ " bytes, lasted " + (Timed.getFireCount() - vmStartTime) + " ,noi: "
+												+ noiTemp);
 
 									}
 								});
-						this.sumOfProcessedData += this.allocatedData; 
+						this.sumOfProcessedData += this.allocatedData;
 					} catch (NetworkException e) {
 						e.printStackTrace();
 					}
 				}
 			}
-			System.out.println(" load(%): "+this.getLoadOfCloud());
-		} 
-		
-		
-		
+			System.out.println(" load(%): " + this.getLoadOfCloud());
+		}
+
 		this.countVmRunningTime();
 		this.turnoffVM();
-				
 
-		if ( (this.currentTask == 0 && this.incomingData == 0 &&
-				this.sumOfProcessedData==this.sumOfArrivedData && this.checkStationState() )
-				 ) {	
-			
-			
+		if ((this.currentTask == 0 && this.incomingData == 0 && this.sumOfProcessedData == this.sumOfArrivedData
+				&& this.checkStationState())) {
+
 			unsubscribe();
-			for(Provider p : this.providers) {
-				if(p.isSubscribed()) {
-					p.shouldStop=true;
+			for (Provider p : this.providers) {
+				if (p.isSubscribed()) {
+					p.shouldStop = true;
 				}
 			}
 			StorageObject so = new StorageObject(this.name, this.sumOfProcessedData, false);
-			if(!this.computingAppliance.iaas.repositories.get(0).registerObject(so)){
+			if (!this.computingAppliance.iaas.repositories.get(0).registerObject(so)) {
 				this.computingAppliance.iaas.repositories.get(0).deregisterObject(so);
 				this.computingAppliance.iaas.repositories.get(0).registerObject(so);
 			}
-			
+
 			for (VmCollector vmcl : this.vmlist) {
 				try {
 					if (vmcl.vm.getState().equals(VirtualMachine.State.RUNNING)) {
-						if(vmcl.id.equals("broker")) {
-							vmcl.pm=vmcl.vm.getResourceAllocation().getHost();
+						if (vmcl.id.equals("broker")) {
+							vmcl.pm = vmcl.vm.getResourceAllocation().getHost();
 						}
 						vmcl.vm.switchoff(true);
-						
+
 					}
 				} catch (StateChangeException e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		
 
-		
 	}
 
 	@Override
 	public String toString() {
-		
-		return "fogApp=" + computingAppliance.name + " " + this.computingAppliance.x + " " +  this.computingAppliance.y +  " stations: " + this.ownStations.size();
+
+		return "fogApp=" + computingAppliance.name + " " + this.computingAppliance.x + " " + this.computingAppliance.y
+				+ " stations: " + this.ownStations.size();
 	}
-	
+
 }

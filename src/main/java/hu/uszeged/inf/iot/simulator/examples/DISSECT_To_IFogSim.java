@@ -18,7 +18,7 @@ public class DISSECT_To_IFogSim {
 
 	public static void main(String[] args){
 		
-		String fogfile=ScenarioBase.resourcePath+"/Scenario_DISSECT_To_IFogSim/LPDSFog.xml"; 
+		String fogfile=ScenarioBase.resourcePath+"/Scenario_DISSECT_To_IFogSim/LPDSFog_type1.xml"; 
 		String cloudfile=ScenarioBase.resourcePath+"/Scenario_DISSECT_To_IFogSim/LPDSCloud.xml";
 		String appliancefile = ScenarioBase.resourcePath+"/Scenario_DISSECT_To_IFogSim/Appliances.xml"; 
 		String CSstationfile=ScenarioBase.resourcePath+"/Scenario_DISSECT_To_IFogSim/WeatherStation.xml";

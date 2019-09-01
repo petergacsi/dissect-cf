@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <devices>
- 	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+ 	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_1</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -19,10 +19,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_2</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -38,10 +38,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_3</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -57,10 +57,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_4</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -76,10 +76,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_5</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -95,29 +95,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
-      <name>station_6</name>
-      <freq>60000</freq>
-      <sensor>1</sensor>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <reposize>60000</reposize>
-      <ratio>1</ratio>
-      <strategy>distance</strategy>
-	  <xCoord>-30</xCoord>
-	  <yCoord>205</yCoord>
-      <shutdown>
-      	<number>5</number>
-      	<from>2</from>
-      	<to>8</to>
-      </shutdown>
-	</device>
-	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_7</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -133,10 +114,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_8</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -152,29 +133,12 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
-      <name>station_9</name>
-      <freq>60000</freq>
-      <sensor>1</sensor>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <reposize>60000</reposize>
-      <ratio>1</ratio>
-      <strategy>distance</strategy>
-	  <xCoord>-60</xCoord>
-	  <yCoord>-113</yCoord>
-      <shutdown>
-      	<number>5</number>
-      	<from>2</from>
-      	<to>8</to>
-      </shutdown>
-	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_10</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -190,10 +154,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_11</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -209,10 +173,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_12</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -228,10 +192,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_13</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -248,10 +212,10 @@
 	</device>
 	
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_14</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -267,10 +231,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_15</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -286,10 +250,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_16</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -306,10 +270,10 @@
 	</device>
 	
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_17</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -325,10 +289,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_18</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -344,10 +308,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_19</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -363,10 +327,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_20</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -382,10 +346,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_21</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -401,10 +365,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_22</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -420,10 +384,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_23</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -439,10 +403,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_24</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -458,29 +422,12 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
-      <name>station_25</name>
-      <freq>60000</freq>
-      <sensor>1</sensor>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <reposize>60000</reposize>
-      <ratio>1</ratio>
-      <strategy>distance</strategy>
-	  <xCoord>30</xCoord>
-	  <yCoord>-207</yCoord>
-      <shutdown>
-      	<number>5</number>
-      	<from>2</from>
-      	<to>8</to>
-      </shutdown>
-	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_26</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -496,10 +443,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_27</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -515,10 +462,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_28</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -534,10 +481,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_29</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -553,29 +500,12 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
-      <name>station_30</name>
-      <freq>60000</freq>
-      <sensor>1</sensor>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <reposize>60000</reposize>
-      <ratio>1</ratio>
-      <strategy>distance</strategy>
-	  <xCoord>-120</xCoord>
-	  <yCoord>-175</yCoord>
-      <shutdown>
-      	<number>5</number>
-      	<from>2</from>
-      	<to>8</to>
-      </shutdown>
-	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_31</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -591,10 +521,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_32</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -610,29 +540,12 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
-      <name>station_33</name>
-      <freq>60000</freq>
-      <sensor>1</sensor>
-      <maxinbw>1000</maxinbw>
-      <maxoutbw>1000</maxoutbw>
-      <diskbw>1000</diskbw>
-      <reposize>60000</reposize>
-      <ratio>1</ratio>
-      <strategy>distance</strategy>
-	  <xCoord>-197</xCoord>
-	  <yCoord>-25</yCoord>
-      <shutdown>
-      	<number>5</number>
-      	<from>2</from>
-      	<to>8</to>
-      </shutdown>
-	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_34</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>
@@ -648,10 +561,10 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="60060000" number="1" filesize="10">
+	<device starttime="0" stoptime="86400000" number="10" filesize="100">
       <name>station_35</name>
       <freq>60000</freq>
-      <sensor>1</sensor>
+      <sensor>5</sensor>
       <maxinbw>1000</maxinbw>
       <maxoutbw>1000</maxoutbw>
       <diskbw>1000</diskbw>

@@ -30,9 +30,11 @@ public abstract class ScenarioBase {
 		int usedVM = 0;
 		int tasks = 0;
 		long timeout=Long.MIN_VALUE;
+		long highestApplicationStopTime = Long.MIN_VALUE;
+		long highestStationStoptime = Long.MIN_VALUE;
 		for (ComputingAppliance c : ComputingAppliance.allComputingAppliance) {
 			System.out.println("computingAppliance: " + c.name);
-			long highestStationStoptime=Long.MIN_VALUE;
+			//long highestStationStoptime=Long.MIN_VALUE;
 			for (Application a : c.applications) {
 				System.out.println(a.name);
 				totalCost+=a.instance.calculateCloudCost(a.sumOfWorkTime);
@@ -45,35 +47,27 @@ public abstract class ScenarioBase {
 						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
 								+ vmcl.installed+" restarted: "+vmcl.restarted);
 				}
+							
 				
-				if (a instanceof FogApp) {
-				FogApp app = (FogApp) a;
-				
-				
-				for(Device d : app.ownStations) {
+				for(Device d : a.ownStations) {
 					generatedData+=d.sumOfGeneratedData;
-					
-					if(d.stopTime>highestStationStoptime)
+						
+					if(d.stopTime>highestStationStoptime) {
 						highestStationStoptime=d.stopTime;
-				}
-				if((a.stopTime-highestStationStoptime)>timeout) {
-					timeout=(a.stopTime-highestStationStoptime);
-					
-				}
-				System.out.println(a.name+" stations: " + app.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-					for (Device s : ((FogApp) a).ownStations) {
-					System.out.print(" " + s.x + " " + s.y + " ");	
 					}
-				} else {
-					
-					System.out.println(a.name+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-	
-					
 				}
 				
+				if (a.stopTime > highestApplicationStopTime) {
+					highestApplicationStopTime = a.stopTime;
+				}
 				
+//				if((a.stopTime-highestStationStoptime)>timeout) {
+//					timeout=(a.stopTime-highestStationStoptime);
+//					
+//				}
 				
-				
+				System.out.println(a.name+" stations: " + a.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
+								
 				
 			}
 			
@@ -81,9 +75,12 @@ public abstract class ScenarioBase {
 			
 			System.out.println();
 		}
+		timeout = highestApplicationStopTime - highestStationStoptime;
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
 		System.out.println("Generated/processed/arrived data: " + generatedData + "/" + processedData+ "/"+arrivedData);
 		System.out.println("Cost: "+totalCost);
+		System.out.println("Last applicationStoptime: " + highestApplicationStopTime);
+		System.out.println("Last station to stop: " + highestStationStoptime);
 		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
 		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
 		

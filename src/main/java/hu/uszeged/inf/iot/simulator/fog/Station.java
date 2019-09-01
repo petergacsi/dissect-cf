@@ -124,22 +124,20 @@ public class Station extends Device{
 		}
 	}
 
-	public  void installionProcess(final Station s) {
-		
-			if(this.strategy.equals("load")){		
-				new RuntimeStrategy(this);
-			}else if(this.strategy.equals("random")){
-				new RandomStrategy(this);
-			}else if(this.strategy.equals("distance")){
-				new DistanceStrategy(this);
-			}else if(this.strategy.equals("ratio")) {
-				new DistancePerInBandWidthStrategy(this);
-			}else if(this.strategy.equals("cost")) {
-				new CostStrategy(this);
-			}else if(this.strategy.equals("fuzzy")){
-				new FuzzyStrategy(this);	
-			} 		
-		
+	public void installionProcess(final Station s) {
+
+		if (this.strategy.equals("load")) {
+			new RuntimeStrategy(this);
+		} else if (this.strategy.equals("random")) {
+			new RandomStrategy(this);
+		} else if (this.strategy.equals("distance")) {
+			new DistanceStrategy(this);
+		} else if (this.strategy.equals("cost")) {
+			new CostStrategy(this);
+		} else if (this.strategy.equals("fuzzy")) {
+			new FuzzyStrategy(this);
+		}
+
 	}
 
 	@Override

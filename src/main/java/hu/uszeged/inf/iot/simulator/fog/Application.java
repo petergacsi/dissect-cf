@@ -57,6 +57,7 @@ public abstract class Application extends Timed {
 	//public static List<FogApp> fogApplications = new ArrayList<FogApp>();
 	protected long tasksize;
 	
+	public List<Device> ownStations = new ArrayList<Device>();
 	
 	public ComputingAppliance computingAppliance;
 	//public List<ComputingAppliance> childComputingDevice;
@@ -95,8 +96,6 @@ public abstract class Application extends Timed {
 		this.computingAppliance.applications.add(this);
 		
 		
-//		this.childComputingDevice = new ArrayList<ComputingAppliance>();
-		
 		
 		Application.applications.add(this);
 		
@@ -104,10 +103,6 @@ public abstract class Application extends Timed {
 		this.freq=freq;
 		subscribe(freq);
 		}
-		
-		/*this.freq = freq;
-		subscribe(freq);*/
-		
 		
 		this.instance = Instance.getInstances().get(instance);
 		
@@ -142,15 +137,17 @@ public abstract class Application extends Timed {
 		return null;
 	}
 	
-	public static List<FogApp> getFogApplications(){
-		List<FogApp> fogApplications = new ArrayList<FogApp>(); 
-		for (Application app : applications) {
-			if (app.type.equals("FogApp")) {
-				fogApplications.add((FogApp)app);
+	protected boolean checkStationState() {
+		for (Device s : this.ownStations) {
+			if (s.isSubscribed()) {
+				return false;
 			}
 		}
-		return fogApplications;
+		return true;
 	}
+	
+	
+	
 
 	
 	public ComputingAppliance getARandomNeighbourAppliance() {
@@ -212,20 +209,16 @@ public abstract class Application extends Timed {
 		}
 	}
 	
-	public void handleDataTransderToNeighbourAppliance(long unprocessedData) {
-		ComputingAppliance ca = this.getARandomNeighbourAppliance();
-		if (ca != null) {
-			Application app = this.getARandomApplication(ca);
-			try {
-				//System.out.println("Ide küldtük: " +  app.name);
-				this.initiateDataTransferToNeighbourAppliance(unprocessedData, ca, app);
-			} catch (NetworkException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+	public void handleDataTransferToNeighbourAppliance(long unprocessedData, ComputingAppliance ca) {
+		Application app = this.getARandomApplication(ca);
+		try {
+
+			this.initiateDataTransferToNeighbourAppliance(unprocessedData, ca, app);
+		} catch (NetworkException e) {
+
+			e.printStackTrace();
 		}
-		
+
 	}
 	
 		

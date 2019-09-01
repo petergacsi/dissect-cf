@@ -10,20 +10,25 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
+import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.fog.ComputingAppliance;
 import hu.uszeged.inf.iot.simulator.fog.Station;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 
 public class Scenario1 {
 	
+	private static String SCENARIO = "Scenario1_3_15";
+	
 	public static void main(String[] args) {
 			
-		String fogfile_type1=ScenarioBase.resourcePath+"/Scenario1/LPDSFog.xml"; 
-		String fogfile_type2=ScenarioBase.resourcePath+"/Scenario1/LPDSFog.xml"; 
-		String cloudfile=ScenarioBase.resourcePath+"/Scenario1/LPDSCloud.xml";
-		String appliancefile = ScenarioBase.resourcePath+"/Scenario1/Appliances.xml"; 
-		String CSstationfile=ScenarioBase.resourcePath+"/Scenario1/WeatherStation.xml";
-		String instancefile=ScenarioBase.resourcePath+"/Scenario1/InstanceIOT.xml";
+		
+		
+		String fogfile_type1=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSFog_type1.xml"; 
+		String fogfile_type2=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSFog_type2.xml"; 
+		String cloudfile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSCloud.xml";
+		String appliancefile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Appliances.xml"; 
+		String CSstationfile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/WeatherStation.xml";
+		String instancefile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/InstanceIOT.xml";
 		
 		Map<String, String> iaasloaders = new HashMap<String, String>();
 		iaasloaders.put("cloud", cloudfile);
@@ -58,6 +63,15 @@ public class Scenario1 {
 		System.out.println("------------------------");
 		
 
+//		for (ComputingAppliance ca : ComputingAppliance.allComputingAppliance) {
+//			if (ca.parentApp == null) {
+//				System.out.println(ca.name + " " + "parentApp null");
+//			} else {
+//				System.out.println(ca.name + " " + ca.parentApp.name);
+//			}
+//		}
+		
+		
 		// TODO: IoT pricing set-up
 		
 		// Start the simulation

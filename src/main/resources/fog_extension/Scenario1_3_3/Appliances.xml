@@ -18,19 +18,18 @@
 		<neighbourAppliances>
 		</neighbourAppliances>
 	</appliance>
-	
-	
+		
 	
 	<appliance>
 		<name>fog1</name>
 		<xcoord>0</xcoord>
-		<ycoord>25</ycoord>
+		<ycoord>-40</ycoord>
 		<parentApp>CloudApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type1</file>
 		<applications>
 			<application tasksize="1000000">
 				<type>FogApp</type>
-				<name>fogApp-1</name>
+				<name>FogApp-1</name>
 				<parentDevice>fog1</parentDevice>
 				<freq>300000</freq>
 				<instance>a1.xlarge</instance>
@@ -43,26 +42,23 @@
 			<device>
 				<deviceName>fog3</deviceName>
 			</device>
-			<device>
-				<deviceName>fog4</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	
 	<appliance>
 		<name>fog2</name>
-		<xcoord>0</xcoord>
-		<ycoord>-25</ycoord>
+		<xcoord>-40</xcoord>
+		<ycoord>30</ycoord>
 		<parentApp>CloudApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type1</file>
 		<applications>
 			<application tasksize="1000000">
 				<type>FogApp</type>
-				<name>fogApp-2</name>
+				<name>FogApp-2</name>
 				<parentDevice>fog2</parentDevice>
 				<freq>300000</freq>
 				<instance>a1.xlarge</instance>
-			</application>		
+			</application>	
 		</applications>
 		<neighbourAppliances>
 			<device>
@@ -71,22 +67,19 @@
 			<device>
 				<deviceName>fog3</deviceName>
 			</device>
-			<device>
-				<deviceName>fog4</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	
 	<appliance>
 		<name>fog3</name>
-		<xcoord>25</xcoord>
-		<ycoord>0</ycoord>
+		<xcoord>40</xcoord>
+		<ycoord>30</ycoord>
 		<parentApp>CloudApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type1</file>
 		<applications>
 			<application tasksize="1000000">
 				<type>FogApp</type>
-				<name>fogApp-3</name>
+				<name>FogApp-3</name>
 				<parentDevice>fog3</parentDevice>
 				<freq>300000</freq>
 				<instance>a1.xlarge</instance>
@@ -99,39 +92,69 @@
 			<device>
 				<deviceName>fog2</deviceName>
 			</device>
-			<device>
-				<deviceName>fog4</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
 	
 	<appliance>
-		<name>fog4</name>
-		<xcoord>-25</xcoord>
-		<ycoord>0</ycoord>
-		<parentApp>CloudApp-1</parentApp>
-		<file>fog</file>
+		<name>fog1_1</name>
+		<xcoord>0</xcoord>
+		<ycoord>-80</ycoord>
+		<parentApp>FogApp-1</parentApp>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="1000000">
+			<application tasksize="500000">
 				<type>FogApp</type>
-				<name>fogApp-4</name>
-				<parentDevice>fog4</parentDevice>
+				<name>fogApp-1_1</name>
+				<parentDevice>fog1_1</parentDevice>
 				<freq>300000</freq>
-				<instance>a1.xlarge</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
-		<device>
-				<deviceName>fog1</deviceName>
-			</device>
-			<device>
-				<deviceName>fog2</deviceName>
-			</device>
-			<device>
-				<deviceName>fog3</deviceName>
-			</device>
 		</neighbourAppliances>
 	</appliance>
+	
+	
+	<appliance>
+		<name>fog2_1</name>
+		<xcoord>-70</xcoord>
+		<ycoord>60</ycoord>
+		<parentApp>FogApp-2</parentApp>
+		<file>fog_type2</file>
+		<applications>
+			<application tasksize="500000">
+				<type>FogApp</type>
+				<name>fogApp-2_1</name>
+				<parentDevice>fog2_1</parentDevice>
+				<freq>300000</freq>
+				<instance>a1.large</instance>
+			</application>
+		</applications>
+		<neighbourAppliances>
+		</neighbourAppliances>
+	</appliance>
+	
+	<appliance>
+		<name>fog3_1</name>
+		<xcoord>70</xcoord>
+		<ycoord>60</ycoord>
+		<parentApp>FogApp-3</parentApp>
+		<file>fog_type2</file>
+		<applications>
+			<application tasksize="500000">
+				<type>FogApp</type>
+				<name>fogApp-3_1</name>
+				<parentDevice>fog3_1</parentDevice>
+				<freq>300000</freq>
+				<instance>a1.large</instance>
+			</application>
+		</applications>
+		<neighbourAppliances>
+			
+		</neighbourAppliances>
+	</appliance>
+	
+	
 	
 	
 </appliances>

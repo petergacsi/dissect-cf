@@ -1,6 +1,5 @@
 package hu.uszeged.inf.iot.simulator.fog;
 
-import javax.xml.bind.JAXBException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
@@ -12,13 +11,14 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.uszeged.inf.iot.simulator.fog.Application;
 import hu.uszeged.inf.iot.simulator.providers.Provider;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
-import hu.uszeged.inf.xml.model.ApplicationModel;
+
 
 public class CloudApp extends Application{
 
+	public static double TRESHOLD_TO_SEND = 5;
 	public CloudApp(long freq, long tasksize, String instance, String name, String type, double noi, ComputingAppliance computingAppliance) {
 		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	
@@ -26,7 +26,7 @@ public class CloudApp extends Application{
 
 	@Override
 	public void tick(long fires) {
-		//System.out.println("CloudApp tick");
+		
 		
 		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
 
@@ -43,9 +43,11 @@ public class CloudApp extends Application{
 				if (vml == null) {
 					double ratio = ((double)unprocessedData/this.tasksize);
 					
-					if (ratio > 5) {
-						this.handleDataTransderToNeighbourAppliance(unprocessedData-processedData);
-						
+					if (ratio > TRESHOLD_TO_SEND) {
+						ComputingAppliance ca = this.getARandomNeighbourAppliance();
+						if (ca != null) {
+							this.handleDataTransferToNeighbourAppliance(unprocessedData-processedData, ca);
+						}
 					}
 					
 					System.out.print("data/VM: "+ratio+" unprocessed after exit: "+unprocessedData+ " decision:");
@@ -89,9 +91,9 @@ public class CloudApp extends Application{
 		this.countVmRunningTime();
 		this.turnoffVM();
 		
-		if (this.currentTask == 0 && this.incomingData == 0 && this.sumOfProcessedData==this.sumOfArrivedData) {
+		if (this.currentTask == 0 && this.incomingData == 0 && this.sumOfProcessedData==this.sumOfArrivedData && this.checkStationState()) {
 			unsubscribe();
-			System.out.println(this.name + " leiratkozik " + this.sumOfArrivedData +" "+  this.sumOfProcessedData +" "+ unprocessedData);
+			
 			for(Provider p : this.providers) {
 				if(p.isSubscribed()) {
 					p.shouldStop=true;

@@ -12,7 +12,7 @@
 				<name>CloudApp-1</name>
 				<parentDevice>cloud1</parentDevice>
 				<freq>300000</freq>
-				<instance>amazon-medium</instance>
+				<instance>a2.xlarge</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -29,10 +29,10 @@
 		<applications>
 			<application tasksize="1000000">
 				<type>FogApp</type>
-				<name>fogApp-1</name>
+				<name>FogApp-1</name>
 				<parentDevice>fog1</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.xlarge</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -52,12 +52,12 @@
 		<parentApp>CloudApp-1</parentApp>
 		<file>fog_type1</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="1000000">
 				<type>FogApp</type>
-				<name>fogApp-2</name>
+				<name>FogApp-2</name>
 				<parentDevice>fog2</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.xlarge</instance>
 			</application>	
 		</applications>
 		<neighbourAppliances>
@@ -75,14 +75,14 @@
 		<xcoord>60</xcoord>
 		<ycoord>70</ycoord>
 		<parentApp>CloudApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type1</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="1000000">
 				<type>FogApp</type>
-				<name>fogApp-3</name>
+				<name>FogApp-3</name>
 				<parentDevice>fog3</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.xlarge</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -100,14 +100,14 @@
 		<xcoord>-55</xcoord>
 		<ycoord>-110</ycoord>
 		<parentApp>FogApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-1_1</name>
 				<parentDevice>fog1_1</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -125,14 +125,14 @@
 		<xcoord>0</xcoord>
 		<ycoord>-130</ycoord>
 		<parentApp>FogApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-1_2</name>
 				<parentDevice>fog1_2</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -150,14 +150,14 @@
 		<xcoord>55</xcoord>
 		<ycoord>-110</ycoord>
 		<parentApp>FogApp-1</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-1_3</name>
 				<parentDevice>fog1_3</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -175,14 +175,14 @@
 		<xcoord>-110</xcoord>
 		<ycoord>70</ycoord>
 		<parentApp>FogApp-2</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-2_1</name>
 				<parentDevice>fog2_1</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -200,14 +200,14 @@
 		<xcoord>-90</xcoord>
 		<ycoord>110</ycoord>
 		<parentApp>FogApp-2</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-2_2</name>
 				<parentDevice>fog2_2</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -225,14 +225,14 @@
 		<xcoord>-40</xcoord>
 		<ycoord>110</ycoord>
 		<parentApp>FogApp-2</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-2_3</name>
 				<parentDevice>fog2_3</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -250,14 +250,14 @@
 		<xcoord>40</xcoord>
 		<ycoord>110</ycoord>
 		<parentApp>FogApp-3</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-3_1</name>
 				<parentDevice>fog3_1</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -275,14 +275,14 @@
 		<xcoord>90</xcoord>
 		<ycoord>110</ycoord>
 		<parentApp>FogApp-3</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-3_2</name>
 				<parentDevice>fog3_2</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
@@ -300,14 +300,14 @@
 		<xcoord>110</xcoord>
 		<ycoord>70</ycoord>
 		<parentApp>FogApp-3</parentApp>
-		<file>fog</file>
+		<file>fog_type2</file>
 		<applications>
-			<application tasksize="2500000">
+			<application tasksize="500000">
 				<type>FogApp</type>
 				<name>fogApp-3_3</name>
 				<parentDevice>fog3_3</parentDevice>
 				<freq>300000</freq>
-				<instance>bluemix-small</instance>
+				<instance>a1.large</instance>
 			</application>
 		</applications>
 		<neighbourAppliances>
