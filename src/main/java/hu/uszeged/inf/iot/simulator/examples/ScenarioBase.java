@@ -11,7 +11,7 @@ import hu.uszeged.inf.iot.simulator.fog.FogApp;
 import hu.uszeged.inf.iot.simulator.fog.Station;;
 
 public abstract class ScenarioBase {
-	final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
+		public final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
 			append(File.separator).
 			append("src").
 			append(File.separator).
@@ -42,12 +42,13 @@ public abstract class ScenarioBase {
 				arrivedData+=a.sumOfArrivedData;
 				usedVM+=a.vmlist.size();
 				
+				
 				for (VmCollector vmcl : a.vmlist) {
 						tasks += vmcl.taskCounter;
 						System.out.println(vmcl.id +" "+vmcl.vm + " tasks: " + vmcl.taskCounter + " worktime: " + vmcl.workingTime + " installed at: "
 								+ vmcl.installed+" restarted: "+vmcl.restarted);
 				}
-							
+				
 				
 				for(Device d : a.ownStations) {
 					generatedData+=d.sumOfGeneratedData;
@@ -61,13 +62,7 @@ public abstract class ScenarioBase {
 					highestApplicationStopTime = a.stopTime;
 				}
 				
-//				if((a.stopTime-highestStationStoptime)>timeout) {
-//					timeout=(a.stopTime-highestStationStoptime);
-//					
-//				}
-				
 				System.out.println(a.name+" stations: " + a.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-								
 				
 			}
 			

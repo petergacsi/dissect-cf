@@ -8,7 +8,7 @@ import hu.uszeged.inf.iot.simulator.system.Application;
 import hu.uszeged.inf.iot.simulator.system.Cloud;
 import hu.uszeged.inf.iot.simulator.util.TimelineGenerator;
 
-public class Example1 {
+public class OldExample1 {
 
 	public static void main(String[] args) throws Exception {
 			

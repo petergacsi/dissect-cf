@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="appliances">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="appliance" maxOccurs="unbounded" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="name"/>
+              <xs:element type="xs:double" name="xcoord"/>
+              <xs:element type="xs:double" name="ycoord"/>
+              <xs:element type="xs:string" name="parentApp"/>
+              <xs:element type="xs:string" name="file"/>
+              <xs:element name="applications">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="application" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="type"/>
+                          <xs:element type="xs:string" name="name"/>
+                          <xs:element type="xs:string" name="parentDevice"/>
+                          <xs:element type="xs:int" name="freq"/>
+                          <xs:element type="xs:string" name="instance"/>
+                        </xs:sequence>
+                        <xs:attribute type="xs:int" name="tasksize" use="optional"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="neighbourAppliances">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="device" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element type="xs:string" name="deviceName"/>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

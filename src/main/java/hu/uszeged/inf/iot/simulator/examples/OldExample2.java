@@ -16,7 +16,7 @@ import hu.uszeged.inf.iot.simulator.system.Cloud;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 import hu.uszeged.inf.iot.simulator.providers.OracleProvider;
 
-public class Example2 {
+public class OldExample2 {
 	
 	public static void main(String[] args) throws Exception {
 	String cloudfile = ScenarioBase.resourcePath+"LPDS-1.xml";

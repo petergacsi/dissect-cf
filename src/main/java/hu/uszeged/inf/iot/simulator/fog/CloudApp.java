@@ -15,7 +15,7 @@ import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
 
 public class CloudApp extends Application{
 
-	public static double TRESHOLD_TO_SEND = 5;
+	public static double TRESHOLD_TO_SEND = 1;
 	public CloudApp(long freq, long tasksize, String instance, String name, String type, double noi, ComputingAppliance computingAppliance) {
 		super(freq, tasksize,  instance, name, type, noi, computingAppliance);
 		
@@ -29,7 +29,7 @@ public class CloudApp extends Application{
 		
 		
 		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
-
+		dataLoad = unprocessedData;
 		if (unprocessedData > 0) {
 			long processedData = 0;
 
@@ -44,7 +44,7 @@ public class CloudApp extends Application{
 					double ratio = ((double)unprocessedData/this.tasksize);
 					
 					if (ratio > TRESHOLD_TO_SEND) {
-						ComputingAppliance ca = this.getARandomNeighbourAppliance();
+						ComputingAppliance ca = getNeighbourFromAppliance(TRESHOLD_TO_SEND);
 						if (ca != null) {
 							this.handleDataTransferToNeighbourAppliance(unprocessedData-processedData, ca);
 						}

@@ -27,7 +27,7 @@
 		<parentApp>CloudApp-1</parentApp>
 		<file>fog_type1</file>
 		<applications>
-			<application tasksize="1000000">
+			<application tasksize="1250000">
 				<type>FogApp</type>
 				<name>FogApp-1</name>
 				<parentDevice>fog1</parentDevice>
@@ -52,7 +52,7 @@
 		<parentApp>CloudApp-1</parentApp>
 		<file>fog_type1</file>
 		<applications>
-			<application tasksize="1000000">
+			<application tasksize="1250000">
 				<type>FogApp</type>
 				<name>FogApp-2</name>
 				<parentDevice>fog2</parentDevice>
@@ -77,7 +77,7 @@
 		<parentApp>CloudApp-1</parentApp>
 		<file>fog_type1</file>
 		<applications>
-			<application tasksize="1000000">
+			<application tasksize="1250000">
 				<type>FogApp</type>
 				<name>FogApp-3</name>
 				<parentDevice>fog3</parentDevice>
@@ -102,7 +102,7 @@
 		<parentApp>FogApp-1</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-1_1</name>
 				<parentDevice>fog1_1</parentDevice>
@@ -127,7 +127,7 @@
 		<parentApp>FogApp-1</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-1_2</name>
 				<parentDevice>fog1_2</parentDevice>
@@ -152,7 +152,7 @@
 		<parentApp>FogApp-1</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-1_3</name>
 				<parentDevice>fog1_3</parentDevice>
@@ -177,7 +177,7 @@
 		<parentApp>FogApp-2</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-2_1</name>
 				<parentDevice>fog2_1</parentDevice>
@@ -202,7 +202,7 @@
 		<parentApp>FogApp-2</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-2_2</name>
 				<parentDevice>fog2_2</parentDevice>
@@ -227,7 +227,7 @@
 		<parentApp>FogApp-2</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-2_3</name>
 				<parentDevice>fog2_3</parentDevice>
@@ -252,7 +252,7 @@
 		<parentApp>FogApp-3</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-3_1</name>
 				<parentDevice>fog3_1</parentDevice>
@@ -277,7 +277,7 @@
 		<parentApp>FogApp-3</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-3_2</name>
 				<parentDevice>fog3_2</parentDevice>
@@ -302,7 +302,7 @@
 		<parentApp>FogApp-3</parentApp>
 		<file>fog_type2</file>
 		<applications>
-			<application tasksize="500000">
+			<application tasksize="625000">
 				<type>FogApp</type>
 				<name>fogApp-3_3</name>
 				<parentDevice>fog3_3</parentDevice>

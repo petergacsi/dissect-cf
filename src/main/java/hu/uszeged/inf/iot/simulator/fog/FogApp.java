@@ -1,5 +1,6 @@
 package hu.uszeged.inf.iot.simulator.fog;
 
+import java.util.List;
 import java.util.Random;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
@@ -17,7 +18,7 @@ import hu.uszeged.inf.iot.simulator.util.TimelineGenerator.TimelineCollector;
 
 public class FogApp extends Application {
 
-	public static double TRESHOLD_TO_SEND = 3;
+	public static double TRESHOLD_TO_SEND = 1;
 
 	public FogApp(long freq, long tasksize, String instance, String name, String type, double noi,
 			ComputingAppliance computingAppliance) {
@@ -50,11 +51,9 @@ public class FogApp extends Application {
 						@Override
 						public void conCancelled(ResourceConsumption problematic) {
 						}
-
 					});
 		} else {
 			try {
-
 				this.computingAppliance.parentApp.restartApplication();
 				new BrokerCheck(this, this.computingAppliance.parentApp, unprocessedData,
 						(this.computingAppliance.parentApp.freq / 2));
@@ -63,22 +62,14 @@ public class FogApp extends Application {
 				e.printStackTrace();
 			}
 		}
-
 	}
-
-//	private boolean checkStationState() {
-//		for (Device s : this.ownStations) {
-//			if (s.isSubscribed()) {
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
+	
 
 	@Override
 	public void tick(long fires) {
 
 		long unprocessedData = (this.sumOfArrivedData - this.sumOfProcessedData);
+		dataLoad = unprocessedData;
 		if (unprocessedData > 0) {
 
 			long processedData = 0;
@@ -98,11 +89,13 @@ public class FogApp extends Application {
 						Random rng = new Random();
 						int choice = rng.nextInt(2);
 
-						ComputingAppliance ca = this.getARandomNeighbourAppliance();
+						
+						ComputingAppliance ca = getNeighbourFromAppliance(TRESHOLD_TO_SEND);
 						if (choice == 1 && ca != null) {
+							System.out.println("Sending Neighbour");
 							this.handleDataTransferToNeighbourAppliance(unprocessedData - processedData, ca);
 						} 
-							else {
+						else {
 							try {
 								this.initiateDataTransferUp(unprocessedData - processedData);
 							} catch (NetworkException e) {

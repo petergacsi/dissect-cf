@@ -77,7 +77,7 @@ public abstract class Application extends Timed {
 	public String type;
 	
 	public int incomingData;
-	
+	public double dataLoad;
 	
 
 	public Application(final long freq, long tasksize, String instance, String name, String type,double noi ,ComputingAppliance computingAppliance) {
@@ -147,18 +147,6 @@ public abstract class Application extends Timed {
 	}
 	
 	
-	
-
-	
-	public ComputingAppliance getARandomNeighbourAppliance() {
-		Random ran = new Random();
-		if (this.computingAppliance.neighbours.size() == 0) {
-			return null;
-		}
-		int randomIndex = ran.nextInt(this.computingAppliance.neighbours.size());
-		return this.computingAppliance.neighbours.get(randomIndex);
-	}
-	
 	public Application getARandomApplication(ComputingAppliance ca) {
 		for (Application application: ca.applications) {
 			if (application.isSubscribed()) {
@@ -209,8 +197,14 @@ public abstract class Application extends Timed {
 		}
 	}
 	
+	public ComputingAppliance getNeighbourFromAppliance(double treshHold) {
+		List<ComputingAppliance> neighboursWithSufficientLoad = computingAppliance.getNeighboursWithSufficientLoad(treshHold);
+		ComputingAppliance aRandomNeighbourApplianceFromSufficientAppliances = computingAppliance.getARandomNeighbourApplianceFromSufficientAppliances(neighboursWithSufficientLoad);
+		return aRandomNeighbourApplianceFromSufficientAppliances;
+	}
+	
 	public void handleDataTransferToNeighbourAppliance(long unprocessedData, ComputingAppliance ca) {
-		Application app = this.getARandomApplication(ca);
+		Application app = ca.getLeastLoadedApplication();
 		try {
 
 			this.initiateDataTransferToNeighbourAppliance(unprocessedData, ca, app);
