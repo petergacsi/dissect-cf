@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.structuregenerator;
+package hu.szeged.inf.iot.simulator.xmlgenerator;
 
 import static java.lang.Math.pow;
 
@@ -16,35 +16,35 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import hu.szeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance;
+import hu.szeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.Applications;
+import hu.szeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.NeighbourAppliances;
+import hu.szeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.Applications.Application;
+import hu.szeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.NeighbourAppliances.Device;
+import hu.szeged.inf.iot.simulator.xmlgenerator.Devices.Device.Shutdown;
 import hu.uszeged.inf.iot.simulator.examples.ScenarioBase;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.Applications;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.NeighbourAppliances;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.Applications.Application;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.NeighbourAppliances.Device;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device.Shutdown;
 
 public class XMLGenerator {
 
-	private static String LOCATION_OF_XML_OUTPUT = ScenarioBase.resourcePath + "FogvsCloud_XMLs";
+	private static String LOCATION_OF_XML_OUTPUT = ScenarioBase.resourcePath + "CompareToIFogSim_XMLs";
 	private static int NUMBER_OF_CLOUDS = 3;
-	private static int NUMBER_OF_TYPE1_FOGS = 15;
-	private static int NUMBER_OF_TYPE2_FOGS = 160;
+	private static int NUMBER_OF_TYPE1_FOGS = 30;
+	private static int NUMBER_OF_TYPE2_FOGS = 100;
 	private static int RADIUS_OF_CIRCLE = 20;
-	private static int NUMBER_OF_STATIONS = 100;
+	private static int NUMBER_OF_STATIONS = 300;
 	private static int MINIMAL_NUMBER_OF_NEIGHBOURS = 2;
 	
 	public static void main(String[] args) {
 		Appliances appliances = new Appliances();
 		appliances.appliance = new ArrayList<Appliance>();
 		for (int i = 0; i < NUMBER_OF_CLOUDS; i++) {
-			appliances.appliance.add(generateAppliance("cloud", "cloud", 2500000, i, RADIUS_OF_CIRCLE, "a2.xlarge", 0));
+			appliances.appliance.add(generateAppliance("cloud", "cloud", 2500000, i, RADIUS_OF_CIRCLE, "1CPU_Strong_VM", 0));
 		}
-		for (int x = 0; x < NUMBER_OF_TYPE1_FOGS * NUMBER_OF_CLOUDS; x++) {
-			appliances.appliance.add(generateAppliance("fog", "fog_type1", 1250000, x, RADIUS_OF_CIRCLE * 2, "a1.xlarge", 1));
+		for (int x = 0; x < NUMBER_OF_TYPE1_FOGS; x++) {
+			appliances.appliance.add(generateAppliance("fog", "fog_type1", 2500000, x, RADIUS_OF_CIRCLE * 2, "1CPU_Strong_VM", 1));
 		}
 		for (int y = NUMBER_OF_TYPE1_FOGS * NUMBER_OF_CLOUDS; y < NUMBER_OF_TYPE1_FOGS * NUMBER_OF_CLOUDS + NUMBER_OF_TYPE2_FOGS; y++) {
-			appliances.appliance.add(generateAppliance("fog", "fog_type2", 625000, y, RADIUS_OF_CIRCLE * 4, "a1.large", 2));
+			appliances.appliance.add(generateAppliance("fog", "fog_type2", 2500000, y, RADIUS_OF_CIRCLE * 4, "1CPU_Strong_VM", 2));
 			
 		}
 		updateParent(appliances.appliance);
@@ -194,18 +194,18 @@ public class XMLGenerator {
 	
 	public static Devices createDevices() {
 		Devices devices =  new Devices();
-		devices.device = new ArrayList<hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device>();
+		devices.device = new ArrayList<hu.szeged.inf.iot.simulator.xmlgenerator.Devices.Device>();
 		for (int x = 0; x < NUMBER_OF_STATIONS; x++) {
-			devices.device.add(createDevice(x, 5, "distance", new Coord(RADIUS_OF_CIRCLE*5), 86400000, 400, 100));
+			devices.device.add(createDevice(x, 1, "distance", new Coord(RADIUS_OF_CIRCLE*5), 10000000, 1, 500));
 		}
 		return devices;
 	}
 	
-	public static hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device createDevice(int id, int numberOfSensor, String strategy, Coord coord,
+	public static hu.szeged.inf.iot.simulator.xmlgenerator.Devices.Device createDevice(int id, int numberOfSensor, String strategy, Coord coord,
 			int stopTime, int numberOfDevices, int fileSize){
-		hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device device = new hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device();
+		hu.szeged.inf.iot.simulator.xmlgenerator.Devices.Device device = new hu.szeged.inf.iot.simulator.xmlgenerator.Devices.Device();
 		device.setName("station-"+id);
-		device.setFreq(60000);
+		device.setFreq(5100);
 		device.setSensor(numberOfSensor);
 		device.setMaxinbw((short) 1000);
 		device.setMaxoutbw((short) 1000);

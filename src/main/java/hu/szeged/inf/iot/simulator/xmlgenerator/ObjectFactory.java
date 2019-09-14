@@ -6,7 +6,7 @@
 //
 
 
-package hu.uszeged.inf.iot.simulator.structuregenerator;
+package hu.szeged.inf.iot.simulator.xmlgenerator;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
