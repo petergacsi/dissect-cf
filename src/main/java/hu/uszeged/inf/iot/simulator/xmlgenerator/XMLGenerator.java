@@ -1,4 +1,4 @@
-package hu.uszeged.inf.iot.simulator.structuregenerator;
+package hu.uszeged.inf.iot.simulator.xmlgenerator;
 
 import static java.lang.Math.pow;
 
@@ -17,12 +17,12 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import hu.uszeged.inf.iot.simulator.examples.ScenarioBase;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.Applications;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.NeighbourAppliances;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.Applications.Application;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Appliances.Appliance.NeighbourAppliances.Device;
-import hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device.Shutdown;
+import hu.uszeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance;
+import hu.uszeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.Applications;
+import hu.uszeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.NeighbourAppliances;
+import hu.uszeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.Applications.Application;
+import hu.uszeged.inf.iot.simulator.xmlgenerator.Appliances.Appliance.NeighbourAppliances.Device;
+import hu.uszeged.inf.iot.simulator.xmlgenerator.Devices.Device.Shutdown;
 
 public class XMLGenerator {
 
@@ -194,16 +194,16 @@ public class XMLGenerator {
 	
 	public static Devices createDevices() {
 		Devices devices =  new Devices();
-		devices.device = new ArrayList<hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device>();
+		devices.device = new ArrayList<hu.uszeged.inf.iot.simulator.xmlgenerator.Devices.Device>();
 		for (int x = 0; x < NUMBER_OF_STATIONS; x++) {
 			devices.device.add(createDevice(x, 5, "distance", new Coord(RADIUS_OF_CIRCLE*5), 86400000, 400, 100));
 		}
 		return devices;
 	}
 	
-	public static hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device createDevice(int id, int numberOfSensor, String strategy, Coord coord,
+	public static hu.uszeged.inf.iot.simulator.xmlgenerator.Devices.Device createDevice(int id, int numberOfSensor, String strategy, Coord coord,
 			int stopTime, int numberOfDevices, int fileSize){
-		hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device device = new hu.uszeged.inf.iot.simulator.structuregenerator.Devices.Device();
+		hu.uszeged.inf.iot.simulator.xmlgenerator.Devices.Device device = new hu.uszeged.inf.iot.simulator.xmlgenerator.Devices.Device();
 		device.setName("station-"+id);
 		device.setFreq(60000);
 		device.setSensor(numberOfSensor);

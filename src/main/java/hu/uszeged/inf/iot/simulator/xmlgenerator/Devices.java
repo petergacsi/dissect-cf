@@ -6,7 +6,7 @@
 //
 
 
-package hu.uszeged.inf.iot.simulator.structuregenerator;
+package hu.uszeged.inf.iot.simulator.xmlgenerator;
 
 import java.util.ArrayList;
 import java.util.List;
