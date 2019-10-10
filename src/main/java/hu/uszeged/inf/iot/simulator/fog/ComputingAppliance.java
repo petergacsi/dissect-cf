@@ -2,9 +2,9 @@ package hu.uszeged.inf.iot.simulator.fog;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
@@ -89,15 +89,10 @@ public class ComputingAppliance {
 	//this method create the list of applications of an appliance and populate the childdevice member of an application
 	public static void createApplications(ApplianceModel applianceModel, String iaasLoader, ComputingAppliance ca) throws IOException, SAXException, ParserConfigurationException {
 		for (ApplicationModel am : applianceModel.applications) {
-			//type of app is CloudApp
-			if (am.type.equals("CloudApp")) {
-				CloudApp cloudapp = new CloudApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
-				
-			
-			//type of the app is FogApp
+			if (am.type.equals("cloud")) {
+				new CloudApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));				
 			} else {
-				FogApp fogapp = new FogApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
-				
+				new FogApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
 			}
 		}
 	}
@@ -112,8 +107,6 @@ public class ComputingAppliance {
 			ca.neighbours.add(getComputingApplianceByName(applianceName));
 		}
 	}
-	
-	
 	
 	
 	public ComputingAppliance(String loadfile, String name, double x, double y, Application parentApp) throws IOException, SAXException, ParserConfigurationException {
@@ -154,6 +147,42 @@ public class ComputingAppliance {
 		}
 		return appliance;
 	}
+	
+	public Application getLeastLoadedApplication() {
+		double load = Double.MAX_VALUE;
+		Application app = null;
+		for (Application application : this.applications) {
+			if (application.dataLoad < load /*&& application.isSubscribed()*/ ) {
+				load = application.dataLoad;
+				app = application;
+			}
+		}
+		return app;
+		//return this.applications.get(0);
+	}
+	
+	public List<ComputingAppliance> getNeighboursWithSufficientLoad(double treshHold){
+		List<ComputingAppliance> sufficientAppliances = new ArrayList<ComputingAppliance>();
+		for (ComputingAppliance computingAppliance : neighbours) {
+			if (computingAppliance.getLeastLoadedApplication().dataLoad < treshHold) {
+				sufficientAppliances.add(computingAppliance);
+			}
+		}
+		return sufficientAppliances;
+	}
+	
+	public ComputingAppliance getARandomNeighbourApplianceFromSufficientAppliances(List<ComputingAppliance> neighbourComputingAppliances) {
+		if (neighbourComputingAppliances.size() == 0) {
+			return null;
+		} else {
+			Random ran = new Random();
+			int indexOfRandomAppliacation = ran.nextInt(neighbourComputingAppliances.size());
+			return neighbourComputingAppliances.get(indexOfRandomAppliacation);
+		}
+	}
+	
+
+	
 	
 	public void addParentApp(Application app) {
 		this.parentApp = app;

@@ -15,9 +15,9 @@ import hu.uszeged.inf.iot.simulator.fog.ComputingAppliance;
 import hu.uszeged.inf.iot.simulator.fog.Station;
 import hu.uszeged.inf.iot.simulator.providers.Instance;
 
-public class Scenario1 {
+public class ScenarioFogvsCloud {
 	
-	private static String SCENARIO = "Scenario1_3_15";
+	private static String SCENARIO = "FogVsCloud_XMLs";
 	
 	public static void main(String[] args) {
 			
@@ -26,8 +26,8 @@ public class Scenario1 {
 		String fogfile_type1=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSFog_type1.xml"; 
 		String fogfile_type2=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSFog_type2.xml"; 
 		String cloudfile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSCloud.xml";
-		String appliancefile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Appliances.xml"; 
-		String CSstationfile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/WeatherStation.xml";
+		String appliancefile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Scenario_3_45_160.xml";
+		String stationfile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Stations.xml";
 		String instancefile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/InstanceIOT.xml";
 		
 		Map<String, String> iaasloaders = new HashMap<String, String>();
@@ -53,7 +53,7 @@ public class Scenario1 {
 		}
 		
 		try {
-			Station.loadDevice(CSstationfile);
+			Station.loadDevice(stationfile);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,14 +62,6 @@ public class Scenario1 {
 		System.out.println("");
 		System.out.println("------------------------");
 		
-
-//		for (ComputingAppliance ca : ComputingAppliance.allComputingAppliance) {
-//			if (ca.parentApp == null) {
-//				System.out.println(ca.name + " " + "parentApp null");
-//			} else {
-//				System.out.println(ca.name + " " + ca.parentApp.name);
-//			}
-//		}
 		
 		
 		// TODO: IoT pricing set-up

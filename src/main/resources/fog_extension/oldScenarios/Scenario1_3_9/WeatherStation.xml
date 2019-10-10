@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <devices>
- 	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+ 	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_1</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -19,7 +19,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_2</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -38,7 +38,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_3</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -57,7 +57,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_4</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -76,7 +76,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_5</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -95,7 +95,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_7</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -114,7 +114,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_8</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -135,7 +135,7 @@
 	
 	
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_10</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -154,7 +154,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_11</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -173,7 +173,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_12</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -192,7 +192,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_13</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -212,7 +212,7 @@
 	</device>
 	
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_14</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -231,7 +231,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_15</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -250,7 +250,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_16</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -270,7 +270,7 @@
 	</device>
 	
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_17</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -289,7 +289,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_18</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -308,7 +308,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_19</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -327,7 +327,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_20</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -346,7 +346,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_21</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -365,7 +365,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_22</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -384,7 +384,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_23</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -403,7 +403,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_24</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -424,7 +424,7 @@
 	
 	
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_26</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -443,7 +443,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_27</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -462,7 +462,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_28</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -481,7 +481,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_29</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -502,7 +502,7 @@
 	
 	
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_31</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -521,7 +521,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_32</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -542,7 +542,7 @@
 	
 	
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_34</name>
       <freq>60000</freq>
       <sensor>5</sensor>
@@ -561,7 +561,7 @@
       </shutdown>
 	</device>
 	
-	<device starttime="0" stoptime="86400000" number="10" filesize="100">
+	<device starttime="0" stoptime="86400000" number="600" filesize="100">
       <name>station_35</name>
       <freq>60000</freq>
       <sensor>5</sensor>
