@@ -77,7 +77,7 @@ public abstract class ScenarioBase {
 		System.out.println("Last applicationStoptime: " + highestApplicationStopTime);
 		System.out.println("Last station to stop: " + highestStationStoptime);
 		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
-		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS));
+		System.out.println("Runtime: "+TimeUnit.MILLISECONDS.convert(t, TimeUnit.NANOSECONDS));
 		
 
 	}

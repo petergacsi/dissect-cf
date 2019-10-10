@@ -56,7 +56,8 @@ public class CloudApp extends Application{
 					break;
 				} 
 					try {
-						final double noi = this.allocatedData == this.tasksize ? defaultNoi : (double) (2400 * this.allocatedData / this.tasksize);
+//						final double noi = this.allocatedData == this.tasksize ? defaultNoi : (double) (2400 * this.allocatedData / this.tasksize);
+						final double noi = 2500000;
 						processedData += this.allocatedData;
 						vml.isWorking = true;
 						this.currentTask++;
