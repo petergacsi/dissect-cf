@@ -76,13 +76,12 @@ public abstract class Application extends Timed {
 	public long sumOfArrivedData;
 	protected long freq;
 	protected VmCollector broker;
-	public String type;
 	
 	public int incomingData;
 	public double dataLoad;
 	
 
-	public Application(final long freq, long tasksize, String instance, String name, String type,double noi ,ComputingAppliance computingAppliance) {
+	public Application(final long freq, long tasksize, String instance, String name, double noi ,ComputingAppliance computingAppliance) {
 		if(noi>0) {
 			defaultNoi=noi;
 		}
@@ -101,16 +100,13 @@ public abstract class Application extends Timed {
 		
 		Application.applications.add(this);
 		
-		if (type != null) {
+		
 		this.freq=freq;
 		subscribe(freq);
-		}
+		
 		
 		this.instance = Instance.getInstances().get(instance);
-		
-		this.type=type;
-	
-		
+				
 		this.computingAppliance.iaas.repositories.get(0).registerObject(this.instance.getVa());
 		try {
 			this.startBroker();

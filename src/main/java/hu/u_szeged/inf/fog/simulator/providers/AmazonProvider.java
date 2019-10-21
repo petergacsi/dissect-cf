@@ -35,16 +35,11 @@ import hu.u_szeged.inf.fog.simulator.application.Application;
 public class AmazonProvider extends Provider{
 	
 	/**
-	 * The final cost of Azure.
-	 */
-	double AMAZON;
-	
-	/**
 	 * Helper variable to calculate the daily message limit.
 	 */
 	@Override
 	public String toString() {
-		return "[AMAZON=" + AMAZON +" "+this.getFrequency()+"]";
+		return "[AMAZON=" + cost +"]";
 	}
 
 
@@ -77,7 +72,7 @@ public class AmazonProvider extends Provider{
 	 */
 	public void tick(long fires) {		
 		if(this.blockPrice>0 && this.blockSize>0){
-			this.AMAZON= (((double)this.app.sumOfProcessedData / this.blockSize) + 1) * this.blockPrice / this.messageCount;
+			this.cost= (((double)this.app.sumOfProcessedData / this.blockSize) + 1) * this.blockPrice / this.messageCount;
 		}
 		if(this.shouldStop) {
 			unsubscribe();

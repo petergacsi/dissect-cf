@@ -93,7 +93,7 @@ public class ComputingAppliance {
 	public static void createApplications(ApplianceModel applianceModel, String iaasLoader, ComputingAppliance ca) throws IOException, SAXException, ParserConfigurationException {
 		for (ApplicationModel am : applianceModel.applications) {
 			if (am.type.equals("cloud")) {
-				new CloudApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));				
+				new CloudApp(am.freq, am.tasksize, am.instance, am.name, 0, getComputingApplianceByName(am.parentDevice));				
 			} else {
 				new FogApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
 			}

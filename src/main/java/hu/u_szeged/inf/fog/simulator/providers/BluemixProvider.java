@@ -68,7 +68,7 @@ public class BluemixProvider extends Provider{
 		 * @param mbfrom The first tag of the interval.
 		 * @param cost The cost of the interval.
 		 */
-		public Bluemix(double mbto, double mbfrom, double cost) {
+		public Bluemix(double mbfrom, double mbto, double cost) {
 			this.mbto=mbto;
 			this.mbfrom=mbfrom;
 			this.cost=cost;
@@ -80,13 +80,9 @@ public class BluemixProvider extends Provider{
 	 */
 	@Override
 	public String toString() {
-		return  "[BLUEMIX=" + BLUEMIX +" "+this.getFrequency()+"]";
+		return  "[BLUEMIX=" + cost +"]";
 	}
 
-	/**
-	 * The final cost of Azure.
-	 */
-	double BLUEMIX;
 	
 	/**
 	 * This constructor should be used only in case of XML files.
@@ -118,14 +114,13 @@ public class BluemixProvider extends Provider{
 			double cost=0.0;
 			
  			for(Bluemix bm : this.bmList){
-
 				if (tmp <= bm.mbto && tmp >= bm.mbfrom) {
 					cost = bm.cost;
 					
 				}
 			
 			}
- 			this.BLUEMIX=tmp*cost;
+ 			this.cost=tmp*cost;
 		}
 		if(this.shouldStop) {
 			unsubscribe();

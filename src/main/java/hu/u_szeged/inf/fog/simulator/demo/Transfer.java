@@ -13,7 +13,10 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-// this class represent a simple file transfer example between repositories
+/**
+ * This class represents a simple file transfer example between repositories
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class Transfer extends ConsumptionEventAdapter{
 	
 	Repository from;

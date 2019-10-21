@@ -23,7 +23,7 @@ public class FogApp extends Application {
 
 	public FogApp(long freq, long tasksize, String instance, String name, String type, double noi,
 			ComputingAppliance computingAppliance) {
-		super(freq, tasksize, instance, name, type, noi, computingAppliance);
+		super(freq, tasksize, instance, name, noi, computingAppliance);
 
 	}
 
@@ -114,9 +114,9 @@ public class FogApp extends Application {
 
 				} else {
 					try {
-//						final double noi = this.allocatedData == this.tasksize ? defaultNoi
-//								: (double) (2400 * this.allocatedData / this.tasksize);
-						final double noi = 2500000;
+				final double noi = this.allocatedData == this.tasksize ? defaultNoi
+							: (double) (2400 * this.allocatedData / this.tasksize);
+						//final double noi = 2500000; -> this is only for iFogSim comparison
 						processedData += this.allocatedData;
 						vml.isWorking = true;
 						this.currentTask++;

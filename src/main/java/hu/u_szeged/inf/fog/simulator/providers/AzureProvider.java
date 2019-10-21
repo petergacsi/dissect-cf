@@ -34,10 +34,7 @@ import hu.u_szeged.inf.fog.simulator.iot.Device;
  * @author Andras Markus (markusa@inf.u-szeged.hu)
  */
 public class AzureProvider extends Provider{
-	/**
-	 * The final cost of Azure.
-	 */
-	double AZURE;
+
 	
 	/**
 	 * Helper variable to calculate the daily message limit.
@@ -49,7 +46,7 @@ public class AzureProvider extends Provider{
 	 */
 	@Override
 	public String toString() {
-		return "[AZURE=" + AZURE + " "+this.getFrequency()+"]";
+		return "[AZURE=" + this.cost + "]";
 	}
 
 	/**
@@ -105,7 +102,7 @@ public class AzureProvider extends Provider{
 		
 		if(this.messagesPerDay>0 && this.avarageFileSize()<=(this.messagesizePerKB*1024)){
 			if(this.avarageFileSize()==0) {
-				this.AZURE=-1;
+				this.cost=-1;
 			}else {
 				long totalMassages=this.app.sumOfProcessedData / this.avarageFileSize();
 				long msg = totalMassages - usedMessage;
@@ -115,14 +112,14 @@ public class AzureProvider extends Provider{
 					long month = Timed.getFireCount()/this.getFrequency();
 					if(month==0){
 						month=1;
-						this.AZURE=this.pricePerMonth*month;
+						this.cost=this.pricePerMonth*month;
 					}else if(Timed.getFireCount()%(this.getFrequency())!=0){
-						this.AZURE=this.pricePerMonth*(month+1);
+						this.cost=this.pricePerMonth*(month+1);
 					}else{
-						this.AZURE=this.pricePerMonth*month;
+						this.cost=this.pricePerMonth*month;
 					}
 				}else{
-					this.AZURE=-1;
+					this.cost=-1;
 				}
 			}
 			

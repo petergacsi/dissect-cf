@@ -68,6 +68,8 @@ public abstract class Provider extends Timed{
 	public double pricePerMonth;
 	public long messagesPerDay;
 	public long messagesizePerKB;
+	
+	public double cost;
 		
 	
 	/**

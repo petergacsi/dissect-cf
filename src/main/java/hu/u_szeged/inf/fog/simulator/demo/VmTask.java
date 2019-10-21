@@ -18,7 +18,10 @@ import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.mta.sztaki.lpds.cloud.simulator.io.NetworkNode.NetworkException;
 import hu.mta.sztaki.lpds.cloud.simulator.util.PowerTransitionGenerator;
 
-// this class represents how to create virtual machines and compute task on it	
+/**
+ * This class represents how to create a virtual machine and compute task on it
+ * @author Andras Markus (markusa@inf.u-szeged.hu)
+ */
 public class VmTask {
 
 	public static void main(String[] args) throws SecurityException, InstantiationException, IllegalAccessException, NoSuchFieldException, NetworkException, VMManagementException {
@@ -35,6 +38,7 @@ public class VmTask {
 				transitions.get(PowerTransitionGenerator.PowerStateKind.storage),transitions.get(PowerTransitionGenerator.PowerStateKind.network));
 		
 		repo.setState(NetworkNode.State.RUNNING);
+		
 		/* to create a VM, we need first a physical machine with
 		   - 8 CPU cores,
 		   - 1 core processing power

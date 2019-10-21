@@ -38,7 +38,7 @@ public class Station extends Device{
 	
 	
 	public Station(DeviceNetwork dn, long startTime,long stopTime,long filesize, String strategy,int sensorNum,
-			long freq,double ratio, double x, double y)  {
+			long freq, double x, double y)  {
 		long delay = Math.abs(SeedSyncer.centralRnd.nextLong()%20)*60*1000;
 		this.startTime=startTime+delay;
 		this.stopTime=stopTime+delay;
@@ -119,7 +119,7 @@ public class Station extends Device{
 		for(DeviceModel dm : DeviceModel.loadDeviceXML(stationfile)) {
 			for(int i=0;i<dm.number;i++){
 				DeviceNetwork dn = new DeviceNetwork(dm.maxinbw,dm.maxoutbw,dm.diskbw,dm.reposize,dm.name+i,null,null);
-				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq,dm.ratio,dm.xCoord, dm.yCoord);
+				new Station(dn,dm.starttime,dm.stoptime,dm.filesize,dm.strategy,dm.sensor,dm.freq, dm.xCoord, dm.yCoord);
 			}
 			
 		}

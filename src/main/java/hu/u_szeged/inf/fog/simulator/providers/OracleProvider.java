@@ -35,18 +35,14 @@ import hu.u_szeged.inf.fog.simulator.iot.Station;
  * @author Andras Markus (markusa@inf.u-szeged.hu)
  */
 public class OracleProvider extends Provider {
-	
-	/**
-	 * The final cost of Oracle.
-	 */
-	double ORACLE;
+
 	
 	/**
 	 * Helper variable to calculate the daily message limit.
 	 */
 	@Override
 	public String toString() {
-		return "[ORACLE=" + ORACLE + " "+	this.getFrequency()+"]";
+		return "[ORACLE=" + cost+"]";
 	}
 
 	/**
@@ -88,11 +84,11 @@ public class OracleProvider extends Provider {
 					long month = s.getStopTime()/(this.getFrequency());
 					if(month==0){
 						month=1;
-						this.ORACLE=this.ORACLE+this.devicepricePerMonth*((Station) s).getSensorNum()*month;
+						this.cost=this.cost+this.devicepricePerMonth*((Station) s).getSensorNum()*month;
 					}else if(s.getStopTime()%(this.getFrequency())!=0){
-						this.ORACLE=this.ORACLE+this.devicepricePerMonth*((Station) s).getSensorNum()*(month+1);
+						this.cost=this.cost+this.devicepricePerMonth*((Station) s).getSensorNum()*(month+1);
 					}else{
-						this.ORACLE=this.ORACLE+this.devicepricePerMonth*((Station) s).getSensorNum()*month;
+						this.cost=this.cost+this.devicepricePerMonth*((Station) s).getSensorNum()*month;
 					}
 					// additional cost
 					long device = s.getMessageCount()/((Station) s).getSensorNum();// 1 device hany uzenetet generalt
@@ -101,11 +97,11 @@ public class OracleProvider extends Provider {
 						device-=this.messagesPerMonthPerDevice;
 						long whole=device/this.amMessagesPerMonthPerDevice;
 						if(whole==0){
-							this.ORACLE+=this.amDevicepricePerMonth;
+							this.cost+=this.amDevicepricePerMonth;
 						}else if((device%this.amMessagesPerMonthPerDevice)!=0){
-							this.ORACLE+=this.amDevicepricePerMonth*(whole+1);
+							this.cost+=this.amDevicepricePerMonth*(whole+1);
 						}else{
-							this.ORACLE+=this.amDevicepricePerMonth*(whole);
+							this.cost+=this.amDevicepricePerMonth*(whole);
 						}
 					} 
 				}

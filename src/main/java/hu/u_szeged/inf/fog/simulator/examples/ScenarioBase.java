@@ -8,7 +8,8 @@ import hu.u_szeged.inf.fog.simulator.application.FogApp;
 import hu.u_szeged.inf.fog.simulator.application.Application.VmCollector;
 import hu.u_szeged.inf.fog.simulator.iot.Device;
 import hu.u_szeged.inf.fog.simulator.iot.Station;
-import hu.u_szeged.inf.fog.simulator.physical.ComputingAppliance;;
+import hu.u_szeged.inf.fog.simulator.physical.ComputingAppliance;
+import hu.u_szeged.inf.fog.simulator.providers.Provider;;
 
 public abstract class ScenarioBase {
 		public final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
@@ -23,7 +24,7 @@ public abstract class ScenarioBase {
 			append(File.separator).
 			toString();
 	
-	 static void printInformation(long t) {
+	 public static void printInformation(long t) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
 		long generatedData=0,processedData=0,arrivedData=0;
@@ -32,6 +33,11 @@ public abstract class ScenarioBase {
 		long timeout=Long.MIN_VALUE;
 		long highestApplicationStopTime = Long.MIN_VALUE;
 		long highestStationStoptime = Long.MIN_VALUE;
+		double bluemix=0;
+		double amazon=0;
+		double azure=0;
+		double oracle=0;
+		
 		for (ComputingAppliance c : ComputingAppliance.allComputingAppliance) {
 			System.out.println("computingAppliance: " + c.name);
 			//long highestStationStoptime=Long.MIN_VALUE;
@@ -63,7 +69,12 @@ public abstract class ScenarioBase {
 				}
 				
 				System.out.println(a.name+" stations: " + a.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-				
+				System.out.println(a.providers);
+				bluemix+=a.providers.get(0).cost;	
+				amazon+=a.providers.get(1).cost;	
+				azure+=a.providers.get(2).cost;	
+				oracle+=a.providers.get(3).cost;	
+				System.out.println(a.providers.get(1));
 			}
 			
 			
@@ -72,12 +83,11 @@ public abstract class ScenarioBase {
 		}
 		timeout = highestApplicationStopTime - highestStationStoptime;
 		System.out.println("VMs " + usedVM + " tasks: " + tasks);
-		System.out.println("Generated/processed/arrived data: " + generatedData + "/" + processedData+ "/"+arrivedData);
-		System.out.println("Cost: "+totalCost);
-		System.out.println("Last applicationStoptime: " + highestApplicationStopTime);
-		System.out.println("Last station to stop: " + highestStationStoptime);
-		System.out.println("timeout: "+((double)timeout/1000/60) +" min");
-		System.out.println("Runtime: "+TimeUnit.MILLISECONDS.convert(t, TimeUnit.NANOSECONDS));
+		System.out.println("Generated/processed/arrived data: " + generatedData + "/" + processedData+ "/"+arrivedData+ " bytes (~"+(arrivedData/1024/1024)+" MB)");
+		System.out.println("Cloud cost: "+totalCost);
+		System.out.println("IoT cost: Bluemix: "+bluemix+ " Amazon: "+ amazon +" Azure: "+azure+ " Oracle: "+ oracle);
+		System.out.println("Timeout: "+((double)timeout/1000/60) +" minutes");
+		System.out.println("Runtime: "+TimeUnit.SECONDS.convert(t, TimeUnit.NANOSECONDS)+ " seconds");
 		
 
 	}

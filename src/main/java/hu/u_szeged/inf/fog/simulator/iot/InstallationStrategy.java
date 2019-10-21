@@ -16,7 +16,7 @@ import hu.u_szeged.inf.fog.simulator.pliant.FuzzyIndicators;
 import hu.u_szeged.inf.fog.simulator.pliant.Kappa;
 import hu.u_szeged.inf.fog.simulator.pliant.Sigmoid;
 
-public abstract class installionStrategy {
+public abstract class InstallationStrategy {
 
 	public void install(final Device s) {
 	}
@@ -32,7 +32,7 @@ public abstract class installionStrategy {
 
 
 //Choose only fog nodes
-class RandomStrategy extends installionStrategy {
+class RandomStrategy extends InstallationStrategy {
 
 	public RandomStrategy(Device s) {
 		this.install(s);
@@ -40,18 +40,28 @@ class RandomStrategy extends installionStrategy {
 
 	@Override
 	public void install(Device s) {
+		int rnd;
 		Random randomGenerator = new Random();
+		
 		List<Application> fogApplications = new ArrayList<Application>();
+		List<Application> cloudApplications = new ArrayList<Application>();
+		
 		for (Application app : Application.applications) {
-			if (app.type.equals("FogApp")) {
+			if (app.getClass().getSimpleName().equals("FogApp")) {
 				fogApplications.add(app);
+			}
+			if (app.getClass().getSimpleName().equals("CloudApp")) {
+				cloudApplications.add(app);
 			}
 		}
 		
-		int rnd = randomGenerator.nextInt(fogApplications.size());
-
-		// connect the Stations with the FogApps
-		makeRelationBetweenStationsAndApp(s, fogApplications.get(rnd));
+		if(fogApplications.size()==0) {
+			rnd = randomGenerator.nextInt(cloudApplications.size());
+			makeRelationBetweenStationsAndApp(s, cloudApplications.get(rnd));
+		}else {
+			rnd = randomGenerator.nextInt(fogApplications.size());
+			makeRelationBetweenStationsAndApp(s, fogApplications.get(rnd));
+		}
 
 		Device.lmap.put(s.getDn().repoName, Device.latency);
 		Device.lmap.put(s.app.computingAppliance.iaas.repositories.get(0).getName(), Device.latency);
@@ -74,7 +84,7 @@ class RandomStrategy extends installionStrategy {
 
 
 //DistanceStrategy always install station to the nearest fogApp
-class DistanceStrategy extends installionStrategy {
+class DistanceStrategy extends InstallationStrategy {
 	
 	
 	public DistanceStrategy(Device d) {
@@ -122,7 +132,7 @@ class DistanceStrategy extends installionStrategy {
 }
 
 
-class CostStrategy extends installionStrategy{
+class CostStrategy extends InstallationStrategy{
 
 	public CostStrategy(Device d) {
 		this.install(d);
@@ -160,7 +170,7 @@ class CostStrategy extends installionStrategy{
 	
 }
 
-class RuntimeStrategy extends installionStrategy{
+class RuntimeStrategy extends InstallationStrategy{
 	
 	public RuntimeStrategy(Device s) {
 		this.install(s);
@@ -207,7 +217,7 @@ class RuntimeStrategy extends installionStrategy{
 	
 }
 
-class FuzzyStrategy extends installionStrategy{
+class FuzzyStrategy extends InstallationStrategy{
 	Device d;
 	public FuzzyStrategy(Device s) {
 		this.d=s;
