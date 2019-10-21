@@ -24,7 +24,7 @@ public abstract class ScenarioBase {
 			append(File.separator).
 			toString();
 	
-	 public static void printInformation(long t) {
+	 public static void printInformation(long t,boolean iotpricing) {
 		System.out.println("~~Informations about the simulation:~~");
 		double totalCost=0.0;
 		long generatedData=0,processedData=0,arrivedData=0;
@@ -69,12 +69,14 @@ public abstract class ScenarioBase {
 				}
 				
 				System.out.println(a.name+" stations: " + a.ownStations.size()+ " cost:"+a.instance.calculateCloudCost(a.sumOfWorkTime));
-				System.out.println(a.providers);
-				bluemix+=a.providers.get(0).cost;	
-				amazon+=a.providers.get(1).cost;	
-				azure+=a.providers.get(2).cost;	
-				oracle+=a.providers.get(3).cost;	
-				System.out.println(a.providers.get(1));
+				if(iotpricing) {
+					System.out.println(a.providers);
+					bluemix+=a.providers.get(0).cost;	
+					amazon+=a.providers.get(1).cost;	
+					azure+=a.providers.get(2).cost;	
+					oracle+=a.providers.get(3).cost;	
+				}
+
 			}
 			
 			

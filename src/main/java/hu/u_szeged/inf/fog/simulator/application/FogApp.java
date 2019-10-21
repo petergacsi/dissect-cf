@@ -21,7 +21,7 @@ public class FogApp extends Application {
 
 	public static double TRESHOLD_TO_SEND = 1;
 
-	public FogApp(long freq, long tasksize, String instance, String name, String type, double noi,
+	public FogApp(long freq, long tasksize, String instance, String name, double noi,
 			ComputingAppliance computingAppliance) {
 		super(freq, tasksize, instance, name, noi, computingAppliance);
 

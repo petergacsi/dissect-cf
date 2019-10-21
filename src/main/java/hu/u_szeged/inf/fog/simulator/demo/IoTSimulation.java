@@ -53,7 +53,7 @@ public class IoTSimulation {
 	// creating vm images and its resource needs
 	
 	// for a VM, first we need a virtual machine image, it needs 800 instruction for creating a VM from it, and it needs 1 GB of free space on a PM
-	VirtualAppliance va = new VirtualAppliance("va", 800, 0, false, 1073741824L);
+	VirtualAppliance va = new VirtualAppliance("va", 100, 0, false, 1073741824L);
 	
 	// we have to define the resource needs of the VM, we use 1-2-4-8 CPU cores, 0.001 core processing power and 4 GB RAM
 	AlterableResourceConstraints arc1 = new AlterableResourceConstraints(1,0.001,4294967296L);
@@ -90,14 +90,14 @@ public class IoTSimulation {
 	new BluemixProvider(bmList,ca1); new BluemixProvider(bmList,ca2); 
 	new BluemixProvider(bmList,ca3); new BluemixProvider(bmList,ca4);
 	
-	new AmazonProvider(5,1000000,512,ca1); 	new AmazonProvider(5,1000000,512,ca2);
-	new AmazonProvider(5,1000000,512,ca4); 	new AmazonProvider(5,1000000,512,ca3);
+	new AmazonProvider(5,1000000,512,ca1); new AmazonProvider(5,1000000,512,ca2);
+	new AmazonProvider(5,1000000,512,ca4); new AmazonProvider(5,1000000,512,ca3);
 	
 	new AzureProvider(86400000,421.65,6000000,4,ca1); new AzureProvider(86400000,421.65,6000000,4,ca2);
 	new AzureProvider(86400000,421.65,6000000,4,ca3); new AzureProvider(86400000,421.65,6000000,4,ca4);
 	
-	new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca1); 	new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca2);
-	new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca3); 	new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca4);
+	new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca1); new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca2);
+	new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca3); new OracleProvider(2678400000L,0.93,15000,0.02344,1000, ca4);
 	
 	// we start the simulation
 	long starttime = System.nanoTime();
@@ -106,7 +106,7 @@ public class IoTSimulation {
 	
 	// Print some information to the monitor / in file
 	TimelineGenerator.generate();
-	ScenarioBase.printInformation((stopttime-starttime));
+	ScenarioBase.printInformation((stopttime-starttime),true);
 	
 	}
 

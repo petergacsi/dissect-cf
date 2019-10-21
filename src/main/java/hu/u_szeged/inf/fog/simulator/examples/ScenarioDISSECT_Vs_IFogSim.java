@@ -82,7 +82,7 @@ public class ScenarioDISSECT_Vs_IFogSim {
 		Timed.simulateUntilLastEvent();
 		long stopttime = System.nanoTime();
 		// Print some informations to the monitor / in file
-		ScenarioBase.printInformation((stopttime-starttime));
+		ScenarioBase.printInformation((stopttime-starttime),false);
 	}
 
 }

@@ -95,7 +95,7 @@ public class ComputingAppliance {
 			if (am.type.equals("cloud")) {
 				new CloudApp(am.freq, am.tasksize, am.instance, am.name, 0, getComputingApplianceByName(am.parentDevice));				
 			} else {
-				new FogApp(am.freq, am.tasksize, am.instance, am.name, am.type, 0, getComputingApplianceByName(am.parentDevice));
+				new FogApp(am.freq, am.tasksize, am.instance, am.name, 0, getComputingApplianceByName(am.parentDevice));
 			}
 		}
 	}
