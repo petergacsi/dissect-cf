@@ -14,7 +14,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceCons
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.u_szeged.inf.fog.simulator.application.CloudApp;
 import hu.u_szeged.inf.fog.simulator.application.FogApp;
-import hu.u_szeged.inf.fog.simulator.examples.ScenarioBase;
+import hu.u_szeged.inf.fog.simulator.demo.ScenarioBase;
 import hu.u_szeged.inf.fog.simulator.iot.Device.DeviceNetwork;
 import hu.u_szeged.inf.fog.simulator.iot.Station;
 import hu.u_szeged.inf.fog.simulator.physical.ComputingAppliance;
@@ -31,18 +31,6 @@ import hu.u_szeged.inf.fog.simulator.util.TimelineGenerator;
  * @author Andras Markus (markusa@inf.u-szeged.hu)
  */
 public class FogSimulation {
-
-	public final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
-			append(File.separator).
-			append("src").
-			append(File.separator).
-			append("main").
-			append(File.separator).
-			append("resources").
-			append(File.separator).
-			append("demo").
-			append(File.separator).
-			toString();
 	
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 			
@@ -60,8 +48,8 @@ public class FogSimulation {
 	new Instance(va,arc2,0.000000015,"instance2");
 
 	
-	String cloudfile = resourcePath+"LPDS_original.xml";	
-	String fogfile = resourcePath+"LPDS_Fog.xml";	
+	String cloudfile = ScenarioBase.resourcePath+"LPDS_original.xml";	
+	String fogfile = ScenarioBase.resourcePath+"LPDS_Fog_T1.xml";	
 	
 	// we create our clouds using predefined cloud schema
 	ComputingAppliance cloud1 = new ComputingAppliance(cloudfile, "cloud1",-4,5,null);

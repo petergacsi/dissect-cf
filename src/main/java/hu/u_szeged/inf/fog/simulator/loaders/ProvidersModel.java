@@ -93,7 +93,7 @@ public class ProvidersModel{
 				if (mbto == -1) {
 					mbto = Double.MAX_VALUE;
 				}
-				p.bmList.add(new Bluemix(mbto, mbfrom, price));
+				p.bmList.add(new Bluemix(mbfrom, mbto, price));
 			
 		}
 

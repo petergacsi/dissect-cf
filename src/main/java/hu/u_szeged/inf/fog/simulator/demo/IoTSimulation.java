@@ -12,7 +12,7 @@ import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.constraints.AlterableResourceConstraints;
 import hu.mta.sztaki.lpds.cloud.simulator.io.VirtualAppliance;
 import hu.u_szeged.inf.fog.simulator.application.CloudApp;
-import hu.u_szeged.inf.fog.simulator.examples.ScenarioBase;
+import hu.u_szeged.inf.fog.simulator.demo.ScenarioBase;
 import hu.u_szeged.inf.fog.simulator.iot.Device.DeviceNetwork;
 import hu.u_szeged.inf.fog.simulator.iot.Station;
 import hu.u_szeged.inf.fog.simulator.physical.ComputingAppliance;
@@ -29,23 +29,11 @@ import hu.u_szeged.inf.fog.simulator.util.TimelineGenerator;
  * @author Andras Markus (markusa@inf.u-szeged.hu)
  */
 public class IoTSimulation {
-
-	public final static String resourcePath = new StringBuilder(System.getProperty("user.dir")).
-			append(File.separator).
-			append("src").
-			append(File.separator).
-			append("main").
-			append(File.separator).
-			append("resources").
-			append(File.separator).
-			append("demo").
-			append(File.separator).
-			toString();
 	
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
 			
 	// we create our clouds using predefined cloud schemas
-	String cloudfile = resourcePath+"LPDS_original.xml";	
+	String cloudfile = ScenarioBase.resourcePath+"LPDS_original.xml";	
 			
 	ComputingAppliance cloud1 = new ComputingAppliance(cloudfile, "cloud1");
 	ComputingAppliance cloud2 = new ComputingAppliance(cloudfile, "cloud2");
