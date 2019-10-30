@@ -39,7 +39,7 @@ public class IoTSimulation {
 	
 	// creating vm images and its resource needs
 	
-	// for a VM, first we need a virtual machine image, it needs 800 instruction for creating a VM from it, and it needs 1 GB of free space on a PM
+	// for a VM, first we need a virtual machine image, it needs 100 instruction for creating a VM from it, and it needs 1 GB of free space on a PM
 	VirtualAppliance va = new VirtualAppliance("va", 100, 0, false, 1073741824L);
 	
 	// we have to define the resource needs of the VM, we use 1-2-4-8 CPU cores, 0.001 core processing power and 4 GB RAM
