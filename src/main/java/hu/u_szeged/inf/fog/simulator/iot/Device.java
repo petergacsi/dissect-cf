@@ -19,7 +19,7 @@
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with DISSECT-CF.  If not, see <http://www.gnu.org/licenses/>.
  *  
- *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu)
+ *  (C) Copyright 2019, Andras Markus (markusa@inf.u-szeged.hu), Peter Gacsi (gacsi.peti95@gmail.com)
  */
 
 package hu.u_szeged.inf.fog.simulator.iot;
@@ -40,7 +40,7 @@ import hu.u_szeged.inf.fog.simulator.application.Application;
  * The main goal of the class to ensure the data generation function by sensors and
  * to store the data until forwarding to an fog/cloud node.
  * @author Andras Markus (markusa@inf.u-szeged.hu)
- * @author Peter Gacsi
+ * @author Peter Gacsi (gacsi.peti95@gmail.com)
  */
 public abstract class Device extends Timed {
 
@@ -59,6 +59,11 @@ public abstract class Device extends Timed {
      */
     protected Application app;
 
+    /**
+	 * The chosen strategy of the station. The application choosing is based on the strategy. 
+	 */
+	protected String strategy;
+	
     /**
      * The local repository can be reached through this variable and it holds the network settings of the repository.
      */
@@ -137,12 +142,6 @@ public abstract class Device extends Timed {
      * TODO: not implemented yet.
      */
     public abstract void shutdownProcess();
-
-    /**
-     * Load the defined devices from XML file. Need to be overridden.
-     * @param file The path of the XML file.
-     */
-    public static void loadDevice(String file) throws Exception {}
 
     /**
      * Getter for the local repository and its network settings.
