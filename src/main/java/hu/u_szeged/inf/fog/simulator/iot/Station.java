@@ -63,7 +63,7 @@ public class Station extends Device{
 		for (StorageObject so : this.dn.localRepository.contents()) {
 			StorObjEvent soe = new StorObjEvent(so);
 			//this.dn.localRepository.requestContentDelivery(so.id, this.cloudRepository, soe);
-			NetworkNode.initTransfer(so.size, ResourceConsumption.unlimitedProcessing, this.dn.localRepository, this.cloudRepository, soe);
+			NetworkNode.initTransfer(so.size, ResourceConsumption.unlimitedProcessing, this.dn.localRepository, this.nodeRepository, soe);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class Station extends Device{
 				@Override
 				protected void eventAction() {
 					subscribe(freq);
-					cloudRepository = app.computingAppliance.iaas.repositories.get(0);
+					nodeRepository = app.computingAppliance.iaas.repositories.get(0);
 				}
 			};
 		}
@@ -95,7 +95,7 @@ public class Station extends Device{
 		}
 
 			try {
-				if (this.cloudRepository.getCurrState().equals(Repository.State.RUNNING)) {
+				if (this.nodeRepository.getCurrState().equals(Repository.State.RUNNING)) {
 					this.startCommunicate();
 				}
 			} catch (NetworkException e) {

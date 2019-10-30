@@ -58,7 +58,7 @@ public abstract class ScenarioBase {
 				
 				
 				for(Device d : a.ownStations) {
-					generatedData+=d.sumOfGeneratedData;
+					generatedData+=d.getSumOfGeneratedData();
 						
 					if(d.stopTime>highestStationStoptime) {
 						highestStationStoptime=d.stopTime;

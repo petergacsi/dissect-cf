@@ -18,7 +18,7 @@ class Sensor extends DeferredEvent {
 				this.s.filesize, false);
 
 		if (this.s.dn.localRepository.registerObject(so)) {
-			this.s.sumOfGeneratedData += this.s.filesize;
+			this.s.incSumOfGeneratedData(this.s.filesize);
 			this.s.messageCount+=1;
 		}else {
 			try {
