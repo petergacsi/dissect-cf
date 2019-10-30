@@ -59,7 +59,6 @@ public class FogApp extends Application {
 				new BrokerCheck(this, this.computingAppliance.parentApp, unprocessedData,
 						(this.computingAppliance.parentApp.freq / 2));
 			} catch (VMManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

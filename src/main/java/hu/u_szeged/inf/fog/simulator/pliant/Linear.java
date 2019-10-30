@@ -29,7 +29,8 @@ import java.util.Vector;
 
 /**
  * Normalize values to 0 to 1. This solution is some kind of linear transformation.
- * @author dombijd
+ * TODO: refactoring needed! 
+ * @author Jozsef Daniel Dombi (dombijd@inf.u-szeged.hu)
  */
 public class Linear implements INormalizer {
 
@@ -39,9 +40,9 @@ public class Linear implements INormalizer {
 		
 		if(source_vector.get(0) instanceof Double)
 		{
-			Double max = (Double) Collections.max(source_vector) + 1.0;
-			Double min = (Double) Collections.min(source_vector) - 1.0;
-			Double dist =new Double(max-min);
+			double max = (Double) Collections.max(source_vector) + 1.0;
+			double min = (Double) Collections.min(source_vector) - 1.0;
+			double dist =(double)max-min;
 			for(int i=0;i<source_vector.size();i++)
 			{			
 				result.add(((Double) source_vector.get(i) - min) / (dist));				
@@ -49,12 +50,12 @@ public class Linear implements INormalizer {
 		}		
 		if(source_vector.get(0) instanceof Long)
 		{
-			Long max = (Long) Collections.max(source_vector) + 1;
-			Long min = (Long) Collections.min(source_vector) - 1;
-			Double dist =new Double(max-min);		
+			long max = (Long) Collections.max(source_vector) + 1;
+			long min = (Long) Collections.min(source_vector) - 1;
+			double dist = (double) max-min;		
 			for(int i=0;i<source_vector.size();i++)
 			{			
-				result.add(new Double(new Double((Long) source_vector.get(i) - min)/dist));		
+				result.add((double)((double)((Long) source_vector.get(i) - min)/dist));		
 			}
 		}
 		
@@ -67,9 +68,9 @@ public class Linear implements INormalizer {
 		
 		if(source_vector.get(0) instanceof Double)
 		{
-			Double max = (Double) Collections.max(source_vector) + 1.0;
-			Double min = (Double) Collections.min(source_vector) - 1.0;
-			Double dist =new Double(min-max);
+			double max = (Double) Collections.max(source_vector) + 1.0;
+			double min = (Double) Collections.min(source_vector) - 1.0;
+			double dist =(double)min-max;
 			for(int i=0;i<source_vector.size();i++)
 			{			
 				result.add(((Double) source_vector.get(i) - max) / (dist));				
@@ -77,12 +78,12 @@ public class Linear implements INormalizer {
 		}		
 		if(source_vector.get(0) instanceof Long)
 		{
-			Long max = (Long) Collections.max(source_vector) + 1;
-			Long min = (Long) Collections.min(source_vector) - 1;
-			Double dist =new Double(min-max);		
+			long max = (Long) Collections.max(source_vector) + 1;
+			long min = (Long) Collections.min(source_vector) - 1;
+			double dist =(double)min-max;		
 			for(int i=0;i<source_vector.size();i++)
 			{			
-				result.add(new Double(new Double((Long) source_vector.get(i) - max)/dist));		
+				result.add((double)((double)((Long) source_vector.get(i) - max)/dist));		
 			}
 		}		
 		return result;

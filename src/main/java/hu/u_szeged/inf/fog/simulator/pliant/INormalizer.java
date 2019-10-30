@@ -26,6 +26,9 @@ package hu.u_szeged.inf.fog.simulator.pliant;
 
 import java.util.Vector;
 
+/**
+ * @author Jozsef Daniel Dombi (dombijd@inf.u-szeged.hu)
+ */
 public interface INormalizer {
 
 	//if the higher value is better

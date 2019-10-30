@@ -16,7 +16,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
-import hu.u_szeged.inf.fog.simulator.examples.ScenarioBase;
+import hu.u_szeged.inf.fog.simulator.demo.ScenarioBase;
 import hu.u_szeged.inf.fog.simulator.xmlgenerator.Appliances.Appliance;
 import hu.u_szeged.inf.fog.simulator.xmlgenerator.Appliances.Appliance.Applications;
 import hu.u_szeged.inf.fog.simulator.xmlgenerator.Appliances.Appliance.NeighbourAppliances;
@@ -26,7 +26,7 @@ import hu.u_szeged.inf.fog.simulator.xmlgenerator.Devices.Device.Shutdown;
 
 public class XMLGenerator {
 
-	private static String LOCATION_OF_XML_OUTPUT = ScenarioBase.resourcePath + "CompareToIFogSim_XMLs";
+	private static String LOCATION_OF_XML_OUTPUT = ScenarioBase.resourcePath + "TEST";
 	private static int NUMBER_OF_CLOUDS = 3;
 	private static int NUMBER_OF_TYPE1_FOGS = 30;
 	private static int NUMBER_OF_TYPE2_FOGS = 100;

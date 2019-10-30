@@ -189,7 +189,6 @@ public abstract class Application extends Timed {
 				app.restartApplication();
 				new BrokerCheck(this, app, unprocessedData , (app.freq / 2));
 			} catch (VMManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

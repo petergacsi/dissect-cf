@@ -27,6 +27,9 @@ package hu.u_szeged.inf.fog.simulator.pliant;
 
 import java.util.Vector;
 
+/**
+ * @author Jozsef Daniel Dombi (dombijd@inf.u-szeged.hu)
+ */
 public class FuzzyIndicators {
 
 	private static double minmaxcorrigate = 0.00000005;

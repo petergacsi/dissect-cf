@@ -15,7 +15,7 @@ import hu.u_szeged.inf.fog.simulator.util.TimelineGenerator;
 public class ScaledFogSimulation {
 	
 	public static void main(String[] args) throws Exception {
-		
+
 		// cloud and fog nodes
 		String cloudfile=ScenarioBase.resourcePath+"LPDS_original.xml";
 		String fogfile_type1=ScenarioBase.resourcePath+"LPDS_Fog_T1.xml"; 

@@ -25,9 +25,8 @@
 package hu.u_szeged.inf.fog.simulator.pliant;
 
 /**
- * This function helps for decision making
- * @author dombijd
- *
+ * This function helps for decision making.
+ * @author Jozsef Daniel Dombi (dombijd@inf.u-szeged.hu)
  */
 public class Kappa {
 

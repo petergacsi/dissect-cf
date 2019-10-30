@@ -46,7 +46,6 @@ public class BrokerCheck extends DeferredEvent {
 
 						});
 			} catch (NetworkException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 			//this.cancel();

@@ -33,7 +33,7 @@ import hu.u_szeged.inf.fog.simulator.util.TimelineGenerator;
 public class FogSimulation {
 	
 	public static void main(String[] args) throws IOException, SAXException, ParserConfigurationException {
-			
+	
 	// creating vm images and its resource needs
 	
 	// for a VM, first we need a virtual machine image, it needs 800 instruction for creating a VM from it, and it needs 1 GB of free space on a PM
