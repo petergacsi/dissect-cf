@@ -1,6 +1,6 @@
 package hu.u_szeged.inf.fog.simulator.application;
 
-import java.util.List;
+
 import java.util.Random;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;

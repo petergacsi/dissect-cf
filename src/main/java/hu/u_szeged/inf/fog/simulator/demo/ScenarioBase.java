@@ -4,12 +4,10 @@ import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 import hu.u_szeged.inf.fog.simulator.application.Application;
-import hu.u_szeged.inf.fog.simulator.application.FogApp;
 import hu.u_szeged.inf.fog.simulator.application.Application.VmCollector;
 import hu.u_szeged.inf.fog.simulator.iot.Device;
-import hu.u_szeged.inf.fog.simulator.iot.Station;
 import hu.u_szeged.inf.fog.simulator.physical.ComputingAppliance;
-import hu.u_szeged.inf.fog.simulator.providers.Provider;;
+
 
 public abstract class ScenarioBase {
 	

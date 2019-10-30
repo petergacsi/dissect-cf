@@ -13,8 +13,7 @@ import java.util.Map.Entry;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
+
 
 import hu.u_szeged.inf.fog.simulator.demo.ScenarioBase;
 import hu.u_szeged.inf.fog.simulator.xmlgenerator.Appliances.Appliance;
@@ -51,7 +50,7 @@ public class XMLGenerator {
 		createNeighbours(appliances.appliance);
 		createApplianceXMLFile(appliances);
 		
-		//createStationsXML(createDevices());
+		createStationsXML(createDevices());
 		
 	}
 	

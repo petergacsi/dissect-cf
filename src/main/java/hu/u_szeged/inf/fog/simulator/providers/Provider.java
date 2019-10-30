@@ -33,7 +33,6 @@ import org.xml.sax.SAXException;
 
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.u_szeged.inf.fog.simulator.application.Application;
-import hu.u_szeged.inf.fog.simulator.loaders.ApplicationModel;
 import hu.u_szeged.inf.fog.simulator.loaders.ProvidersModel;
 import hu.u_szeged.inf.fog.simulator.providers.BluemixProvider.Bluemix;
 

@@ -1,7 +1,6 @@
 package hu.u_szeged.inf.fog.simulator.application;
 
 import hu.mta.sztaki.lpds.cloud.simulator.DeferredEvent;
-import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.VirtualMachine;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption;
 import hu.mta.sztaki.lpds.cloud.simulator.iaas.resourcemodel.ResourceConsumption.ConsumptionEvent;

@@ -1,6 +1,5 @@
 package hu.u_szeged.inf.fog.simulator.demo;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;

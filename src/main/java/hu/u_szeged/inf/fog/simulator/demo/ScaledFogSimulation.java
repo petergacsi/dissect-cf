@@ -1,6 +1,6 @@
 package hu.u_szeged.inf.fog.simulator.demo;
 
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
 

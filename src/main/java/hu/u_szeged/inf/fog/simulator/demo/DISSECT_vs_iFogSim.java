@@ -1,11 +1,9 @@
 package hu.u_szeged.inf.fog.simulator.demo;
 
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Map;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
+
 import hu.mta.sztaki.lpds.cloud.simulator.Timed;
 import hu.u_szeged.inf.fog.simulator.iot.Station;
 import hu.u_szeged.inf.fog.simulator.physical.ComputingAppliance;
