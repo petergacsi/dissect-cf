@@ -56,6 +56,7 @@ public class FogApp extends Application {
 		} else {
 			try {
 				this.computingAppliance.parentApp.restartApplication();
+				
 				new BrokerCheck(this, this.computingAppliance.parentApp, unprocessedData,
 						(this.computingAppliance.parentApp.freq / 2));
 			} catch (VMManagementException e) {

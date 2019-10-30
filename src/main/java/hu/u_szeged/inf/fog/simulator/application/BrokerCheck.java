@@ -26,6 +26,7 @@ public class BrokerCheck extends DeferredEvent {
 
 	@Override
 	protected void eventAction() {
+
 		if (toApp.broker.vm.getState().equals(VirtualMachine.State.RUNNING)) {
 			final long unprocessed = unprocessedData;
 			try {
@@ -49,7 +50,12 @@ public class BrokerCheck extends DeferredEvent {
 			} 
 			//this.cancel();
 		}else {
-			new BrokerCheck(this.fromApp,this.toApp,this.unprocessedData, this.delay/2);
+			if(this.delay==1) {
+				new BrokerCheck(this.fromApp,this.toApp,this.unprocessedData, 1);
+			}else {
+				new BrokerCheck(this.fromApp,this.toApp,this.unprocessedData, this.delay/2);
+			}
+			
 		}
 
 	}

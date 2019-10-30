@@ -76,20 +76,16 @@ public abstract class Application extends Timed {
 	public long sumOfArrivedData;
 	protected long freq;
 	protected VmCollector broker;
-	
 	public int incomingData;
-	public double dataLoad;
-	
+	public double dataLoad;	
 
 	public Application(final long freq, long tasksize, String instance, String name, double noi ,ComputingAppliance computingAppliance) {
 		if(noi>0) {
 			defaultNoi=noi;
 		}
-		
 		this.vmlist = new ArrayList<VmCollector>();
 		this.tasksize = tasksize;
 		//this.allWorkTime=0;
-		
 		this.name = name;
 		
 		//create relation between a device and its apps
@@ -187,6 +183,7 @@ public abstract class Application extends Timed {
 				
 			
 				app.restartApplication();
+				
 				new BrokerCheck(this, app, unprocessedData , (app.freq / 2));
 			} catch (VMManagementException e) {
 				e.printStackTrace();
@@ -215,7 +212,8 @@ public abstract class Application extends Timed {
 		
 		
 	private void startBroker() throws VMManagementException, NetworkException {
-		if(this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.getArc())) {
+		
+		if(this.broker!=null && this.broker.pm!=null && this.vmlist.contains(this.broker) && this.broker.pm.isReHostableRequest(this.instance.getArc())) {
 			ResourceAllocation ra = this.broker.pm.allocateResources(this.instance.getArc(), false,
 					PhysicalMachine.defaultAllocLen);
 			this.broker.restarted++;		
