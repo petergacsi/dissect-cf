@@ -1,7 +1,7 @@
 /*
  *  ========================================================================
  *  DIScrete event baSed Energy Consumption simulaTor 
- *    					             for Clouds and Federations (DISSECT-CF)
+ *    					            for Clouds, Federations and Fog(DISSECT-CF-Fog)
  *  ========================================================================
  *  
  *  This file is part of DISSECT-CF.

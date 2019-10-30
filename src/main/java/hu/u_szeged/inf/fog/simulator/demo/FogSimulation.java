@@ -81,7 +81,7 @@ public class FogSimulation {
 		y = randomGenerator.nextInt(9)-10;
 		
 		DeviceNetwork dn  = new DeviceNetwork(10240, 10000, 10000, 10000, "dnRepository"+i, null, null);
-		new Station(dn, 0, 24*60*60*1000, 50, "random", 5, 60*1000, x, y).startMeter();
+		new Station(dn, 0, 24*60*60*1000, 50, "fuzzy", 5, 60*1000, x, y).startMeter();
 	}
 	
 	// Setting up the IoT pricing
