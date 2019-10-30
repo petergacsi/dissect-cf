@@ -75,6 +75,7 @@ public class Station extends Device {
      */
     public Station(DeviceNetwork dn, long startTime, long stopTime, long filesize, String strategy, int sensorNum,
         long freq, double x, double y) {
+    	// TODO: fix this delay value
         long delay = Math.abs(SeedSyncer.centralRnd.nextLong() % 20) * 60 * 1000;
         this.startTime = startTime + delay;
         this.stopTime = stopTime + delay;
@@ -131,6 +132,7 @@ public class Station extends Device {
     @Override
     public void tick(long fires) {
         if (Timed.getFireCount() < (stopTime) && Timed.getFireCount() >= (startTime)) {
+        	// TODO: fix this delay value
             new Sensor(this, 1);
         }
 
