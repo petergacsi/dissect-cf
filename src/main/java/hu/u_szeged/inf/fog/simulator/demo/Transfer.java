@@ -40,7 +40,7 @@ public class Transfer extends ConsumptionEventAdapter{
 		System.out.println("Start: "+this.start+" from: "+this.from.getName()+" to: "+this.to.getName()+" end: "+Timed.getFireCount());
 	}
 	
-	public static void main(String[] args) throws SecurityException, InstantiationException, IllegalAccessException, NoSuchFieldException, NetworkException {
+	public static void main(String[] args) throws InstantiationException, IllegalAccessException, NoSuchFieldException, NetworkException {
 	
 		// this variable is only for the creation of the repositories, we do not deal with energy measurement currently 
 		final EnumMap<PowerTransitionGenerator.PowerStateKind, Map<String, PowerState>> transitions =

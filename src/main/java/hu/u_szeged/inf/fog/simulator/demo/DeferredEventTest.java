@@ -16,13 +16,13 @@ public class DeferredEventTest extends DeferredEvent{
 
 	@Override
 	protected void eventAction() {
-		new TimedTest("te2", 25);
+		new TimedTest("tt2", 25);
 	}
 	
 public static void main(String[] args) {
 		
 		// creating the recurrent events and a single, delayed event
-		new TimedTest("te1", 100);
+		new TimedTest("tt1", 100);
 		new DeferredEventTest(300);
 		
 		// we start the simulation until the last event

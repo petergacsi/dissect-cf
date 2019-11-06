@@ -16,6 +16,7 @@ public class TimedTest extends Timed{
 		// the events should be registered
 		subscribe(freq);
 	}
+	
 	@Override
 	public void tick(long fires) {
 		
@@ -25,18 +26,16 @@ public class TimedTest extends Timed{
 			unsubscribe();
 		}
 		
-		System.out.println(this.id+": time: "+ Timed.getFireCount());
-		
-		
+		System.out.println(this.id+" - time: "+ Timed.getFireCount());
 		
 	}
 
 	public static void main(String[] args) {
 		
 		// creating the recurrent events
-		new TimedTest("te1", 100);
+		new TimedTest("tt1", 100);
 		
-		new TimedTest("te2", 99);
+		new TimedTest("tt2", 99);
 
 		// we start the simulation until the last event
 		Timed.simulateUntilLastEvent();

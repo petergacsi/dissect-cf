@@ -70,7 +70,7 @@ public class FogSimulation {
 	FogApp fa3 = new FogApp(5*60*1000, 179200, "instance2", "Fog-app5", 2400.0, fog3);
 	FogApp fa4 = new FogApp(5*60*1000, 179200, "instance2", "Fogapp6", 2400.0, fog4);
 	
-	// we create 100 smart device with random installation strategy, 10kB storage, 10000 bandwidth, 
+	// we create 1000 smart device with random installation strategy, 10kB storage, 10000 bandwidth, 
 	// 24 hours long running time, 50 bytes of generated data by each sensor, each smart device has 5 sensor,
 	// and the frequency is 1 minute, last 3 zero parameters are for the geolocation, but it is now irrelevant for us
 	for(int i=0;i<1000;i++) {
@@ -80,7 +80,7 @@ public class FogSimulation {
 		y = randomGenerator.nextInt(9)-10;
 		
 		DeviceNetwork dn  = new DeviceNetwork(10240, 10000, 10000, 10000, "dnRepository"+i, null, null);
-		new Station(dn, 0, 24*60*60*1000, 50, "distance", 5, 60*1000, x, y).startMeter();
+		new Station(dn, 0, 24*60*60*1000, 50, "cost", 5, 60*1000, x, y).startMeter();
 	}
 	
 	// Setting up the IoT pricing

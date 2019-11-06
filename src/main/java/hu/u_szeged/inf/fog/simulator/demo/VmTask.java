@@ -34,7 +34,7 @@ public class VmTask {
 		HashMap<String, Integer> latencyMap = new HashMap<String, Integer>();
 		
 		// creating a repository with 16 GBs of storage
-		Repository repo = new Repository(17179869184L, "repo", 1000, 1000, 1000, latencyMap, 
+		Repository repo = new Repository(17179869184L, "repo", 1000000, 1000000, 1000000, latencyMap, 
 				transitions.get(PowerTransitionGenerator.PowerStateKind.storage),transitions.get(PowerTransitionGenerator.PowerStateKind.network));
 		
 		repo.setState(NetworkNode.State.RUNNING);

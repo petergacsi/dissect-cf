@@ -24,7 +24,7 @@ public class ScaledFogSimulation {
 		// application modules
 		String appliancefile = ScenarioBase.resourcePath+"Scenario_3_30_80.xml";
 		
-		// stations 
+		// stations  (100 000 * 5 sensors)
 		String stationfile = ScenarioBase.resourcePath+"Stations.xml";
 		
 		// instances and providers
