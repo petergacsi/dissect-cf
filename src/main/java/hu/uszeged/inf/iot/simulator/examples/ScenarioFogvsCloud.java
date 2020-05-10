@@ -26,8 +26,6 @@ public class ScenarioFogvsCloud {
 		String fogfile_type1=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSFog_type1.xml"; 
 		String fogfile_type2=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSFog_type2.xml"; 
 		String cloudfile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/LPDSCloud.xml";
-//		String appliancefile = ScenarioBase.resourcePath+"/generatingXML/output3.xml"; 
-//		String stationfile=ScenarioBase.resourcePath+"/generatingXML/stations_output.xml";
 		String appliancefile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Scenario_3_45_160.xml";
 		String stationfile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Stations.xml";
 		String instancefile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/InstanceIOT.xml";

@@ -33,12 +33,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog2</deviceName>
-            </device>
-            <device>
-                <deviceName>fog1</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -57,12 +51,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog2</deviceName>
-            </device>
-            <device>
-                <deviceName>fog0</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -81,12 +69,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog1</deviceName>
-            </device>
-            <device>
-                <deviceName>fog0</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -105,12 +87,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog0</deviceName>
-            </device>
-            <device>
-                <deviceName>fog2</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -129,18 +105,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog5</deviceName>
-            </device>
-            <device>
-                <deviceName>fog17</deviceName>
-            </device>
-            <device>
-                <deviceName>fog14</deviceName>
-            </device>
-            <device>
-                <deviceName>fog23</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -159,18 +123,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog4</deviceName>
-            </device>
-            <device>
-                <deviceName>fog17</deviceName>
-            </device>
-            <device>
-                <deviceName>fog14</deviceName>
-            </device>
-            <device>
-                <deviceName>fog23</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -189,18 +141,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog17</deviceName>
-            </device>
-            <device>
-                <deviceName>fog21</deviceName>
-            </device>
-            <device>
-                <deviceName>fog8</deviceName>
-            </device>
-            <device>
-                <deviceName>fog5</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -219,18 +159,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog16</deviceName>
-            </device>
-            <device>
-                <deviceName>fog13</deviceName>
-            </device>
-            <device>
-                <deviceName>fog18</deviceName>
-            </device>
-            <device>
-                <deviceName>fog22</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -249,18 +177,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog21</deviceName>
-            </device>
-            <device>
-                <deviceName>fog10</deviceName>
-            </device>
-            <device>
-                <deviceName>fog19</deviceName>
-            </device>
-            <device>
-                <deviceName>fog6</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -279,18 +195,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog11</deviceName>
-            </device>
-            <device>
-                <deviceName>fog20</deviceName>
-            </device>
-            <device>
-                <deviceName>fog22</deviceName>
-            </device>
-            <device>
-                <deviceName>fog13</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -309,18 +213,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog19</deviceName>
-            </device>
-            <device>
-                <deviceName>fog8</deviceName>
-            </device>
-            <device>
-                <deviceName>fog21</deviceName>
-            </device>
-            <device>
-                <deviceName>fog12</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -339,18 +231,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog9</deviceName>
-            </device>
-            <device>
-                <deviceName>fog20</deviceName>
-            </device>
-            <device>
-                <deviceName>fog22</deviceName>
-            </device>
-            <device>
-                <deviceName>fog13</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -369,18 +249,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog19</deviceName>
-            </device>
-            <device>
-                <deviceName>fog10</deviceName>
-            </device>
-            <device>
-                <deviceName>fog18</deviceName>
-            </device>
-            <device>
-                <deviceName>fog8</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -399,18 +267,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog16</deviceName>
-            </device>
-            <device>
-                <deviceName>fog7</deviceName>
-            </device>
-            <device>
-                <deviceName>fog22</deviceName>
-            </device>
-            <device>
-                <deviceName>fog18</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -429,18 +285,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog23</deviceName>
-            </device>
-            <device>
-                <deviceName>fog15</deviceName>
-            </device>
-            <device>
-                <deviceName>fog4</deviceName>
-            </device>
-            <device>
-                <deviceName>fog5</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -459,18 +303,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog23</deviceName>
-            </device>
-            <device>
-                <deviceName>fog14</deviceName>
-            </device>
-            <device>
-                <deviceName>fog4</deviceName>
-            </device>
-            <device>
-                <deviceName>fog5</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -489,18 +321,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog7</deviceName>
-            </device>
-            <device>
-                <deviceName>fog13</deviceName>
-            </device>
-            <device>
-                <deviceName>fog18</deviceName>
-            </device>
-            <device>
-                <deviceName>fog22</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -519,18 +339,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog5</deviceName>
-            </device>
-            <device>
-                <deviceName>fog4</deviceName>
-            </device>
-            <device>
-                <deviceName>fog6</deviceName>
-            </device>
-            <device>
-                <deviceName>fog14</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -549,18 +357,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog7</deviceName>
-            </device>
-            <device>
-                <deviceName>fog16</deviceName>
-            </device>
-            <device>
-                <deviceName>fog12</deviceName>
-            </device>
-            <device>
-                <deviceName>fog13</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -579,18 +375,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog10</deviceName>
-            </device>
-            <device>
-                <deviceName>fog8</deviceName>
-            </device>
-            <device>
-                <deviceName>fog21</deviceName>
-            </device>
-            <device>
-                <deviceName>fog12</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -609,18 +393,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog11</deviceName>
-            </device>
-            <device>
-                <deviceName>fog9</deviceName>
-            </device>
-            <device>
-                <deviceName>fog22</deviceName>
-            </device>
-            <device>
-                <deviceName>fog15</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -639,18 +411,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog8</deviceName>
-            </device>
-            <device>
-                <deviceName>fog10</deviceName>
-            </device>
-            <device>
-                <deviceName>fog19</deviceName>
-            </device>
-            <device>
-                <deviceName>fog6</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -669,18 +429,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog13</deviceName>
-            </device>
-            <device>
-                <deviceName>fog9</deviceName>
-            </device>
-            <device>
-                <deviceName>fog11</deviceName>
-            </device>
-            <device>
-                <deviceName>fog16</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
     <appliance>
@@ -699,18 +447,6 @@
             </application>
         </applications>
         <neighbourAppliances>
-            <device>
-                <deviceName>fog14</deviceName>
-            </device>
-            <device>
-                <deviceName>fog15</deviceName>
-            </device>
-            <device>
-                <deviceName>fog4</deviceName>
-            </device>
-            <device>
-                <deviceName>fog5</deviceName>
-            </device>
         </neighbourAppliances>
     </appliance>
 </appliances>

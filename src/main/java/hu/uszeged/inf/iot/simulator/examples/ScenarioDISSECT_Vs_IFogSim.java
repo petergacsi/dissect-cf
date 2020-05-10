@@ -26,7 +26,7 @@ public class ScenarioDISSECT_Vs_IFogSim {
 		String fogfile_type1=ScenarioBase.resourcePath+"/"+ SCENARIO +"/1CPUStrong_Fog.xml"; 
 		String fogfile_type2=ScenarioBase.resourcePath+"/"+ SCENARIO +"/3CPUStrong_Fog.xml"; 
 		String cloudfile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/45CPUStrong_Cloud.xml";
-		String appliancefile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Scenario_1_10_40.xml";
+		String appliancefile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Scenario_1_4_20.xml";
 		String stationfile = ScenarioBase.resourcePath+"/"+ SCENARIO +"/Stations_80.xml";
 		String instancefile=ScenarioBase.resourcePath+"/"+ SCENARIO +"/InstanceOf_1CPUStrongVM.xml";
 		

@@ -31,23 +31,19 @@ public class FogApp extends Application {
 	}
 
 	public void initiateDataTransferUp(long unprocessedData) throws NetworkException {
-
-		
 		this.computingAppliance.parentApp.incomingData++;
 		this.sumOfArrivedData -= unprocessedData;
 		if (this.computingAppliance.parentApp.isSubscribed()) {
-
+			
 			final long unprocessed = unprocessedData;
 			NetworkNode.initTransfer(unprocessedData, ResourceConsumption.unlimitedProcessing,
 					this.computingAppliance.iaas.repositories.get(0),
 					this.getParentDeviceOfApp().iaas.repositories.get(0), new ConsumptionEvent() {
-
 						@Override
 						public void conComplete() {
 							computingAppliance.parentApp.sumOfArrivedData += unprocessed;
 							computingAppliance.parentApp.incomingData--;
 						}
-
 						@Override
 						public void conCancelled(ResourceConsumption problematic) {
 						}
@@ -58,7 +54,6 @@ public class FogApp extends Application {
 				new BrokerCheck(this, this.computingAppliance.parentApp, unprocessedData,
 						(this.computingAppliance.parentApp.freq / 2));
 			} catch (VMManagementException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -153,10 +148,10 @@ public class FogApp extends Application {
 		this.countVmRunningTime();
 		this.turnoffVM();
 
-		if ((this.currentTask == 0 && this.incomingData == 0 && this.sumOfProcessedData == this.sumOfArrivedData
-				&& this.checkStationState())) {
-
+		if ((this.currentTask == 0 && this.incomingData == 0 
+			&& this.sumOfProcessedData == this.sumOfArrivedData && this.checkStationState())) {
 			unsubscribe();
+			
 			for (Provider p : this.providers) {
 				if (p.isSubscribed()) {
 					p.shouldStop = true;
