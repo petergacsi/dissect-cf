@@ -52,6 +52,11 @@ The documentation for the simulator's java API will be generated in the followin
 
 `target/site/apidocs`
 
+OR 
+
+* Download the zip and unzip it or use git clone command
+* Launch Eclipse and import as Existing Maven project
+
 ## Getting started
 
 ### Minimum runtime dependencies
