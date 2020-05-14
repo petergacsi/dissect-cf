@@ -53,7 +53,7 @@ public class DISSECT_vs_iFogSim {
 				
 		// Print some information to the monitor / in file
 		TimelineGenerator.generate();
-		ScenarioBase.printInformation((stopttime-starttime),true);
+		ScenarioBase.printInformation((stopttime-starttime),false);
 	}
 
 }
